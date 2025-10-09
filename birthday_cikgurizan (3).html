@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SELAMAT HARI JADI CIKGU RIZAN!</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Poppins', sans-serif;
+      text-align: center;
+      color: white;
+      background: radial-gradient(circle at center, #f9d6ff, #e3a7ff, #ffb6c1);
+      overflow: hidden;
+      height: 100vh;
+    }
+
+    h1 {
+      font-size: 3em;
+      color: gold;
+      text-shadow: 0 0 20px rgba(255,255,255,0.9), 0 0 35px #ffb6c1;
+      margin-top: 90px;
+      animation: glow 2s infinite alternate;
+    }
+
+    h2 {
+      font-size: 1.5em;
+      margin-top: 10px;
+      color: #fff;
+      text-shadow: 0 0 15px rgba(255,255,255,0.8);
+    }
+
+    p {
+      max-width: 700px;
+      margin: 25px auto;
+      font-size: 1.2em;
+      line-height: 1.8;
+      color: #fff9f9;
+      text-shadow: 0 0 10px rgba(255,255,255,0.6);
+    }
+
+    footer {
+      position: absolute;
+      bottom: 20px;
+      width: 100%;
+      color: #fff;
+      font-size: 1em;
+      text-shadow: 0 0 10px rgba(255,255,255,0.8);
+    }
+
+    /* 浮现-消失动画 */
+    .fade-text {
+      font-size: 1.3em;
+      color: #ffe9ff;
+      margin-top: 20px;
+      text-shadow: 0 0 12px rgba(255,255,255,0.7);
+      animation: fadeInOut 6s ease-in-out infinite;
+    }
+
+    @keyframes fadeInOut {
+      0%, 100% { opacity: 0; transform: translateY(10px); }
+      25%, 75% { opacity: 1; transform: translateY(0); }
+    }
+
+    /* 金光闪烁背景 */
+    .sparkle {
+      position: absolute;
+      width: 4px;
+      height: 4px;
+      background: gold;
+      border-radius: 50%;
+      opacity: 0.8;
+      animation: sparkleAnim 3s infinite;
+    }
+
+    @keyframes sparkleAnim {
+      0% { transform: scale(0) translateY(0); opacity: 1; }
+      50% { transform: scale(1.5) translateY(-50px); opacity: 0.8; }
+      100% { transform: scale(0) translateY(-100px); opacity: 0; }
+    }
+
+    /* 白花漂浮 */
+    .flowers {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      overflow: hidden;
+      z-index: -1;
+    }
+
+    .flower {
+      position: absolute;
+      bottom: -10%;
+      opacity: 0.9;
+      animation: floatUp 12s linear infinite;
+    }
+
+    @keyframes floatUp {
+      0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+      10% { opacity: 1; }
+      90% { opacity: 1; }
+      100% { transform: translateY(-10vh) rotate(360deg); opacity: 0; }
+    }
+
+    @keyframes glow {
+      from { text-shadow: 0 0 15px gold; }
+      to { text-shadow: 0 0 35px #ff80ff; }
+    }
+
+    /* 音乐按钮 */
+    #musicBtn {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      background: rgba(255,255,255,0.2);
+      border: 2px solid white;
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      color: white;
+      font-size: 22px;
+      cursor: pointer;
+      backdrop-filter: blur(5px);
+      transition: 0.3s;
+    }
+
+    #musicBtn:hover {
+      background: rgba(255,255,255,0.4);
+    }
+  </style>
+</head>
+<body>
+  <div class="flowers"></div>
+
+  <h1>SELAMAT HARI JADI CIKGU RIZAN! 🎉</h1>
+  <h2>Semoga panjang umur, murah rezeki dan sentiasa bahagia 💖</h2>
+
+  <div class="fade-text">Happy Birthday to our beloved teacher 💛</div>
+
+  <p>
+    Terima kasih, CIKGU RIZAN, atas segala tunjuk ajar dan bimbingan selama ini.  
+    Cikgu sentiasa memberi semangat, kasih sayang dan ilmu yang bermakna kepada saya.  
+    Saya amat menghargai setiap nasihat dan kebaikan cikgu.  
+    Semoga hari ini membawa banyak senyuman dan kenangan indah buat cikgu. 🌸
+  </p>
+
+  <footer>Dari saya, dengan penuh penghargaan 💐</footer>
+
+  <button id="musicBtn">🎵</button>
+  <audio id="bgMusic" loop autoplay>
+    <source src="https://www.epidemicsound.com/music/tracks/5b1fefe1-0b4a-4aaa-8977-895663130bed/" type="audio/mpeg">
+  </audio>
+
+  <script>
+    // 白花飘落动画
+    const flowersContainer = document.querySelector('.flowers');
+    for (let i = 0; i < 10; i++) {
+      const flower = document.createElement('img');
+      flower.src = 'https://hips.hearstapps.com/hmg-prod/images/tulips-royalty-free-image-1722883362.jpg?crop=0.447xw:1.00xh;0.366xw,0';
+      flower.classList.add('flower');
+      flower.style.left = Math.random() * 100 + 'vw';
+      flower.style.animationDuration = (10 + Math.random() * 5) + 's';
+      flower.style.width = (60 + Math.random() * 40) + 'px';
+      flowersContainer.appendChild(flower);
+    }
+
+    // 金粉闪烁
+    for (let i = 0; i < 60; i++) {
+      const sparkle = document.createElement('div');
+      sparkle.classList.add('sparkle');
+      sparkle.style.left = Math.random() * 100 + 'vw';
+      sparkle.style.top = Math.random() * 100 + 'vh';
+      sparkle.style.animationDelay = Math.random() * 3 + 's';
+      document.body.appendChild(sparkle);
+    }
+
+    // 音乐控制
+    const music = document.getElementById("bgMusic");
+    const btn = document.getElementById("musicBtn");
+    let playing = true;
+
+    btn.addEventListener("click", () => {
+      if (playing) {
+        music.pause();
+        btn.textContent = "🔇";
+      } else {
+        music.play();
+        btn.textContent = "🎵";
+      }
+      playing = !playing;
+    });
+  </script>
+</body>
+</html>
