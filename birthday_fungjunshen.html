@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>生日快乐 范俊升</title>
+    <style>
+        body {
+            margin: 0;
+            height: 100vh;
+            background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: "Microsoft YaHei", sans-serif;
+            overflow: hidden;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 50px 70px;
+            border-radius: 20px;
+            text-align: center;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+            animation: pop 1s ease-out;
+        }
+
+        h1 {
+            font-size: 48px;
+            margin: 0;
+            color: #ff5e62;
+        }
+
+        h2 {
+            margin-top: 20px;
+            font-size: 28px;
+            color: #333;
+        }
+
+        p {
+            margin-top: 15px;
+            font-size: 18px;
+            color: #555;
+        }
+
+        @keyframes pop {
+            0% {
+                transform: scale(0.6);
+                opacity: 0;
+            }
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        /* 漂浮气球 */
+        .balloon {
+            position: absolute;
+            bottom: -100px;
+            width: 40px;
+            height: 55px;
+            border-radius: 50%;
+            animation: float 8s linear infinite;
+        }
+
+        .balloon::after {
+            content: "";
+            position: absolute;
+            top: 55px;
+            left: 50%;
+            width: 2px;
+            height: 30px;
+            background: #aaa;
+            transform: translateX(-50%);
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(0);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-120vh);
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="card">
+        <h1>🎂 生日快乐 🎂</h1>
+        <h2>范俊升</h2>
+        <p>愿你岁岁平安，年年顺心</p>
+        <p>天天开心，梦想成真 ✨</p>
+    </div>
+
+    <!-- 气球 -->
+    <div class="balloon" style="left:10%; background:#ff6f91;"></div>
+    <div class="balloon" style="left:30%; background:#ffc75f; animation-delay:2s;"></div>
+    <div class="balloon" style="left:50%; background:#845ec2; animation-delay:4s;"></div>
+    <div class="balloon" style="left:70%; background:#4d96ff; animation-delay:1s;"></div>
+    <div class="balloon" style="left:90%; background:#00c9a7; animation-delay:3s;"></div>
+
+</body>
+</html>
