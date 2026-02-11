@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>生日快乐林淑娟老师</title>
+<title>生日快乐互动网页</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
 body{font-family:"Microsoft YaHei","PingFang SC",serif;background:linear-gradient(135deg,#ff9999,#ff4d4d);overflow:hidden;text-align:center;color:#333;}
@@ -119,17 +119,17 @@ input[type=text]{
 
 <!-- 页面1 -->
 <div class="section active" id="page1">
-  <h1>林淑娟老师生日快乐 🎉</h1>
+  <h1>生日快乐 🎉</h1>
   <button id="btn1">开始互动</button>
 </div>
 
 <!-- 页面2 -->
 <div class="section" id="page2">
-  <h1>祝林淑娟老师每天快乐 ❤️</h1>
+  <h1>祝老师每天快乐 ❤️</h1>
   <button id="btn2">下一页</button>
 </div>
 
-<!-- 页面3：数学题互动 + 固定祝福循环 -->
+<!-- 页面3：数学题互动 + 固定祝福循环 + 气球新增祝福 -->
 <div class="section" id="page3">
   <h1>happy</h1>
   <div style="margin-bottom:15px;">
@@ -145,10 +145,11 @@ input[type=text]{
     <div id="thankText" style="margin-top:15px; color:#333; font-size:20px; font-weight:bold; text-shadow:1px 1px 2px #fff;"></div>
   </div>
 
-  <div id="wishText"></div>
+  <div id="wishText"></div> <!-- 固定闪烁祝福 -->
+  <div id="extraWishes" style="margin-top:10px;"></div> <!-- 追加祝福显示 -->
 </div>
 
-<!-- 页面4~10示例 -->
+<!-- 页面4~10 -->
 <div class="section" id="page4">
   <h1>回忆时刻 📖</h1>
   <div class="card" onclick="toggleCard(this)">📅 那句鼓励<div class="hidden">“相信自己。”</div></div>
@@ -193,6 +194,30 @@ function toggleCard(el){
     hidden.style.display = hidden.style.display==="block"?"none":"block";
 }
 
+// 页面按钮绑定
+document.getElementById("btn1").addEventListener("click",()=>showPage(2));
+document.getElementById("btn2").addEventListener("click",()=>showPage(3));
+
+// 固定祝福文字循环
+const wishText = document.getElementById("wishText");
+const extraWishes = document.getElementById("extraWishes");
+const wishes = [
+    "黄宥敏：致：林淑娟老师\n生日快乐,老师祝你身体健康，长命百岁 🎉",
+    "梁锦壕：致：林淑娟老师\n生日快乐老师，我祝你身体健康，心想事成，另外，也祝你新年快乐 ❤️",
+    "陈语捷：致：林淑娟老师\n生日快乐！祝老师天天开心，工作顺利，身体健康！🍀",
+    "李韡翰：致：林淑娟老师\n生日快乐。祝老师身体健康，笑口常开，新年快乐，万事如意！🎉🎂🍀",
+    "黄宥敏：致：林淑娟老师\n生日快乐,老师祝你身体健康，长命百岁 🎉",
+    "侯甜芉：致：林淑娟老师\n生日快乐,老师祝你身体健康，心想事成 🎉",
+    "祝老师新年快乐！🎉"
+];
+let wishIndex = 0;
+function showWish(){
+    wishText.innerText = wishes[wishIndex];
+    wishIndex = (wishIndex+1)%wishes.length;
+}
+showWish();
+setInterval(showWish,5000); // 5秒切换一次
+
 // 气球按钮
 document.getElementById("balloonBtn").addEventListener("click",()=>{
     const items=["🎈","🧧","🍊","🎋","🎊","🎂","🎉"];
@@ -207,37 +232,32 @@ document.getElementById("balloonBtn").addEventListener("click",()=>{
         document.body.appendChild(b);
         setTimeout(()=>b.remove(),5000);
     }
-    document.getElementById("wishText").innerHTML="愿老师生日快乐，岁岁平安！";
+
+    // 在固定祝福下方追加新祝福
+    const extra = document.createElement("div");
+    extra.style.color="#fff";
+    extra.style.fontWeight="bold";
+    extra.style.textShadow="1px 1px 4px #aa0000";
+    extra.style.marginTop="5px";
+    extra.style.whiteSpace="pre-line";
+    extra.innerText = "愿老师生日快乐，岁岁平安！🎉";
+    extraWishes.appendChild(extra);
 });
 
-// 页面按钮绑定
-document.getElementById("btn1").addEventListener("click",()=>showPage(2));
-document.getElementById("btn2").addEventListener("click",()=>showPage(3));
-
-// 数学互动按钮（固定祝福闪烁）
+// 数学互动
 document.getElementById("btnMath").addEventListener("click",()=>{
     document.getElementById("mathSection").style.display="block";
     const correctAnswer = 212;
     const input = document.getElementById("mathInput");
     const thankText = document.getElementById("thankText");
-    const wishText = document.getElementById("wishText");
 
     input.value = "";
     thankText.innerHTML = "";
-    wishText.innerHTML = "";
-
-    const wishes = [
-        "黄宥敏：致：林淑娟老师\n生日快乐,老师祝你身体健康，长命百岁 🎉",
-        "梁锦壕：致：林淑娟老师\n生日快乐老师，我祝你身体健康，心想事成，另外，也祝你新年快乐 ❤️",
-        "陈语捷：致：林淑娟老师\n生日快乐！祝老师天天开心，工作顺利，身体健康！🍀",
-        "李韡翰：致：林淑娟老师\n生日快乐。祝老师身体健康，笑口常开，新年快乐，万事如意！🎉❤️🍀",
-        "祝老师新年快乐！🎉"
-    ];
 
     input.oninput = ()=>{
         if(Number(input.value) === correctAnswer){
             input.disabled = true;
-            const msg = "感谢林淑娟老师的培育";
+            const msg = "感谢老师的培育";
             let index=0;
             const interval = setInterval(()=>{
                 if(index<msg.length){
@@ -245,13 +265,6 @@ document.getElementById("btnMath").addEventListener("click",()=>{
                     index++;
                 }else{
                     clearInterval(interval);
-                    let wishIndex = 0;
-                    function showWish(){
-                        wishText.innerText = wishes[wishIndex];
-                        wishIndex = (wishIndex+1)%wishes.length;
-                    }
-                    showWish();
-                    setInterval(showWish,10000); // 每10秒切换下一条祝福
                 }
             },200);
         }
