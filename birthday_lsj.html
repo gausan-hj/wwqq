@@ -106,6 +106,7 @@ input[type=text]{
     position:relative;
     animation:blink 2s infinite;
     white-space:pre-line;
+    text-align:center;
 }
 @keyframes blink{
     0%,100%{opacity:1;}
@@ -129,15 +130,15 @@ input[type=text]{
   <button id="btn2">下一页</button>
 </div>
 
-<!-- 页面3：数学题互动 + 固定祝福循环 + 气球新增祝福 -->
+<!-- 页面3 -->
 <div class="section" id="page3">
   <h1>happy</h1>
   <div style="margin-bottom:15px;">
-    <button id="balloonBtn">点我放气球</button>
     <button id="btnMath">数学互动</button>
+    <button id="balloonBtn">点我放气球</button>
   </div>
-  
-  <div id="mathSection" style="margin-top:20px; display:none;">
+
+  <div id="mathSection" style="margin-top:20px;">
     <div id="mathQuestion" style="font-size:20px; color:#333; font-weight:bold; margin-bottom:10px; text-shadow:1px 1px 2px #fff;">
       题目：(524 ÷ 2) - 50 = ?
     </div>
@@ -145,8 +146,9 @@ input[type=text]{
     <div id="thankText" style="margin-top:15px; color:#333; font-size:20px; font-weight:bold; text-shadow:1px 1px 2px #fff;"></div>
   </div>
 
-  <div id="wishText"></div> <!-- 固定闪烁祝福 -->
-  <div id="extraWishes" style="margin-top:10px;"></div> <!-- 追加祝福显示 -->
+  <!-- 正确答案后显示祝福 -->
+  <div id="wishText" style="display:none;"></div> 
+  <div id="extraWishes" style="display:none; margin-top:10px;"></div> 
 </div>
 
 <!-- 页面4~10 -->
@@ -198,42 +200,78 @@ function toggleCard(el){
 document.getElementById("btn1").addEventListener("click",()=>showPage(2));
 document.getElementById("btn2").addEventListener("click",()=>showPage(3));
 
-// 固定祝福文字循环
+// page3逻辑
+const mathInput = document.getElementById("mathInput");
+const thankText = document.getElementById("thankText");
 const wishText = document.getElementById("wishText");
 const extraWishes = document.getElementById("extraWishes");
-const wishes = [
-    "黄宥敏：致：林淑娟老师\n生日快乐,老师祝你身体健康，长命百岁 🎉",
-    "梁锦壕：致：林淑娟老师\n生日快乐老师，我祝你身体健康，心想事成，另外，也祝你新年快乐 ❤️",
-    "陈语捷：致：林淑娟老师\n生日快乐！祝老师天天开心，工作顺利，身体健康！🍀",
-    "李韡翰：致：林淑娟老师\n生日快乐。祝老师身体健康，笑口常开，新年快乐，万事如意！🎉🎂🍀",
-    "黄宥敏：致：林淑娟老师\n生日快乐,老师祝你身体健康，长命百岁 🎉",
-    "侯甜芉：致：林淑娟老师\n生日快乐,老师祝你身体健康，心想事成 🎉",
-    "祝老师新年快乐！🎉"
-];
-let wishIndex = 0;
-function showWish(){
-    wishText.innerText = wishes[wishIndex];
-    wishIndex = (wishIndex+1)%wishes.length;
-}
-showWish();
-setInterval(showWish,5000); // 5秒切换一次
+const balloonBtn = document.getElementById("balloonBtn");
 
-// 气球按钮
-document.getElementById("balloonBtn").addEventListener("click",()=>{
+const correctAnswer = 212;
+let wishes = [
+  "黄宥敏：致：林淑娟老师\n生日快乐,老师祝你身体健康，长命百岁 🎉",
+  "梁锦壕：致：林淑娟老师\n生日快乐老师，我祝你身体健康，心想事成，另外，也祝你新年快乐 ❤️",
+  "陈语捷：致：林淑娟老师\n生日快乐！祝老师天天开心，工作顺利，身体健康！🍀",
+  "李韡翰：致：林淑娟老师\n生日快乐。祝老师身体健康，笑口常开，新年快乐，万事如意！🎉❤️🍀",
+  "祝老师新年快乐！🎉"
+];
+
+let wishIndex = 0;
+let wishInterval = null;
+
+document.getElementById("btnMath").addEventListener("click", ()=>{
+    document.getElementById("mathSection").style.display="block";
+    mathInput.value="";
+    thankText.innerHTML="";
+});
+
+mathInput.addEventListener("input", ()=>{
+  if(Number(mathInput.value) === correctAnswer){
+    mathInput.disabled = true;
+
+    // 逐字显示感谢老师的培育
+    const msg = "感谢老师的培育";
+    let index = 0;
+    const interval = setInterval(()=>{
+      if(index < msg.length){
+        thankText.innerHTML += msg[index];
+        index++;
+      }else{
+        clearInterval(interval);
+        // 显示祝福文字
+        wishText.style.display = "block";
+        extraWishes.style.display = "block";
+
+        // 循环显示固定祝福
+        showWish();
+        wishInterval = setInterval(showWish, 5000); // 5秒切换
+      }
+    },200);
+  }
+});
+
+function showWish(){
+  wishText.innerText = wishes[wishIndex];
+  wishIndex = (wishIndex + 1) % wishes.length;
+}
+
+// 点击气球
+balloonBtn.addEventListener("click", ()=>{
+  if(mathInput.disabled){ // 只有输入正确答案后才允许
     const items=["🎈","🧧","🍊","🎋","🎊","🎂","🎉"];
     for(let i=0;i<20;i++){
-        let b=document.createElement("div");
-        b.className="balloon-fly";
-        b.style.left=Math.random()*window.innerWidth+"px";
-        b.style.bottom="0px";
-        b.style.fontSize=(30+Math.random()*30)+"px";
-        b.style.animationDuration=(3+Math.random()*2)+"s";
-        b.innerText=items[Math.floor(Math.random()*items.length)];
-        document.body.appendChild(b);
-        setTimeout(()=>b.remove(),5000);
+      let b=document.createElement("div");
+      b.className="balloon-fly";
+      b.style.left=Math.random()*window.innerWidth+"px";
+      b.style.bottom="0px";
+      b.style.fontSize=(30+Math.random()*30)+"px";
+      b.style.animationDuration=(3+Math.random()*2)+"s";
+      b.innerText=items[Math.floor(Math.random()*items.length)];
+      document.body.appendChild(b);
+      setTimeout(()=>b.remove(),5000);
     }
 
-    // 在固定祝福下方追加新祝福
+    // 追加祝福文字
     const extra = document.createElement("div");
     extra.style.color="#fff";
     extra.style.fontWeight="bold";
@@ -242,33 +280,7 @@ document.getElementById("balloonBtn").addEventListener("click",()=>{
     extra.style.whiteSpace="pre-line";
     extra.innerText = "愿老师生日快乐，岁岁平安！🎉";
     extraWishes.appendChild(extra);
-});
-
-// 数学互动
-document.getElementById("btnMath").addEventListener("click",()=>{
-    document.getElementById("mathSection").style.display="block";
-    const correctAnswer = 212;
-    const input = document.getElementById("mathInput");
-    const thankText = document.getElementById("thankText");
-
-    input.value = "";
-    thankText.innerHTML = "";
-
-    input.oninput = ()=>{
-        if(Number(input.value) === correctAnswer){
-            input.disabled = true;
-            const msg = "感谢老师的培育";
-            let index=0;
-            const interval = setInterval(()=>{
-                if(index<msg.length){
-                    thankText.innerHTML += msg[index];
-                    index++;
-                }else{
-                    clearInterval(interval);
-                }
-            },200);
-        }
-    };
+  }
 });
 </script>
 </body>
