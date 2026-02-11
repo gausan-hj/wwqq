@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>特别的一天</title>
+
+<style>
+body {
+    margin: 0;
+    font-family: "Microsoft YaHei", serif;
+    background: linear-gradient(to bottom right, #fdf6f0, #f3e8ff);
+    overflow-x: hidden;
+    text-align: center;
+    color: #444;
+}
+
+.section {
+    display: none;
+    padding: 60px 20px;
+    min-height: 100vh;
+}
+
+.active {
+    display: block;
+}
+
+button {
+    padding: 12px 25px;
+    font-size: 16px;
+    border: none;
+    border-radius: 30px;
+    background: #d8b4fe;
+    color: white;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+button:hover {
+    background: #c084fc;
+}
+
+.title {
+    font-size: 32px;
+    margin-bottom: 20px;
+}
+
+.timeline {
+    max-width: 600px;
+    margin: auto;
+    text-align: left;
+}
+
+.timeline div {
+    margin: 20px 0;
+    padding: 15px;
+    background: rgba(255,255,255,0.7);
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.hidden-text {
+    display: none;
+    margin-top: 10px;
+    font-size: 14px;
+}
+
+.balloon {
+    font-size: 40px;
+    cursor: pointer;
+    transition: transform 1s;
+}
+
+.float {
+    transform: translateY(-200px);
+}
+
+#confetti {
+    position: fixed;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+}
+
+.secret {
+    position: fixed;
+    bottom: 10px;
+    right: 10px;
+    font-size: 14px;
+    cursor: pointer;
+    opacity: 0.4;
+}
+
+.secret:hover {
+    opacity: 1;
+}
+</style>
+</head>
+
+<body>
+
+<canvas id="confetti"></canvas>
+
+<!-- 开场 -->
+<div class="section active" id="start">
+    <div class="title">今天，是一个特别的日子</div>
+    <button onclick="nextSection('guess')">点击开启</button>
+</div>
+
+<!-- 猜是谁 -->
+<div class="section" id="guess">
+    <div class="title">她每天教导我们<br>她为学生操心<br>她总是默默付出</div>
+    <button onclick="reveal()">她是谁？</button>
+    <div id="revealText" style="margin-top:20px;font-size:20px;"></div>
+</div>
+
+<!-- 时间轴 -->
+<div class="section" id="timeline">
+    <div class="title">那些值得记住的时刻</div>
+    <div class="timeline">
+        <div onclick="toggle(this)">
+            📅 考试前的鼓励
+            <div class="hidden-text">“相信自己，你可以做到。”</div>
+        </div>
+        <div onclick="toggle(this)">
+            📅 严格却温柔的提醒
+            <div class="hidden-text">那份严格，其实是最深的关心。</div>
+        </div>
+        <div onclick="toggle(this)">
+            📅 一次难忘的课堂
+            <div class="hidden-text">您让知识变得有温度。</div>
+        </div>
+    </div>
+    <br>
+    <button onclick="nextSection('celebrate')">继续</button>
+</div>
+
+<!-- 祝福互动 -->
+<div class="section" id="celebrate">
+    <div class="title">生日快乐 ❤️</div>
+    <p>点击气球，为老师送上祝福</p>
+    <div class="balloon" onclick="floatBalloon(this)">🎈</div>
+    <div id="wishText" style="margin-top:20px;"></div>
+</div>
+
+<!-- 隐藏彩蛋 -->
+<div class="secret" onclick="secretMessage()">小小惊喜</div>
+
+<script>
+
+function nextSection(id){
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+}
+
+function reveal(){
+    document.getElementById("revealText").innerHTML =
+        "是我们最敬爱的老师 🎂<br><br>祝您生日快乐，幸福安康。";
+    setTimeout(()=>nextSection('timeline'),2000);
+}
+
+function toggle(el){
+    let text = el.querySelector(".hidden-text");
+    text.style.display = text.style.display === "block" ? "none" : "block";
+}
+
+function floatBalloon(el){
+    el.classList.add("float");
+    document.getElementById("wishText").innerHTML =
+        "愿您被温柔以待，<br>愿岁月对您格外温柔。";
+    launchConfetti();
+}
+
+function secretMessage(){
+    alert("谢谢您这些年的教导与包容。\n我们真的很幸运遇见您。");
+}
+
+/* 简单飘落效果 */
+function launchConfetti(){
+    const canvas = document.getElementById("confetti");
+    const ctx = canvas.getContext("2d");
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    let pieces = [];
+    for(let i=0;i<100;i++){
+        pieces.push({
+            x: Math.random()*canvas.width,
+            y: Math.random()*canvas.height,
+            r: Math.random()*6+2,
+            d: Math.random()*100
+        });
+    }
+
+    function draw(){
+        ctx.clearRect(0,0,canvas.width,canvas.height);
+        ctx.fillStyle="rgba(216,180,254,0.7)";
+        pieces.forEach(p=>{
+            ctx.beginPath();
+            ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+            ctx.fill();
+        });
+        update();
+    }
+
+    function update(){
+        pieces.forEach(p=>{
+            p.y += Math.cos(p.d)+1;
+            if(p.y > canvas.height){
+                p.y = 0;
+                p.x = Math.random()*canvas.width;
+            }
+        });
+    }
+
+    setInterval(draw,20);
+}
+
+</script>
+
+</body>
+</html>
