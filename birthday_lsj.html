@@ -6,7 +6,7 @@
 <title>生日快乐互动网页</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
-body{font-family:"Microsoft YaHei",serif;background:linear-gradient(135deg,#ff9999,#ff4d4d);overflow:hidden;text-align:center;color:#333;}
+body{font-family:"Microsoft YaHei","PingFang SC",serif;background:linear-gradient(135deg,#ff9999,#ff4d4d);overflow:hidden;text-align:center;color:#333;}
 
 /* 背景漂浮金光点 */
 .background{
@@ -114,7 +114,7 @@ input[type=text]{
   <button id="btn2">下一页</button>
 </div>
 
-<!-- 页面3固定题目增强版 -->
+<!-- 页面3减法题互动 -->
 <div class="section" id="page3">
   <h1>happy</h1>
   <div style="margin-bottom:15px;">
@@ -123,14 +123,14 @@ input[type=text]{
   </div>
   
   <div id="mathSection" style="margin-top:20px; display:none;">
-    <div id="mathQuestion" style="font-size:18px; color:#fff; margin-bottom:10px;">
-      题目：3 / 4 = 6 / ?
+    <div id="mathQuestion" style="font-size:20px; color:#333; font-weight:bold; margin-bottom:10px; text-shadow:1px 1px 2px #fff;">
+      题目：424 - 212 = ?
     </div>
     <input type="text" id="mathInput" placeholder="输入答案">
-    <div id="thankText" style="margin-top:15px; color:#fff; font-size:18px;"></div>
+    <div id="thankText" style="margin-top:15px; color:#333; font-size:20px; font-weight:bold; text-shadow:1px 1px 2px #fff;"></div>
   </div>
 
-  <div id="wishText" style="margin-top:20px;color:#fff;"></div>
+  <div id="wishText" style="margin-top:20px;color:#333;"></div>
 </div>
 
 <!-- 页面4~10示例 -->
@@ -199,11 +199,10 @@ document.getElementById("balloonBtn").addEventListener("click",()=>{
 document.getElementById("btn1").addEventListener("click",()=>showPage(2));
 document.getElementById("btn2").addEventListener("click",()=>showPage(3));
 
-// 数学互动按钮
+// 数学互动按钮（减法题）
 document.getElementById("btnMath").addEventListener("click",()=>{
     document.getElementById("mathSection").style.display="block";
-
-    const correctAnswer = 8; // 固定答案
+    const correctAnswer = 212; // 固定答案
     const input = document.getElementById("mathInput");
     const thankText = document.getElementById("thankText");
 
@@ -213,6 +212,7 @@ document.getElementById("btnMath").addEventListener("click",()=>{
     input.oninput = ()=>{
         if(Number(input.value) === correctAnswer){
             input.disabled = true;
+            // 逐字显示感谢老师
             const msg = "感谢老师的培育";
             let index=0;
             const interval = setInterval(()=>{
@@ -221,19 +221,35 @@ document.getElementById("btnMath").addEventListener("click",()=>{
                     index++;
                 }else{
                     clearInterval(interval);
-                    // 显示大量祝福 emoji
-                    const items=["🎉","🎂","🎈","🧧","🎁","✨","🍊","🎋"];
-                    for(let i=0;i<40;i++){
-                        let b=document.createElement("div");
-                        b.className="balloon-fly";
-                        b.style.left=Math.random()*window.innerWidth+"px";
-                        b.style.bottom="0px";
-                        b.style.fontSize=(20+Math.random()*30)+"px";
-                        b.style.animationDuration=(3+Math.random()*3)+"s";
-                        b.innerText=items[Math.floor(Math.random()*items.length)];
-                        document.body.appendChild(b);
-                        setTimeout(()=>b.remove(),6000);
-                    }
+                    // 显示多个同学祝福，每个斜着漂浮
+                    const wishes = [
+                        "小明：祝老师生日快乐！",
+                        "小红：天天开心！",
+                        "小刚：身体健康！",
+                        "小丽：工作顺利！",
+                        "小华：桃李满天下！"
+                    ];
+                    wishes.forEach(text=>{
+                        let w = document.createElement("div");
+                        w.innerText = text;
+                        w.style.position = "fixed";
+                        w.style.left = Math.random()*window.innerWidth + "px";
+                        w.style.bottom = "0px";
+                        w.style.fontSize = (16 + Math.random()*10) + "px";
+                        w.style.fontWeight = "bold";
+                        w.style.color = "#333";
+                        w.style.transform = `rotate(${Math.random()*60-30}deg)`; // -30° ~ 30°斜着
+                        w.style.opacity = 1;
+                        w.style.pointerEvents = "none";
+                        w.style.zIndex = 3;
+                        document.body.appendChild(w);
+                        let animDuration = 3 + Math.random()*3;
+                        w.animate([
+                            {transform: w.style.transform + " translateY(0px)", opacity:1},
+                            {transform: w.style.transform + " translateY(-500px)", opacity:0}
+                        ],{duration: animDuration*1000, easing:"linear"});
+                        setTimeout(()=>w.remove(), animDuration*1000);
+                    });
                 }
             },200);
         }
