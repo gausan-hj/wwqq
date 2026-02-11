@@ -114,7 +114,7 @@ input[type=text]{
   <button id="btn2">下一页</button>
 </div>
 
-<!-- 页面3：先除法再减法互动 + 祝福循环 -->
+<!-- 页面3：数学题互动 + 祝福循环 -->
 <div class="section" id="page3">
   <h1>happy</h1>
   <div style="margin-bottom:15px;">
@@ -199,10 +199,10 @@ document.getElementById("balloonBtn").addEventListener("click",()=>{
 document.getElementById("btn1").addEventListener("click",()=>showPage(2));
 document.getElementById("btn2").addEventListener("click",()=>showPage(3));
 
-// 数学互动按钮（先除法再减法 + 循环祝福）
+// 数学互动按钮（先除法再减法 + 横向祝福循环）
 document.getElementById("btnMath").addEventListener("click",()=>{
     document.getElementById("mathSection").style.display="block";
-    const correctAnswer = 212; // 固定答案
+    const correctAnswer = 212;
     const input = document.getElementById("mathInput");
     const thankText = document.getElementById("thankText");
 
@@ -212,15 +212,14 @@ document.getElementById("btnMath").addEventListener("click",()=>{
     const wishes = [
         "黄宥敏：致：林淑娟老师\n生日快乐,老师祝你身体健康，长命百岁 🎉",
         "梁锦壕：致：林淑娟老师\n生日快乐老师，我祝你身体健康，心想事成，另外，也祝你新年快乐 ❤️",
-        "陈语捷：致：林淑娟老师\n生日快乐！祝老师天天开心，工作顺利，身体健康！🍀",
-        "李韡翰: 致：林淑娟老师\n生日快乐！祝老师身体健康，笑口常开，新年快乐，万事如意！🎉❤️🍀",
+        "陈语捷：致：林淑娟老师\n生日快乐，祝老师天天开心，工作顺利，身体健康！🍀",
+        "李韡翰：致：林淑娟老师\n生日快乐。祝老师身体健康，笑口常开，新年快乐，万事如意！🎉❤️🍀",
         "祝老师新年快乐！🎉"
     ];
 
     input.oninput = ()=>{
         if(Number(input.value) === correctAnswer){
             input.disabled = true;
-            // 逐字显示感谢老师
             const msg = "感谢老师的培育";
             let index=0;
             const interval = setInterval(()=>{
@@ -229,7 +228,6 @@ document.getElementById("btnMath").addEventListener("click",()=>{
                     index++;
                 }else{
                     clearInterval(interval);
-                    // 循环显示祝福
                     function spawnWishes(){
                         wishes.forEach(text=>{
                             let w = document.createElement("div");
@@ -242,12 +240,12 @@ document.getElementById("btnMath").addEventListener("click",()=>{
                             w.style.color = "#fff";
                             w.style.textShadow = "1px 1px 4px #aa0000";
                             w.style.whiteSpace = "pre-line";
-                            w.style.transform = `rotate(${Math.random()*60-30}deg)`;
+                            w.style.transform = `rotate(${Math.random()*20-10}deg)`; // 斜着角度小一点
                             w.style.opacity = 1;
                             w.style.pointerEvents = "none";
                             w.style.zIndex = 3;
                             document.body.appendChild(w);
-                            let animDuration = 3 + Math.random()*3;
+                            let animDuration = 8 + Math.random()*4; // 时间拉长，看得更久
                             w.animate([
                                 {transform: w.style.transform + " translateY(0px)", opacity:1},
                                 {transform: w.style.transform + " translateY(-500px)", opacity:0}
@@ -255,9 +253,8 @@ document.getElementById("btnMath").addEventListener("click",()=>{
                             setTimeout(()=>w.remove(), animDuration*1000);
                         });
                     }
-
-                    spawnWishes(); // 首次显示
-                    setInterval(spawnWishes,10000); // 每10秒循环
+                    spawnWishes();
+                    setInterval(spawnWishes,10000);
                 }
             },200);
         }
