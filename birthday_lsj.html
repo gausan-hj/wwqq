@@ -114,7 +114,7 @@ input[type=text]{
   <button id="btn2">下一页</button>
 </div>
 
-<!-- 页面3减法题互动 -->
+<!-- 页面3：先除法再减法互动 -->
 <div class="section" id="page3">
   <h1>happy</h1>
   <div style="margin-bottom:15px;">
@@ -124,7 +124,7 @@ input[type=text]{
   
   <div id="mathSection" style="margin-top:20px; display:none;">
     <div id="mathQuestion" style="font-size:20px; color:#333; font-weight:bold; margin-bottom:10px; text-shadow:1px 1px 2px #fff;">
-      题目：424 - 212 = ?
+      题目：(524 ÷ 2) - 50 = ?
     </div>
     <input type="text" id="mathInput" placeholder="输入答案">
     <div id="thankText" style="margin-top:15px; color:#333; font-size:20px; font-weight:bold; text-shadow:1px 1px 2px #fff;"></div>
@@ -199,7 +199,7 @@ document.getElementById("balloonBtn").addEventListener("click",()=>{
 document.getElementById("btn1").addEventListener("click",()=>showPage(2));
 document.getElementById("btn2").addEventListener("click",()=>showPage(3));
 
-// 数学互动按钮（减法题）
+// 数学互动按钮（先除法再减法）
 document.getElementById("btnMath").addEventListener("click",()=>{
     document.getElementById("mathSection").style.display="block";
     const correctAnswer = 212; // 固定答案
@@ -221,35 +221,41 @@ document.getElementById("btnMath").addEventListener("click",()=>{
                     index++;
                 }else{
                     clearInterval(interval);
-                    // 显示多个同学祝福，每个斜着漂浮
+                    // 循环显示祝福
                     const wishes = [
-                        "小明：祝老师生日快乐！",
-                        "小红：天天开心！",
-                        "小刚：身体健康！",
-                        "小丽：工作顺利！",
-                        "小华：桃李满天下！"
+                        "小明：祝老师生日快乐！🎉",
+                        "小红：天天开心！❤️",
+                        "小刚：身体健康！🍀",
+                        "小丽：工作顺利！💐",
+                        "小华：桃李满天下！🌸"
                     ];
-                    wishes.forEach(text=>{
-                        let w = document.createElement("div");
-                        w.innerText = text;
-                        w.style.position = "fixed";
-                        w.style.left = Math.random()*window.innerWidth + "px";
-                        w.style.bottom = "0px";
-                        w.style.fontSize = (16 + Math.random()*10) + "px";
-                        w.style.fontWeight = "bold";
-                        w.style.color = "#333";
-                        w.style.transform = `rotate(${Math.random()*60-30}deg)`; // -30° ~ 30°斜着
-                        w.style.opacity = 1;
-                        w.style.pointerEvents = "none";
-                        w.style.zIndex = 3;
-                        document.body.appendChild(w);
-                        let animDuration = 3 + Math.random()*3;
-                        w.animate([
-                            {transform: w.style.transform + " translateY(0px)", opacity:1},
-                            {transform: w.style.transform + " translateY(-500px)", opacity:0}
-                        ],{duration: animDuration*1000, easing:"linear"});
-                        setTimeout(()=>w.remove(), animDuration*1000);
-                    });
+
+                    function spawnWishes(){
+                        wishes.forEach(text=>{
+                            let w = document.createElement("div");
+                            w.innerText = text;
+                            w.style.position = "fixed";
+                            w.style.left = Math.random()*window.innerWidth + "px";
+                            w.style.bottom = "0px";
+                            w.style.fontSize = (16 + Math.random()*10) + "px";
+                            w.style.fontWeight = "bold";
+                            w.style.color = "#333";
+                            w.style.transform = `rotate(${Math.random()*60-30}deg)`; // -30° ~ 30°斜着
+                            w.style.opacity = 1;
+                            w.style.pointerEvents = "none";
+                            w.style.zIndex = 3;
+                            document.body.appendChild(w);
+                            let animDuration = 3 + Math.random()*3;
+                            w.animate([
+                                {transform: w.style.transform + " translateY(0px)", opacity:1},
+                                {transform: w.style.transform + " translateY(-500px)", opacity:0}
+                            ],{duration: animDuration*1000, easing:"linear"});
+                            setTimeout(()=>w.remove(), animDuration*1000);
+                        });
+                    }
+
+                    spawnWishes(); // 首次显示
+                    setInterval(spawnWishes,10000); // 每10秒循环
                 }
             },200);
         }
