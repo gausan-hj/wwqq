@@ -256,8 +256,11 @@ function showWish(){
 }
 
 // 点击气球
+let extraBlessingShown = false; // 控制是否已经显示过
+
 balloonBtn.addEventListener("click", ()=>{
-  if(mathInput.disabled){ // 只有输入正确答案后才允许
+  if(mathInput.disabled){
+
     const items=["🎈","🧧","🍊","🎋","🎊","🎂","🎉"];
     for(let i=0;i<20;i++){
       let b=document.createElement("div");
@@ -271,15 +274,20 @@ balloonBtn.addEventListener("click", ()=>{
       setTimeout(()=>b.remove(),5000);
     }
 
-    // 追加祝福文字
-    const extra = document.createElement("div");
-    extra.style.color="#fff";
-    extra.style.fontWeight="bold";
-    extra.style.textShadow="1px 1px 4px #aa0000";
-    extra.style.marginTop="5px";
-    extra.style.whiteSpace="pre-line";
-    extra.innerText = "愿林淑娟老师生日快乐，岁岁平安！🎉";
-    extraWishes.appendChild(extra);
+    // ⭐ 只允许出现一次祝福
+    if(!extraBlessingShown){
+        const extra = document.createElement("div");
+        extra.style.color="#fff";
+        extra.style.fontWeight="bold";
+        extra.style.textShadow="1px 1px 4px #aa0000";
+        extra.style.marginTop="5px";
+        extra.style.whiteSpace="pre-line";
+        extra.innerText = "愿老师生日快乐，岁岁平安！🎉";
+        extraWishes.appendChild(extra);
+
+        extraBlessingShown = true; // 标记已经显示过
+    }
+
   }
 });
 </script>
