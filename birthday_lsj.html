@@ -10,7 +10,7 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    -webkit-tap-highlight-color: transparent; /* 移除蓝色点击框 */
+    -webkit-tap-highlight-color: transparent; /* 去掉蓝色方框 */
 }
 
 body {
@@ -21,7 +21,7 @@ body {
     color: #444;
 }
 
-/* 漂浮光点背景 */
+/* 背景漂浮光点 */
 .background span{
     position:absolute;
     width:8px;
@@ -49,11 +49,13 @@ body {
     opacity:0;
     transform:translateY(30px);
     transition: all 0.8s ease;
+    pointer-events:none;
 }
 
 .section.active{
     opacity:1;
     transform:translateY(0);
+    pointer-events:auto;
 }
 
 h1{
@@ -77,18 +79,6 @@ button{
 
 button:active{
     transform:scale(0.95);
-}
-
-/* 波纹效果 */
-button::after{
-    content:"";
-    position:absolute;
-    width:0;
-    height:0;
-    background:rgba(255,255,255,0.6);
-    border-radius:50%;
-    transform:translate(-50%,-50%);
-    pointer-events:none;
 }
 
 button:focus{
@@ -147,31 +137,33 @@ button:focus{
 <!-- 页面1 -->
 <div class="section active" id="page1">
     <h1>今天，是一个温柔的日子</h1>
-    <button onclick="nextPage(2)">点击开启</button>
+    <button id="btn1">点击开启</button>
 </div>
 
 <!-- 页面2 -->
 <div class="section" id="page2">
     <h1>她每天教导我们<br>她默默付出<br>她用心守护</h1>
-    <button onclick="nextPage(3)">她是谁？</button>
+    <button id="btn2">她是谁？</button>
+    <div id="revealText" style="margin-top:20px;font-size:20px;"></div>
 </div>
 
 <!-- 页面3 -->
 <div class="section" id="page3">
     <h1>生日快乐 ❤️</h1>
 
-    <div class="card" onclick="toggle(this)">
+    <div class="card" onclick="toggleCard(this)">
         📅 那句鼓励
         <div class="hidden">“相信自己。”</div>
     </div>
 
-    <div class="card" onclick="toggle(this)">
+    <div class="card" onclick="toggleCard(this)">
         📅 那份严格
         <div class="hidden">其实是最深的关心。</div>
     </div>
 
     <br>
-    <div class="balloon" onclick="fly(this)">🎈</div>
+    <div class="balloon" id="balloon">🎈</div>
+    <div id="wishText" style="margin-top:20px;"></div>
 </div>
 
 <div class="secret" onclick="alert('谢谢您一直以来的教导与陪伴。')">
@@ -179,25 +171,7 @@ button:focus{
 </div>
 
 <script>
-
-/* 页面切换 */
-function nextPage(num){
-    document.querySelectorAll('.section').forEach(p=>p.classList.remove('active'));
-    document.getElementById("page"+num).classList.add('active');
-}
-
-/* 展开卡片 */
-function toggle(el){
-    let hidden = el.querySelector(".hidden");
-    hidden.style.display = hidden.style.display==="block"?"none":"block";
-}
-
-/* 气球飞走 */
-function fly(el){
-    el.classList.add("fly");
-}
-
-/* 生成漂浮光点 */
+// 背景光点生成
 const bg = document.querySelector(".background");
 for(let i=0;i<40;i++){
     let span=document.createElement("span");
@@ -207,7 +181,31 @@ for(let i=0;i<40;i++){
     bg.appendChild(span);
 }
 
-</script>
+// 页面切换函数
+function showPage(id){
+    document.querySelectorAll('.section').forEach(p=>p.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+}
 
+// 按钮点击事件绑定
+document.getElementById("btn1").addEventListener("click", ()=>showPage("page2"));
+document.getElementById("btn2").addEventListener("click", ()=>{
+    document.getElementById("revealText").innerHTML="是我们最敬爱的老师 🎂<br>祝您生日快乐，幸福安康。";
+    setTimeout(()=>showPage("page3"),2000);
+});
+
+// 卡片展开
+function toggleCard(el){
+    let hidden = el.querySelector(".hidden");
+    hidden.style.display = hidden.style.display==="block"?"none":"block";
+}
+
+// 气球飞走
+document.getElementById("balloon").addEventListener("click", function(){
+    this.classList.add("fly");
+    document.getElementById("wishText").innerHTML="愿您被温柔以待，岁月对您格外温柔。";
+});
+
+</script>
 </body>
 </html>
