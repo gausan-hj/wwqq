@@ -1,0 +1,777 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MapExplorer - 智能地图探索</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <link href="https://fontsource.ink/fontsource/css/noto-sans-sc.css" rel="stylesheet">
+    <style>
+        * {
+            font-family: 'Noto Sans SC', sans-serif;
+        }
+        
+        #map {
+            height: calc(100vh - 80px);
+            width: 100%;
+            z-index: 1;
+        }
+        
+        .sidebar {
+            transition: transform 0.3s ease-in-out;
+        }
+        
+        .sidebar-closed {
+            transform: translateX(-100%);
+        }
+        
+        .leaflet-popup-content-wrapper {
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+        }
+        
+        .leaflet-popup-content {
+            margin: 12px;
+            font-size: 14px;
+        }
+        
+        .control-btn {
+            transition: all 0.2s ease;
+        }
+        
+        .control-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+        
+        .control-btn:active {
+            transform: translateY(0);
+        }
+        
+        .search-result-item {
+            transition: all 0.2s ease;
+        }
+        
+        .search-result-item:hover {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        
+        .layer-option {
+            transition: all 0.2s ease;
+        }
+        
+        .layer-option.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        
+        .marker-cluster {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 50%;
+            color: white;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        
+        .pulse-animation {
+            animation: pulse 2s infinite;
+        }
+        
+        .loading-spinner {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #667eea;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: #667eea;
+            border-radius: 3px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: #764ba2;
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+    <div class="flex flex-col h-screen">
+        <header class="bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 text-white shadow-lg z-50">
+            <div class="container mx-auto px-4 py-3">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-10 h-10 bg-white rounded-full flex items-center justify-center">
+                            <svg class="w-6 h-6 text-indigo-600" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <h1 class="text-xl font-bold">MapExplorer</h1>
+                            <p class="text-xs text-indigo-200">智能地图探索平台</p>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-center space-x-4">
+                        <button id="toggleSidebar" class="control-btn bg-white/20 hover:bg-white/30 px-4 py-2 rounded-lg flex items-center space-x-2">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+                            </svg>
+                            <span class="hidden sm:inline">菜单</span>
+                        </button>
+                        <button id="locateBtn" class="control-btn bg-white/20 hover:bg-white/30 px-4 py-2 rounded-lg flex items-center space-x-2">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+                            </svg>
+                            <span class="hidden sm:inline">定位</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <div class="flex flex-1 overflow-hidden">
+            <aside id="sidebar" class="sidebar w-80 bg-white shadow-xl z-40 overflow-y-auto">
+                <div class="p-4">
+                    <div class="mb-6">
+                        <h2 class="text-lg font-semibold text-gray-800 mb-3 flex items-center">
+                            <svg class="w-5 h-5 mr-2 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                            </svg>
+                            搜索地点
+                        </h2>
+                        <div class="relative">
+                            <input type="text" id="searchInput" placeholder="输入地点名称..." 
+                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition">
+                            <button id="searchBtn" class="absolute right-2 top-1/2 transform -translate-y-1/2 bg-indigo-600 hover:bg-indigo-700 text-white px-3 py-1.5 rounded-lg transition">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                                </svg>
+                            </button>
+                        </div>
+                        <div id="searchResults" class="mt-2 space-y-1 max-h-48 overflow-y-auto"></div>
+                    </div>
+
+                    <div class="mb-6">
+                        <h2 class="text-lg font-semibold text-gray-800 mb-3 flex items-center">
+                            <svg class="w-5 h-5 mr-2 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"/>
+                            </svg>
+                            地图图层
+                        </h2>
+                        <div class="space-y-2">
+                            <button class="layer-option active w-full text-left px-4 py-3 rounded-lg border border-gray-200 hover:border-indigo-300 transition" data-layer="street">
+                                <div class="flex items-center">
+                                    <div class="w-8 h-8 bg-gradient-to-br from-green-400 to-blue-500 rounded mr-3"></div>
+                                    <div>
+                                        <p class="font-medium">街道地图</p>
+                                        <p class="text-xs text-gray-500">详细街道信息</p>
+                                    </div>
+                                </div>
+                            </button>
+                            <button class="layer-option w-full text-left px-4 py-3 rounded-lg border border-gray-200 hover:border-indigo-300 transition" data-layer="satellite">
+                                <div class="flex items-center">
+                                    <div class="w-8 h-8 bg-gradient-to-br from-blue-600 to-green-600 rounded mr-3"></div>
+                                    <div>
+                                        <p class="font-medium">卫星图像</p>
+                                        <p class="text-xs text-gray-500">真实卫星视图</p>
+                                    </div>
+                                </div>
+                            </button>
+                            <button class="layer-option w-full text-left px-4 py-3 rounded-lg border border-gray-200 hover:border-indigo-300 transition" data-layer="terrain">
+                                <div class="flex items-center">
+                                    <div class="w-8 h-8 bg-gradient-to-br from-yellow-400 to-orange-500 rounded mr-3"></div>
+                                    <div>
+                                        <p class="font-medium">地形图</p>
+                                        <p class="text-xs text-gray-500">地形高程信息</p>
+                                    </div>
+                                </div>
+                            </button>
+                            <button class="layer-option w-full text-left px-4 py-3 rounded-lg border border-gray-200 hover:border-indigo-300 transition" data-layer="dark">
+                                <div class="flex items-center">
+                                    <div class="w-8 h-8 bg-gradient-to-br from-gray-700 to-gray-900 rounded mr-3"></div>
+                                    <div>
+                                        <p class="font-medium">深色模式</p>
+                                        <p class="text-xs text-gray-500">夜间友好视图</p>
+                                    </div>
+                                </div>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="mb-6">
+                        <h2 class="text-lg font-semibold text-gray-800 mb-3 flex items-center">
+                            <svg class="w-5 h-5 mr-2 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+                            </svg>
+                            我的标记
+                        </h2>
+                        <div id="markersList" class="space-y-2 max-h-48 overflow-y-auto">
+                            <p class="text-gray-500 text-sm text-center py-4">暂无标记，点击地图添加</p>
+                        </div>
+                        <button id="clearMarkers" class="mt-3 w-full bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg transition flex items-center justify-center">
+                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                            </svg>
+                            清除所有标记
+                        </button>
+                    </div>
+
+                    <div>
+                        <h2 class="text-lg font-semibold text-gray-800 mb-3 flex items-center">
+                            <svg class="w-5 h-5 mr-2 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                            </svg>
+                            快速操作
+                        </h2>
+                        <div class="grid grid-cols-2 gap-2">
+                            <button id="addMarkerMode" class="control-btn bg-indigo-50 hover:bg-indigo-100 text-indigo-700 px-3 py-3 rounded-lg text-sm transition">
+                                <svg class="w-5 h-5 mx-auto mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                                </svg>
+                                添加标记
+                            </button>
+                            <button id="measureDistance" class="control-btn bg-green-50 hover:bg-green-100 text-green-700 px-3 py-3 rounded-lg text-sm transition">
+                                <svg class="w-5 h-5 mx-auto mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m8-2a2 2 0 00-2-2H7a2 2 0 00-2 2v2m8-10V5a2 2 0 00-2-2H7a2 2 0 00-2 2v6m8 0V5a2 2 0 00-2-2H7a2 2 0 00-2 2v6"/>
+                                </svg>
+                                测量距离
+                            </button>
+                            <button id="drawRoute" class="control-btn bg-purple-50 hover:bg-purple-100 text-purple-700 px-3 py-3 rounded-lg text-sm transition">
+                                <svg class="w-5 h-5 mx-auto mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/>
+                                </svg>
+                                绘制路线
+                            </button>
+                            <button id="fullscreenMap" class="control-btn bg-orange-50 hover:bg-orange-100 text-orange-700 px-3 py-3 rounded-lg text-sm transition">
+                                <svg class="w-5 h-5 mx-auto mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"/>
+                                </svg>
+                                全屏模式
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </aside>
+
+            <main class="flex-1 relative">
+                <div id="map"></div>
+                
+                <div class="absolute bottom-4 right-4 z-30 space-y-2">
+                    <div class="bg-white rounded-lg shadow-lg p-3">
+                        <div class="text-center">
+                            <p class="text-xs text-gray-500">缩放级别</p>
+                            <p id="zoomLevel" class="text-lg font-bold text-indigo-600">10</p>
+                        </div>
+                    </div>
+                    <div class="bg-white rounded-lg shadow-lg p-3">
+                        <div class="text-center">
+                            <p class="text-xs text-gray-500">坐标</p>
+                            <p id="coordinates" class="text-xs font-mono text-gray-700">-</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="notification" class="absolute top-4 left-1/2 transform -translate-x-1/2 z-50 hidden">
+                    <div class="bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg flex items-center space-x-2">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                        </svg>
+                        <span id="notificationText">操作成功</span>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script>
+        let map;
+        let markers = [];
+        let currentLayer = 'street';
+        let addMarkerMode = false;
+        let measureMode = false;
+        let measurePoints = [];
+        let measureLine = null;
+        let routePoints = [];
+        let routeLine = null;
+        let layerGroups = {};
+
+        const markerIconUrl = 'https://image.qwenlm.ai/public_source/daaf266c-4c96-4791-b087-a96fbb2609b5/107d0e64a-54fa-44e2-a022-0c24585be1a7.png';
+        const searchIconUrl = 'https://image.qwenlm.ai/public_source/daaf266c-4c96-4791-b087-a96fbb2609b5/12d9d2c45-ca97-4f2d-9cb1-ff4227cddd78.png';
+        const routeIconUrl = 'https://image.qwenlm.ai/public_source/daaf266c-4c96-4791-b087-a96fbb2609b5/1ce38c5ee-8fcb-4a6d-84b8-e61e5517c546.png';
+
+        const tileLayers = {
+            street: L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '© OpenStreetMap contributors',
+                maxZoom: 19
+            }),
+            satellite: L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+                attribution: '© ESRI',
+                maxZoom: 19
+            }),
+            terrain: L.tileLayer('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', {
+                attribution: '© OpenTopoMap',
+                maxZoom: 17
+            }),
+            dark: L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+                attribution: '© CartoDB',
+                maxZoom: 19
+            })
+        };
+
+        function initMap() {
+            map = L.map('map', {
+                center: [39.9042, 116.4074],
+                zoom: 10,
+                zoomControl: false
+            });
+
+            tileLayers.street.addTo(map);
+            layerGroups.street = tileLayers.street;
+
+            L.control.zoom({
+                position: 'bottomright'
+            }).addTo(map);
+
+            L.control.scale({
+                position: 'bottomleft',
+                metric: true,
+                imperial: false
+            }).addTo(map);
+
+            map.on('zoomend', () => {
+                document.getElementById('zoomLevel').textContent = map.getZoom();
+            });
+
+            map.on('mousemove', (e) => {
+                document.getElementById('coordinates').textContent = 
+                    `${e.latlng.lat.toFixed(4)}, ${e.latlng.lng.toFixed(4)}`;
+            });
+
+            map.on('click', handleMapClick);
+
+            setupSidebar();
+            setupSearch();
+            setupLayerSwitcher();
+            setupQuickActions();
+        }
+
+        function setupSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const toggleBtn = document.getElementById('toggleSidebar');
+            let isClosed = false;
+
+            toggleBtn.addEventListener('click', () => {
+                isClosed = !isClosed;
+                if (isClosed) {
+                    sidebar.classList.add('sidebar-closed');
+                } else {
+                    sidebar.classList.remove('sidebar-closed');
+                }
+            });
+
+            document.getElementById('locateBtn').addEventListener('click', () => {
+                if (navigator.geolocation) {
+                    navigator.geolocation.getCurrentPosition(
+                        (position) => {
+                            const lat = position.coords.latitude;
+                            const lng = position.coords.longitude;
+                            map.setView([lat, lng], 15);
+                            
+                            L.marker([lat, lng])
+                                .addTo(map)
+                                .bindPopup('<b>您当前的位置</b><br>已定位成功')
+                                .openPopup();
+                            
+                            showNotification('定位成功！');
+                        },
+                        () => {
+                            showNotification('无法获取位置，请检查权限设置', 'error');
+                        }
+                    );
+                } else {
+                    showNotification('浏览器不支持地理定位', 'error');
+                }
+            });
+        }
+
+        function setupSearch() {
+            const searchInput = document.getElementById('searchInput');
+            const searchBtn = document.getElementById('searchBtn');
+            const searchResults = document.getElementById('searchResults');
+
+            const sampleLocations = [
+                { name: '北京故宫', lat: 39.9163, lng: 116.3972 },
+                { name: '上海外滩', lat: 31.2397, lng: 121.4900 },
+                { name: '广州塔', lat: 23.1064, lng: 113.3260 },
+                { name: '深圳湾公园', lat: 22.5071, lng: 113.9492 },
+                { name: '杭州西湖', lat: 30.2441, lng: 120.1488 },
+                { name: '成都大熊猫基地', lat: 30.7328, lng: 104.1469 },
+                { name: '西安兵马俑', lat: 34.3848, lng: 109.2734 },
+                { name: '重庆洪崖洞', lat: 29.5654, lng: 106.5790 }
+            ];
+
+            function performSearch() {
+                const query = searchInput.value.trim().toLowerCase();
+                searchResults.innerHTML = '';
+
+                if (query.length === 0) {
+                    return;
+                }
+
+                const results = sampleLocations.filter(loc => 
+                    loc.name.toLowerCase().includes(query)
+                );
+
+                if (results.length === 0) {
+                    searchResults.innerHTML = '<p class="text-gray-500 text-sm text-center py-2">未找到相关地点</p>';
+                    return;
+                }
+
+                results.forEach(loc => {
+                    const item = document.createElement('div');
+                    item.className = 'search-result-item px-3 py-2 rounded-lg cursor-pointer text-sm';
+                    item.innerHTML = `
+                        <div class="flex items-center">
+                            <svg class="w-4 h-4 mr-2 text-indigo-600" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"/>
+                            </svg>
+                            <span>${loc.name}</span>
+                        </div>
+                    `;
+                    item.addEventListener('click', () => {
+                        map.setView([loc.lat, loc.lng], 14);
+                        L.marker([loc.lat, loc.lng])
+                            .addTo(map)
+                            .bindPopup(`<b>${loc.name}</b><br>已添加到地图`)
+                            .openPopup();
+                        searchInput.value = '';
+                        searchResults.innerHTML = '';
+                        showNotification(`已导航至 ${loc.name}`);
+                    });
+                    searchResults.appendChild(item);
+                });
+            }
+
+            searchBtn.addEventListener('click', performSearch);
+            searchInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    performSearch();
+                }
+            });
+        }
+
+        function setupLayerSwitcher() {
+            const layerOptions = document.querySelectorAll('.layer-option');
+            
+            layerOptions.forEach(option => {
+                option.addEventListener('click', () => {
+                    const layerName = option.dataset.layer;
+                    
+                    layerOptions.forEach(opt => opt.classList.remove('active'));
+                    option.classList.add('active');
+
+                    Object.values(layerGroups).forEach(layer => {
+                        if (map.hasLayer(layer)) {
+                            map.removeLayer(layer);
+                        }
+                    });
+
+                    if (!layerGroups[layerName]) {
+                        layerGroups[layerName] = tileLayers[layerName];
+                    }
+                    layerGroups[layerName].addTo(map);
+                    currentLayer = layerName;
+
+                    showNotification(`已切换至${option.querySelector('p').textContent}`);
+                });
+            });
+        }
+
+        function setupQuickActions() {
+            document.getElementById('addMarkerMode').addEventListener('click', () => {
+                addMarkerMode = !addMarkerMode;
+                measureMode = false;
+                document.getElementById('addMarkerMode').classList.toggle('bg-indigo-200', addMarkerMode);
+                showNotification(addMarkerMode ? '点击地图添加标记' : '已退出标记模式');
+            });
+
+            document.getElementById('measureDistance').addEventListener('click', () => {
+                measureMode = !measureMode;
+                addMarkerMode = false;
+                if (!measureMode) {
+                    measurePoints = [];
+                    if (measureLine) {
+                        map.removeLayer(measureLine);
+                        measureLine = null;
+                    }
+                    markers.forEach(m => {
+                        if (m.customMarker && m.customMarker.type === 'measure') {
+                            map.removeLayer(m);
+                        }
+                    });
+                }
+                document.getElementById('measureDistance').classList.toggle('bg-green-200', measureMode);
+                showNotification(measureMode ? '点击地图测量距离' : '已退出测量模式');
+            });
+
+            document.getElementById('drawRoute').addEventListener('click', () => {
+                routePoints = [];
+                if (routeLine) {
+                    map.removeLayer(routeLine);
+                    routeLine = null;
+                }
+                showNotification('请在地图上点击设置路线点');
+            });
+
+            document.getElementById('fullscreenMap').addEventListener('click', () => {
+                const elem = document.documentElement;
+                if (!document.fullscreenElement) {
+                    elem.requestFullscreen().catch(err => {
+                        showNotification('无法进入全屏模式', 'error');
+                    });
+                } else {
+                    document.exitFullscreen();
+                }
+            });
+
+            document.getElementById('clearMarkers').addEventListener('click', () => {
+                markers.forEach(marker => map.removeLayer(marker));
+                markers = [];
+                updateMarkersList();
+                showNotification('已清除所有标记');
+            });
+        }
+
+        function handleMapClick(e) {
+            if (measureMode) {
+                handleMeasureClick(e);
+                return;
+            }
+
+            if (addMarkerMode) {
+                addMarker(e.latlng);
+                return;
+            }
+
+            if (routePoints.length < 2) {
+                routePoints.push(e.latlng);
+                L.marker(e.latlng, {
+                    icon: L.divIcon({
+                        className: 'bg-green-500 rounded-full w-4 h-4 border-2 border-white',
+                        iconSize: [16, 16]
+                    })
+                }).addTo(map);
+
+                if (routePoints.length === 2) {
+                    drawRoute();
+                }
+            }
+        }
+
+        function addMarker(latlng) {
+            const marker = L.marker(latlng, {
+                icon: L.icon({
+                    iconUrl: markerIconUrl,
+                    iconSize: [32, 32],
+                    iconAnchor: [16, 32],
+                    popupAnchor: [0, -32]
+                })
+            }).addTo(map);
+
+            const popupContent = `
+                <div class="p-2">
+                    <h3 class="font-bold mb-2">新标记</h3>
+                    <p class="text-sm text-gray-600 mb-2">纬度：${latlng.lat.toFixed(4)}</p>
+                    <p class="text-sm text-gray-600 mb-3">经度：${latlng.lng.toFixed(4)}</p>
+                    <input type="text" placeholder="添加备注..." 
+                        class="w-full px-2 py-1 border rounded text-sm mb-2" id="markerNote">
+                    <button class="w-full bg-red-500 text-white px-3 py-1 rounded text-sm hover:bg-red-600" 
+                        onclick="removeMarker(${markers.length})">删除标记</button>
+                </div>
+            `;
+
+            marker.bindPopup(popupContent);
+            marker.openPopup();
+
+            marker.on('popupopen', () => {
+                const noteInput = document.getElementById('markerNote');
+                if (noteInput) {
+                    noteInput.addEventListener('change', () => {
+                        marker.bindPopup(`
+                            <div class="p-2">
+                                <h3 class="font-bold mb-2">${noteInput.value || '新标记'}</h3>
+                                <p class="text-sm text-gray-600 mb-2">纬度：${latlng.lat.toFixed(4)}</p>
+                                <p class="text-sm text-gray-600 mb-3">经度：${latlng.lng.toFixed(4)}</p>
+                                <button class="w-full bg-red-500 text-white px-3 py-1 rounded text-sm hover:bg-red-600" 
+                                    onclick="removeMarker(${markers.length})">删除标记</button>
+                            </div>
+                        `);
+                    });
+                }
+            });
+
+            markers.push(marker);
+            updateMarkersList();
+            showNotification('标记已添加');
+        }
+
+        function handleMeasureClick(e) {
+            measurePoints.push(e.latlng);
+
+            const measureMarker = L.circleMarker(e.latlng, {
+                radius: 6,
+                fillColor: '#22c55e',
+                color: '#fff',
+                weight: 2,
+                opacity: 1,
+                fillOpacity: 1
+            }).addTo(map);
+            measureMarker.customMarker = { type: 'measure' };
+            markers.push(measureMarker);
+
+            if (measurePoints.length > 1) {
+                if (measureLine) {
+                    map.removeLayer(measureLine);
+                }
+                measureLine = L.polyline(measurePoints, {
+                    color: '#22c55e',
+                    weight: 3,
+                    dashArray: '10, 10'
+                }).addTo(map);
+
+                const distance = calculateDistance(measurePoints);
+                measureLine.bindPopup(`<b>总距离</b><br>${distance.toFixed(2)} 公里`).openPopup();
+            }
+        }
+
+        function calculateDistance(points) {
+            let total = 0;
+            for (let i = 1; i < points.length; i++) {
+                total += points[i-1].distanceTo(points[i]);
+            }
+            return total / 1000;
+        }
+
+        function drawRoute() {
+            if (routePoints.length < 2) return;
+
+            if (routeLine) {
+                map.removeLayer(routeLine);
+            }
+
+            routeLine = L.polyline(routePoints, {
+                color: '#667eea',
+                weight: 4,
+                opacity: 0.8
+            }).addTo(map);
+
+            const distance = calculateDistance(routePoints);
+            routeLine.bindPopup(`
+                <div class="p-2">
+                    <h3 class="font-bold mb-2">路线信息</h3>
+                    <p class="text-sm">总距离：${distance.toFixed(2)} 公里</p>
+                    <p class="text-sm">途经点：${routePoints.length}</p>
+                </div>
+            `).openPopup();
+
+            map.fitBounds(routeLine.getBounds(), { padding: [50, 50] });
+            showNotification(`路线已绘制，总距离 ${distance.toFixed(2)} 公里`);
+            routePoints = [];
+        }
+
+        function updateMarkersList() {
+            const list = document.getElementById('markersList');
+            
+            if (markers.length === 0) {
+                list.innerHTML = '<p class="text-gray-500 text-sm text-center py-4">暂无标记，点击地图添加</p>';
+                return;
+            }
+
+            list.innerHTML = '';
+            markers.forEach((marker, index) => {
+                const latlng = marker.getLatLng();
+                const item = document.createElement('div');
+                item.className = 'px-3 py-2 bg-gray-50 rounded-lg text-sm cursor-pointer hover:bg-indigo-50 transition';
+                item.innerHTML = `
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center">
+                            <svg class="w-4 h-4 mr-2 text-red-500" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"/>
+                            </svg>
+                            <span>标记 ${index + 1}</span>
+                        </div>
+                        <button class="text-red-500 hover:text-red-700" onclick="removeMarker(${index})">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                            </svg>
+                        </button>
+                    </div>
+                    <p class="text-xs text-gray-500 ml-6 mt-1">${latlng.lat.toFixed(4)}, ${latlng.lng.toFixed(4)}</p>
+                `;
+                item.addEventListener('click', (e) => {
+                    if (!e.target.closest('button')) {
+                        map.setView(latlng, 15);
+                        marker.openPopup();
+                    }
+                });
+                list.appendChild(item);
+            });
+        }
+
+        window.removeMarker = function(index) {
+            if (markers[index]) {
+                map.removeLayer(markers[index]);
+                markers.splice(index, 1);
+                updateMarkersList();
+                showNotification('标记已删除');
+            }
+        };
+
+        function showNotification(message, type = 'success') {
+            const notification = document.getElementById('notification');
+            const notificationText = document.getElementById('notificationText');
+            
+            notification.className = `absolute top-4 left-1/2 transform -translate-x-1/2 z-50 ${
+                type === 'error' ? 'bg-red-500' : 'bg-green-500'
+            } text-white px-6 py-3 rounded-lg shadow-lg flex items-center space-x-2`;
+            
+            notificationText.textContent = message;
+            notification.classList.remove('hidden');
+            
+            setTimeout(() => {
+                notification.classList.add('hidden');
+            }, 3000);
+        }
+
+        document.addEventListener('DOMContentLoaded', initMap);
+    </script>
+</body>
+</html>
+
