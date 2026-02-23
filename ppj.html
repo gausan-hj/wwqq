@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Projek Kata Ganda - Kumpulan 4 (Halaman Tajuk)</title>
+    <title>Projek Kata Ganda - Kumpulan 4 (Gabungan)</title>
     <style>
         * {
             margin: 0;
@@ -27,77 +27,62 @@
             overflow: hidden;
             border: 1px solid #b0a28a;
         }
-        /* Halaman tajuk (separate page style) */
-        .title-page {
-            background: #fffcf5;
-            padding: 55px 40px 60px 40px;
+        /* Header terus di atas kandungan - tanpa halaman tajuk berasingan */
+        .project-header {
+            background: linear-gradient(145deg, #2c5234, #1f3a2b);
+            color: white;
+            padding: 30px 30px 20px 30px;
             text-align: center;
-            border-bottom: 3px solid #2c5530;
-            page-break-after: always; /* untuk word, kesan muka surat berasingan */
+            border-bottom: 5px solid #c9b27e;
         }
-        .title-page h1 {
-            font-size: 42px;
-            letter-spacing: 3px;
-            color: #1f3a2b;
-            margin-top: 40px;
+        .project-header h1 {
+            font-size: 38px;
+            letter-spacing: 2px;
             font-weight: 800;
             text-transform: uppercase;
-            text-shadow: 2px 2px 0 #c9b27e;
+            text-shadow: 2px 2px 0 #3b6b44;
+            margin-bottom: 8px;
         }
-        .title-page h2 {
-            font-size: 32px;
-            font-weight: 500;
-            color: #3b2e1e;
-            margin: 15px 0 50px;
-            border-bottom: 2px solid #a7b89e;
-            display: inline-block;
-            padding-bottom: 10px;
-        }
-        .title-page .kumpulan-box {
-            background: #e3dac9;
-            display: inline-block;
-            padding: 18px 45px;
-            border-radius: 80px;
-            margin: 30px 0 20px;
-            border: 2px solid #5f6e4b;
-            box-shadow: 0 5px 0 #3d4f35;
-        }
-        .title-page .kumpulan-box p {
-            font-size: 32px;
-            font-weight: bold;
-            color: #142410;
-        }
-        .title-page .ahli {
+        .project-header h2 {
             font-size: 28px;
-            background: #eef3e3;
-            padding: 18px 35px;
-            border-radius: 50px;
-            display: inline-block;
-            margin: 20px 0 15px;
-            border: 1px solid #7b6b50;
+            font-weight: 400;
+            margin-bottom: 15px;
+            color: #f8f0d5;
         }
-        .title-page .tarikh {
-            font-size: 24px;
-            margin-top: 50px;
-            color: #2a431f;
-            background: #f7f1e2;
-            padding: 10px 30px;
-            display: inline-block;
+        .project-header .kumpulan-info {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            flex-wrap: wrap;
+            background: #3f6a49;
+            padding: 14px 30px;
+            border-radius: 60px;
+            margin: 15px auto 5px;
+            max-width: 700px;
+            border: 1px solid #e9cfa0;
+            font-size: 20px;
+            font-weight: 500;
+        }
+        .project-header .kumpulan-info span {
+            background: #f7e9cf;
+            color: #1f3a2b;
+            padding: 5px 20px;
             border-radius: 40px;
+            font-weight: 700;
         }
-        .title-page .lambang {
-            font-size: 60px;
-            margin: 15px 0 5px;
-            opacity: 0.7;
+        .project-header .tarikh {
+            font-size: 18px;
+            margin-top: 10px;
+            color: #e2f0d9;
         }
-        /* kandungan utama (bermula selepas muka surat tajuk) */
+        /* kandungan utama */
         .content-page {
             padding: 35px 30px 40px 30px;
             background-color: white;
         }
-        .content-page h2 {
+        .content-page h3 {
             font-size: 26px;
-            margin: 5px 0 20px;
+            margin: 0 0 20px 0;
             color: #1f4d2b;
             border-left: 12px solid #a37c44;
             padding-left: 20px;
@@ -170,7 +155,7 @@
             border-bottom: 1px dashed #a69063;
             font-size: 16px;
         }
-        /* Seksyen jawapan (answers) - tambahan baru */
+        /* Seksyen jawapan (answers) */
         .jawapan-section {
             background: #e2e8df;
             padding: 20px 30px;
@@ -216,35 +201,24 @@
             margin: 15px 0 5px;
             color: #4b3e2b;
         }
-        /* sembunyikan elemen kumpulan di bahagian bawah */
-        .no-footer-group {
-            display: none;
-        }
     </style>
 </head>
 <body>
 <div class="project-wrapper" id="projekWord">
-    <!-- HALAMAN TAJUK (封面) - 含组别与组员, 无其他内容 -->
-    <div class="title-page">
-        <div class="lambang">📚🇲🇾</div>
+    <!-- HEADER LANGSUNG: GABUNGAN TAJUK + KUMPULAN + AHLI (tiada muka surat berasingan) -->
+    <div class="project-header">
         <h1>PROJEK BAHASA MELAYU</h1>
         <h2>KATA GANDA • 重叠词</h2>
-        <div class="kumpulan-box">
-            <p>KUMPULAN 4</p>
+        <div class="kumpulan-info">
+            <span>KUMPULAN 4</span>
+            <span>JIMMY & WEI HAN (LEEWEIHANN)</span>
         </div>
-        <div class="ahli">
-            JIMMY  &  WEI HAN (LEEWEIHANN)
-        </div>
-        <div class="tarikh">
-            Tarikh hantar: 17 APRIL 2026
-        </div>
-        <p style="margin-top: 70px; font-size: 18px; color: #4e5d40;">◈ 黄玮翰 & 詹竣吉  ◈</p>
-        <!-- hiasan -->
+        <div class="tarikh">Tarikh hantar: 17 APRIL 2026</div>
     </div>
 
-    <!-- MUKA SURAT KANDUNGAN UTAMA (senarai kata ganda + latihan) tanpa maklumat ahli/group di bawah -->
+    <!-- KANDUNGAN UTAMA (bermula dengan tajuk senarai) -->
     <div class="content-page">
-        <h2>🔹 SENARAI KATA GANDA (Kumpulan 4) · 第十九组词汇表</h2>
+        <h3>🔹 SENARAI KATA GANDA (Kumpulan 4) · 第十九组词汇表</h3>
         <table>
             <thead>
                 <tr>
@@ -255,7 +229,7 @@
                 </tr>
             </thead>
             <tbody>
-                <!-- Data diisi 19 baris, setiap baris ada BM dan CN -->
+                <!-- Data 19 baris lengkap BM dan CN -->
                 <tr><td class="kata">Usik-mengusik</td><td class="terjemahan">互相开玩笑 / 戏弄</td><td class="ayat-melayu"><span class="ayat-contoh">Mereka sering usik-mengusik antara satu sama lain sejak kecil, namun tidak pernah bermasam muka.</span></td><td class="ayat-cina bahasa-cina">他们从小经常互相戏弄，但从不翻脸。</td></tr>
                 <tr><td class="kata">Sapa-menyapa</td><td class="terjemahan">互相问候 / 打招呼</td><td class="ayat-melayu"><span class="ayat-contoh">Walaupun tinggal di blok yang sama, jiran-jiran jarang sapa-menyapa kerana kesibukan masing-masing.</span></td><td class="ayat-cina bahasa-cina">虽然住在同一栋楼，邻居们因各自忙碌很少互相问候。</td></tr>
                 <tr><td class="kata">Ungkit-mengungkit</td><td class="terjemahan">不断提起往事 / 翻旧账</td><td class="ayat-melayu"><span class="ayat-contoh">Ibu selalu ungkit-mengungkit tentang perbuatan nakal saya semasa kecil apabila kami berkumpul.</span></td><td class="ayat-cina bahasa-cina">妈妈聚会时总翻我小时候淘气的旧账。</td></tr>
@@ -275,11 +249,10 @@
                 <tr><td class="kata">Simpang-siur</td><td class="terjemahan">穿梭 / 交错 / 纷繁</td><td class="ayat-melayu"><span class="ayat-contoh">Kenderaan di jalan raya bertali aras bergerak simpang-siur ketika waktu puncak.</span></td><td class="ayat-cina bahasa-cina">高峰时段，多层高速公路上的车辆穿梭交错。</td></tr>
                 <tr><td class="kata">Segar-bugar</td><td class="terjemahan">精神饱满 / 身心舒畅</td><td class="ayat-melayu"><span class="ayat-contoh">Selepas bersenam, badan saya berasa segar-bugar.</span></td><td class="ayat-cina bahasa-cina">运动后我感到身心舒畅，精神饱满。</td></tr>
                 <tr><td class="kata">Desas-desus</td><td class="terjemahan">谣言 / 风声 / 传闻</td><td class="ayat-melayu"><span class="ayat-contoh">Desas-desus mengatakan bahawa cikgu akan berpindah ke sekolah lain.</span></td><td class="ayat-cina bahasa-cina">有传闻说老师要转到别的学校去。</td></tr>
-                <!-- 19已足够 -->
             </tbody>
         </table>
 
-        <!-- 10 Latihan tambahan (soalan disertakan dengan terjemahan Cina) -->
+        <!-- 10 Latihan tambahan (soalan dengan terjemahan Cina) -->
         <div class="latihan-tambahan">
             <h3>📝 LATIHAN TAMBAHAN (10 soalan) · 附加练习（含中文）</h3>
             <div class="soalan-grid">
@@ -296,7 +269,7 @@
             </div>
         </div>
 
-        <!-- JAWAPAN (答案) 放在最底部 -->
+        <!-- JAWAPAN (答案) di bahagian paling bawah -->
         <div class="jawapan-section">
             <h3>🔍 JAWAPAN / 参考答案 (Latihan Tambahan)</h3>
             <div class="jawapan-grid">
@@ -314,22 +287,20 @@
             <p style="margin-top:15px; font-style:italic; color:#2b4f2b;">* Jawapan adalah panduan; pelajar boleh bina ayat sendiri yang sesuai.</p>
         </div>
 
-        <!-- Kaki tanpa sebarang group / ahli (hanya peringatan halus) -->
-        <div style="text-align: right; margin-top: 25px; font-size: 15px; color: #59512b;">© Projek BM J3 2026 – Kumpulan 4 (halaman utama)</div>
+        <!-- Kaki halaman (tiada maklumat kumpulan) -->
+        <div style="text-align: right; margin-top: 25px; font-size: 15px; color: #59512b;">© Projek BM J3 2026 – Kumpulan 4</div>
     </div>
-    <!-- tiada lagi footer dengan nama group atau nombor, hanya di muka surat tajuk -->
 </div>
 
 <!-- Download button -->
 <div style="text-align: center; margin-top: 15px;">
-    <button class="btn-download" id="downloadBtn">📥  Muat Turun Dokumen Word (versi lengkap + jawapan)</button>
+    <button class="btn-download" id="downloadBtn">📥  Muat Turun Dokumen Word (gabungan + jawapan)</button>
 </div>
-<footer>** Klik butang untuk dapatkan fail Word dengan halaman tajuk, latihan bertulis Cina & jawapan di bawah **</footer>
+<footer>** Dokumen ini mempunyai maklumat kumpulan di bahagian atas, tanpa halaman tajuk berasingan **</footer>
 
 <script>
 document.getElementById('downloadBtn').addEventListener('click', function() {
     const container = document.getElementById('projekWord').cloneNode(true);
-    // Pastikan butang download tidak muncul dalam dokumen word nanti
     const styles = document.querySelector('style').innerHTML;
 
     const wordHtml = `
@@ -337,13 +308,12 @@ document.getElementById('downloadBtn').addEventListener('click', function() {
     <html>
     <head>
         <meta charset="UTF-8">
-        <title>Projek Kata Ganda Kumpulan 4 (dengan jawapan)</title>
+        <title>Projek Kata Ganda Kumpulan 4 (Gabungan)</title>
         <style>
             ${styles}
             .btn-download, #downloadBtn, footer { display: none; }
             .project-wrapper { max-width: 1100px; margin: 0 auto; box-shadow: none; border: 1px solid #aaa; }
             body { background: white; padding: 20px; }
-            .title-page { page-break-after: always; }
         </style>
     </head>
     <body>
@@ -355,7 +325,7 @@ document.getElementById('downloadBtn').addEventListener('click', function() {
     const blob = new Blob([wordHtml], { type: 'application/msword' });
     const link = document.createElement('a');
     link.href = URL.createObjectURL(blob);
-    link.download = 'Projek_KataGanda_Kumpulan4_Jimmy_WeiHan_Jawapan.doc';
+    link.download = 'Projek_KataGanda_Kumpulan4_Jimmy_WeiHan_Bersatu.doc';
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
@@ -364,4 +334,4 @@ document.getElementById('downloadBtn').addEventListener('click', function() {
 </script>
 
 </body>
-                                                                                                                                                                                                                </html>
+</html>
