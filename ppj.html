@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Projek Kata Ganda - Kumpulan 4 (Halaman Tajuk)</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Times New Roman', Times, serif;
+            background-color: #e9e3d5;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 30px 20px;
+        }
+        .project-wrapper {
+            max-width: 1100px;
+            width: 100%;
+            background-color: white;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            border-radius: 16px;
+            overflow: hidden;
+            border: 1px solid #b0a28a;
+        }
+        /* Halaman tajuk (separate page style) */
+        .title-page {
+            background: #fffcf5;
+            padding: 55px 40px 60px 40px;
+            text-align: center;
+            border-bottom: 3px solid #2c5530;
+            page-break-after: always; /* untuk word, kesan muka surat berasingan */
+        }
+        .title-page h1 {
+            font-size: 42px;
+            letter-spacing: 3px;
+            color: #1f3a2b;
+            margin-top: 40px;
+            font-weight: 800;
+            text-transform: uppercase;
+            text-shadow: 2px 2px 0 #c9b27e;
+        }
+        .title-page h2 {
+            font-size: 32px;
+            font-weight: 500;
+            color: #3b2e1e;
+            margin: 15px 0 50px;
+            border-bottom: 2px solid #a7b89e;
+            display: inline-block;
+            padding-bottom: 10px;
+        }
+        .title-page .kumpulan-box {
+            background: #e3dac9;
+            display: inline-block;
+            padding: 18px 45px;
+            border-radius: 80px;
+            margin: 30px 0 20px;
+            border: 2px solid #5f6e4b;
+            box-shadow: 0 5px 0 #3d4f35;
+        }
+        .title-page .kumpulan-box p {
+            font-size: 32px;
+            font-weight: bold;
+            color: #142410;
+        }
+        .title-page .ahli {
+            font-size: 28px;
+            background: #eef3e3;
+            padding: 18px 35px;
+            border-radius: 50px;
+            display: inline-block;
+            margin: 20px 0 15px;
+            border: 1px solid #7b6b50;
+        }
+        .title-page .tarikh {
+            font-size: 24px;
+            margin-top: 50px;
+            color: #2a431f;
+            background: #f7f1e2;
+            padding: 10px 30px;
+            display: inline-block;
+            border-radius: 40px;
+        }
+        .title-page .lambang {
+            font-size: 60px;
+            margin: 15px 0 5px;
+            opacity: 0.7;
+        }
+        /* kandungan utama (bermula selepas muka surat tajuk) */
+        .content-page {
+            padding: 35px 30px 40px 30px;
+            background-color: white;
+        }
+        .content-page h2 {
+            font-size: 26px;
+            margin: 5px 0 20px;
+            color: #1f4d2b;
+            border-left: 12px solid #a37c44;
+            padding-left: 20px;
+            background: #f8f2e2;
+            line-height: 1.4;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 25px 0;
+            font-size: 16px;
+            border: 2px solid #1f3a2b;
+        }
+        th {
+            background-color: #2c5234;
+            color: white;
+            font-weight: 700;
+            padding: 14px 8px;
+            font-size: 17px;
+            border: 1px solid #102015;
+        }
+        td {
+            border: 1px solid #333;
+            padding: 12px 8px;
+            vertical-align: top;
+        }
+        .kata {
+            background-color: #fbf3d9;
+            font-weight: 600;
+            width: 17%;
+        }
+        .terjemahan {
+            background-color: #daeef8;
+            width: 20%;
+        }
+        .ayat-melayu {
+            background-color: #e3f2da;
+            width: 32%;
+        }
+        .ayat-cina {
+            background-color: #f9e3d0;
+            width: 31%;
+        }
+        .ayat-contoh {
+            font-style: italic;
+        }
+        .bahasa-cina {
+            font-family: 'Microsoft YaHei', 'SimHei', 'Noto Sans SC', sans-serif;
+            font-weight: 400;
+        }
+        .latihan-tambahan {
+            background: #f3ecdb;
+            padding: 20px 30px;
+            border-radius: 30px;
+            border: 2px solid #77613a;
+            margin-top: 40px;
+        }
+        .latihan-tambahan h3 {
+            font-size: 24px;
+            color: #1b4a22;
+            margin-bottom: 20px;
+        }
+        .soalan-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px 30px;
+        }
+        .soalan-item {
+            padding: 8px 5px;
+            border-bottom: 1px dashed #a69063;
+            font-size: 16px;
+        }
+        /* Seksyen jawapan (answers) - tambahan baru */
+        .jawapan-section {
+            background: #e2e8df;
+            padding: 20px 30px;
+            border-radius: 30px;
+            border: 2px solid #3f6b3f;
+            margin-top: 30px;
+        }
+        .jawapan-section h3 {
+            font-size: 24px;
+            color: #1a4d1a;
+            margin-bottom: 18px;
+        }
+        .jawapan-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px 35px;
+        }
+        .jawapan-item {
+            padding: 5px 0;
+            font-size: 16px;
+            border-bottom: 1px dotted #6d8f6d;
+        }
+        .btn-download {
+            background-color: #2d5a3b;
+            color: white;
+            padding: 16px 40px;
+            font-size: 22px;
+            border: none;
+            border-radius: 50px;
+            margin: 20px 0 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: 0.2s;
+            box-shadow: 0 6px 0 #1e3f27;
+            border: 1px solid #517a47;
+        }
+        .btn-download:hover {
+            background-color: #1d4628;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 0 #1e3f27;
+        }
+        footer {
+            margin: 15px 0 5px;
+            color: #4b3e2b;
+        }
+        /* sembunyikan elemen kumpulan di bahagian bawah */
+        .no-footer-group {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+<div class="project-wrapper" id="projekWord">
+    <!-- HALAMAN TAJUK (封面) - 含组别与组员, 无其他内容 -->
+    <div class="title-page">
+        <div class="lambang">📚🇲🇾</div>
+        <h1>PROJEK BAHASA MELAYU</h1>
+        <h2>KATA GANDA • 重叠词</h2>
+        <div class="kumpulan-box">
+            <p>KUMPULAN 4</p>
+        </div>
+        <div class="ahli">
+            JIMMY  &  WEI HAN (LEEWEIHANN)
+        </div>
+        <div class="tarikh">
+            Tarikh hantar: 17 APRIL 2026
+        </div>
+        <p style="margin-top: 70px; font-size: 18px; color: #4e5d40;">◈ 黄玮翰 & 詹竣吉  ◈</p>
+        <!-- hiasan -->
+    </div>
+
+    <!-- MUKA SURAT KANDUNGAN UTAMA (senarai kata ganda + latihan) tanpa maklumat ahli/group di bawah -->
+    <div class="content-page">
+        <h2>🔹 SENARAI KATA GANDA (Kumpulan 4) · 第十九组词汇表</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Kata Ganda</th>
+                    <th>Terjemahan 中文</th>
+                    <th>Ayat Contoh (Bahasa Melayu)</th>
+                    <th>Contoh Ayat (Bahasa Cina) 例句</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Data diisi 19 baris, setiap baris ada BM dan CN -->
+                <tr><td class="kata">Usik-mengusik</td><td class="terjemahan">互相开玩笑 / 戏弄</td><td class="ayat-melayu"><span class="ayat-contoh">Mereka sering usik-mengusik antara satu sama lain sejak kecil, namun tidak pernah bermasam muka.</span></td><td class="ayat-cina bahasa-cina">他们从小经常互相戏弄，但从不翻脸。</td></tr>
+                <tr><td class="kata">Sapa-menyapa</td><td class="terjemahan">互相问候 / 打招呼</td><td class="ayat-melayu"><span class="ayat-contoh">Walaupun tinggal di blok yang sama, jiran-jiran jarang sapa-menyapa kerana kesibukan masing-masing.</span></td><td class="ayat-cina bahasa-cina">虽然住在同一栋楼，邻居们因各自忙碌很少互相问候。</td></tr>
+                <tr><td class="kata">Ungkit-mengungkit</td><td class="terjemahan">不断提起往事 / 翻旧账</td><td class="ayat-melayu"><span class="ayat-contoh">Ibu selalu ungkit-mengungkit tentang perbuatan nakal saya semasa kecil apabila kami berkumpul.</span></td><td class="ayat-cina bahasa-cina">妈妈聚会时总翻我小时候淘气的旧账。</td></tr>
+                <tr><td class="kata">Sekuat-kuatnya</td><td class="terjemahan">尽全力 / 使出最大力气</td><td class="ayat-melayu"><span class="ayat-contoh">Dia menarik tali itu sekuat-kuatnya sehingga terputus.</span></td><td class="ayat-cina bahasa-cina">他使出最大的力气拉绳子，直到绳子断了。</td></tr>
+                <tr><td class="kata">Segugup-gugupnya</td><td class="terjemahan">慌慌张张地 / 十分紧张地</td><td class="ayat-melayu"><span class="ayat-contoh">Segugup-gugupnya dia menyembunyikan kertas ujian yang bernilai rendah itu.</span></td><td class="ayat-cina bahasa-cina">他慌慌张张地把那张低分考卷藏起来。</td></tr>
+                <tr><td class="kata">Setegas-tegasnya</td><td class="terjemahan">极其严厉地 / 斩钉截铁地</td><td class="ayat-melayu"><span class="ayat-contoh">Guru besar memberi amaran setegas-tegasnya supaya pelajar tidak membuli rakan.</span></td><td class="ayat-cina bahasa-cina">校长极其严厉地警告学生不得霸凌同学。</td></tr>
+                <tr><td class="kata">Huru-hara</td><td class="terjemahan">混乱 / 骚动</td><td class="ayat-melayu"><span class="ayat-contoh">Keadaan pasar itu menjadi huru-hara apabila ternampak seekor lembu liar.</span></td><td class="ayat-cina bahasa-cina">当市场出现一头野牛时，场面一片混乱。</td></tr>
+                <tr><td class="kata">Kelam-kabut</td><td class="terjemahan">慌慌张张 / 一团乱</td><td class="ayat-melayu"><span class="ayat-contoh">Dengan kelam-kabut mereka menyiapkan kerja sebelum ketibaan juruaudit.</span></td><td class="ayat-cina bahasa-cina">他们在审计员到来之前手忙脚乱地完成工作。</td></tr>
+                <tr><td class="kata">Comot-momot</td><td class="terjemahan">肮脏不堪 / 邋遢</td><td class="ayat-melayu"><span class="ayat-contoh">Muka budak itu comot-momot selepas bermain lopak air.</span></td><td class="ayat-cina bahasa-cina">那孩子玩完水坑后脸上脏兮兮的。</td></tr>
+                <tr><td class="kata">Kusut-masai</td><td class="terjemahan">蓬乱 / 乱七八糟</td><td class="ayat-melayu"><span class="ayat-contoh">Rambutnya kusut-masai ditiup angin ketika menunggang motosikal.</span></td><td class="ayat-cina bahasa-cina">他骑摩托车时头发被风吹得蓬乱不堪。</td></tr>
+                <tr><td class="kata">Robak-rabik</td><td class="terjemahan">破破烂烂 / 撕裂破烂</td><td class="ayat-melayu"><span class="ayat-contoh">Seluar yang dipakainya sudah robak-rabik dimakan usia.</span></td><td class="ayat-cina bahasa-cina">他穿的裤子已经破旧不堪。</td></tr>
+                <tr><td class="kata">Mandi-manda</td><td class="terjemahan">互相泼水嬉戏 / 玩水</td><td class="ayat-melayu"><span class="ayat-contoh">Pada hari raya, anak-anak kecil mandi-manda dengan gembira di halaman rumah.</span></td><td class="ayat-cina bahasa-cina">开斋节时，小孩们在院子里开心地玩水嬉戏。</td></tr>
+                <tr><td class="kata">Hingar-bingar</td><td class="terjemahan">喧闹 / 嘈杂</td><td class="ayat-melayu"><span class="ayat-contoh">Suara penjual dan pembeli di pasar malam sungguh hingar-bingar.</span></td><td class="ayat-cina bahasa-cina">夜市里商贩和顾客的声音非常嘈杂。</td></tr>
+                <tr><td class="kata">Gotong-royong</td><td class="terjemahan">互助 / 合作 / 大扫除</td><td class="ayat-melayu"><span class="ayat-contoh">Penduduk kampung mengadakan gotong-royong membersihkan kawasan masjid.</span></td><td class="ayat-cina bahasa-cina">村民们互助合作，清理清真寺周围的环境。</td></tr>
+                <tr><td class="kata">Sayur-mayur</td><td class="terjemahan">各种蔬菜 / 蔬果</td><td class="ayat-melayu"><span class="ayat-contoh">Pasar tani menjual sayur-mayur segar pada harga berpatutan.</span></td><td class="ayat-cina bahasa-cina">农贸市场以合理价格出售各种新鲜蔬菜。</td></tr>
+                <tr><td class="kata">Tungkus-lumus</td><td class="terjemahan">辛辛苦苦 / 努力不懈</td><td class="ayat-melayu"><span class="ayat-contoh">Dengan tungkus-lumus dia menyara keluarganya selama berpuluh tahun.</span></td><td class="ayat-cina bahasa-cina">他辛辛苦苦养家糊口几十年。</td></tr>
+                <tr><td class="kata">Simpang-siur</td><td class="terjemahan">穿梭 / 交错 / 纷繁</td><td class="ayat-melayu"><span class="ayat-contoh">Kenderaan di jalan raya bertali aras bergerak simpang-siur ketika waktu puncak.</span></td><td class="ayat-cina bahasa-cina">高峰时段，多层高速公路上的车辆穿梭交错。</td></tr>
+                <tr><td class="kata">Segar-bugar</td><td class="terjemahan">精神饱满 / 身心舒畅</td><td class="ayat-melayu"><span class="ayat-contoh">Selepas bersenam, badan saya berasa segar-bugar.</span></td><td class="ayat-cina bahasa-cina">运动后我感到身心舒畅，精神饱满。</td></tr>
+                <tr><td class="kata">Desas-desus</td><td class="terjemahan">谣言 / 风声 / 传闻</td><td class="ayat-melayu"><span class="ayat-contoh">Desas-desus mengatakan bahawa cikgu akan berpindah ke sekolah lain.</span></td><td class="ayat-cina bahasa-cina">有传闻说老师要转到别的学校去。</td></tr>
+                <!-- 19已足够 -->
+            </tbody>
+        </table>
+
+        <!-- 10 Latihan tambahan (soalan disertakan dengan terjemahan Cina) -->
+        <div class="latihan-tambahan">
+            <h3>📝 LATIHAN TAMBAHAN (10 soalan) · 附加练习（含中文）</h3>
+            <div class="soalan-grid">
+                <div class="soalan-item">1. Isi tempat kosong: Keadaan di pasar raya menjadi ______ apabila berlaku kebakaran kecil. (huru-hara / sayur-mayur) <br> <span class="bahasa-cina">（填空：超市发生小火时场面变得______。）</span></div>
+                <div class="soalan-item">2. Pilih kata ganda yang sesuai: Selepas berkebun, seluar mereka ______. (kusut-masai / simpang-siur) <br> <span class="bahasa-cina">（选择：整理花园后他们的裤子______。）</span></div>
+                <div class="soalan-item">3. Bina ayat dengan kata ganda “usik-mengusik” (dalam BM dan CN). <br> <span class="bahasa-cina">（用“usik-mengusik”造一个马来文和中文的句子。）</span></div>
+                <div class="soalan-item">4. Apakah maksud “gotong-royong”? Terangkan dalam BM dan CN. <br> <span class="bahasa-cina">（“gotong-royong”是什么意思？用马来文和中文解释。）</span></div>
+                <div class="soalan-item">5. Lengkapkan: Mereka bekerja ______ demi menyiapkan projek ini. (tungkus-lumus / robak-rabik) <br> <span class="bahasa-cina">（完成句子：他们______工作以完成这项计划。）</span></div>
+                <div class="soalan-item">6. Bina ayat daripada kata ganda “desas-desus” dalam dua bahasa. <br> <span class="bahasa-cina">（用“desas-desus”造一个双语例句。）</span></div>
+                <div class="soalan-item">7. Apakah perbezaan “kelam-kabut” dan “hingar-bingar”? Beri contoh ayat. <br> <span class="bahasa-cina">（“kelam-kabut”和“hingar-bingar”有何区别？举例说明。）</span></div>
+                <div class="soalan-item">8. Isi tempat kosong dengan kata ganda yang sesuai: ______ tentang kenaikan harga minyak tersebar luas. <br> <span class="bahasa-cina">（填空：关于油价上涨的______广为流传。）</span></div>
+                <div class="soalan-item">9. Pilih kata ganda untuk melengkapkan ayat: Badannya terasa ______ setelah berehat panjang. (segar-bugar / huru-hara) <br> <span class="bahasa-cina">（选择：长时间休息后他感觉身体______。）</span></div>
+                <div class="soalan-item">10. Terjemahkan ayat berikut ke Bahasa Melayu dengan menggunakan kata ganda “sekuat-kuatnya”: “他尽全力推开了那扇门。” <br> <span class="bahasa-cina">（将句子翻译成马来文，并用到“sekuat-kuatnya”。）</span></div>
+            </div>
+        </div>
+
+        <!-- JAWAPAN (答案) 放在最底部 -->
+        <div class="jawapan-section">
+            <h3>🔍 JAWAPAN / 参考答案 (Latihan Tambahan)</h3>
+            <div class="jawapan-grid">
+                <div class="jawapan-item"><strong>1.</strong> huru-hara (混乱)</div>
+                <div class="jawapan-item"><strong>2.</strong> kusut-masai (蓬乱/邋遢)</div>
+                <div class="jawapan-item"><strong>3.</strong> Contoh: Mereka selalu usik-mengusik dengan mesra. / 他们总是亲切地互相开玩笑。</div>
+                <div class="jawapan-item"><strong>4.</strong> Gotong-royong bermaksud kerjasama / 互助合作 (contoh: gotong-royong bersihkan kampung)</div>
+                <div class="jawapan-item"><strong>5.</strong> tungkus-lumus (辛辛苦苦)</div>
+                <div class="jawapan-item"><strong>6.</strong> Desas-desus tentang peperiksaan tersebar. / 关于考试的谣言传开了。</div>
+                <div class="jawapan-item"><strong>7.</strong> Kelam-kabut (慌乱) vs Hingar-bingar (嘈杂). Ayat: Dia kelam-kabut mencari kunci. Pasar malam hingar-bingar.</div>
+                <div class="jawapan-item"><strong>8.</strong> Desas-desus (谣言)</div>
+                <div class="jawapan-item"><strong>9.</strong> segar-bugar (精神饱满)</div>
+                <div class="jawapan-item"><strong>10.</strong> Dia menolak pintu itu sekuat-kuatnya lalu terbuka. / 他尽全力推开了那扇门。</div>
+            </div>
+            <p style="margin-top:15px; font-style:italic; color:#2b4f2b;">* Jawapan adalah panduan; pelajar boleh bina ayat sendiri yang sesuai.</p>
+        </div>
+
+        <!-- Kaki tanpa sebarang group / ahli (hanya peringatan halus) -->
+        <div style="text-align: right; margin-top: 25px; font-size: 15px; color: #59512b;">© Projek BM J3 2026 – Kumpulan 4 (halaman utama)</div>
+    </div>
+    <!-- tiada lagi footer dengan nama group atau nombor, hanya di muka surat tajuk -->
+</div>
+
+<!-- Download button -->
+<div style="text-align: center; margin-top: 15px;">
+    <button class="btn-download" id="downloadBtn">📥  Muat Turun Dokumen Word (versi lengkap + jawapan)</button>
+</div>
+<footer>** Klik butang untuk dapatkan fail Word dengan halaman tajuk, latihan bertulis Cina & jawapan di bawah **</footer>
+
+<script>
+document.getElementById('downloadBtn').addEventListener('click', function() {
+    const container = document.getElementById('projekWord').cloneNode(true);
+    // Pastikan butang download tidak muncul dalam dokumen word nanti
+    const styles = document.querySelector('style').innerHTML;
+
+    const wordHtml = `
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Projek Kata Ganda Kumpulan 4 (dengan jawapan)</title>
+        <style>
+            ${styles}
+            .btn-download, #downloadBtn, footer { display: none; }
+            .project-wrapper { max-width: 1100px; margin: 0 auto; box-shadow: none; border: 1px solid #aaa; }
+            body { background: white; padding: 20px; }
+            .title-page { page-break-after: always; }
+        </style>
+    </head>
+    <body>
+        ${container.outerHTML}
+    </body>
+    </html>
+    `;
+
+    const blob = new Blob([wordHtml], { type: 'application/msword' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = 'Projek_KataGanda_Kumpulan4_Jimmy_WeiHan_Jawapan.doc';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(link.href);
+});
+</script>
+
+</body>
+                                                                                                                                                                                                                </html>
