@@ -3,453 +3,500 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Christmas: now & past · project</title>
-    <!-- Font Awesome for download icon (free) -->
+    <title>🎄 Christmas Now & Past · PPTX style project</title>
+    <!-- Font Awesome (free) -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+            font-family: 'Segoe UI', 'Roboto', system-ui, sans-serif;
         }
+
         body {
-            background: linear-gradient(145deg, #f9f3e8 0%, #f0e2ce 100%);
-            min-height: 100vh;
+            background: #3b2b1a; /* dark wood background */
             display: flex;
             justify-content: center;
             align-items: center;
-            padding: 2rem 1rem;
-        }
-        .project-card {
-            max-width: 1100px;
-            width: 100%;
-            background: rgba(255, 250, 240, 0.85);
-            backdrop-filter: blur(2px);
-            border-radius: 48px 48px 32px 32px;
-            box-shadow: 0 25px 45px -10px rgba(70, 40, 20, 0.3), inset 0 1px 4px #fff8e7;
-            padding: 2.5rem 2.8rem;
-            border: 1px solid #e5d5ba;
+            min-height: 100vh;
+            padding: 30px 20px;
         }
 
-        /* festive header */
-        .header {
-            text-align: center;
-            margin-bottom: 2.2rem;
+        /* main pptx card – like a slide deck */
+        .pptx-container {
+            max-width: 1200px;
+            width: 100%;
+            background: #fef9ef;
+            border-radius: 50px 50px 40px 40px;
+            box-shadow: 0 40px 50px -15px #1f140e, 0 0 0 2px #e0cbaa, 0 0 0 8px #a77b51;
+            overflow: hidden;
             position: relative;
         }
-        .header h1 {
-            font-size: 3.2rem;
-            font-weight: 600;
+
+        /* slide master header */
+        .ppt-header {
+            background: #97233f;  /* deep christmas red */
+            padding: 18px 30px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            border-bottom: 5px solid #f3c26b;
+        }
+        .ppt-header .icon {
+            font-size: 2.6rem;
+            color: #fadf9e;
+            filter: drop-shadow(2px 2px 0 #6b2d2d);
+        }
+        .ppt-header .title {
+            font-size: 2.4rem;
+            font-weight: 700;
             letter-spacing: 2px;
-            background: linear-gradient(135deg, #9f2b2b, #c74b4b, #2f6b3a);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            text-shadow: 0 4px 12px rgba(180, 60, 40, 0.2);
+            color: #ffefcf;
+            text-shadow: 4px 4px 0 #4f1e1e;
         }
-        .header h2 {
-            font-size: 1.7rem;
-            font-weight: 400;
-            color: #3f2e1b;
-            background: #e6d5b8c9;
-            display: inline-block;
-            padding: 0.5rem 2rem;
-            border-radius: 60px;
-            margin-top: 0.5rem;
-            backdrop-filter: blur(4px);
-            box-shadow: 0 2px 6px #aa8e6b50;
-            border: 1px solid #f7e8d2;
-        }
-        .header i {
-            color: #b3470c;
-            margin: 0 12px;
+        .ppt-header .sub {
+            margin-left: auto;
+            background: #faeac6;
+            padding: 8px 25px;
+            border-radius: 40px;
+            color: #7b3f00;
+            font-weight: 600;
+            font-size: 1.4rem;
+            border: 2px solid #b57834;
         }
 
-        /* comparison table */
-        .comparison {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 2rem;
-            margin: 2.5rem 0 2rem;
+        /* slide area – each section looks like a slide */
+        .slide {
+            padding: 30px 40px 25px 40px;
+            border-bottom: 3px dashed #c0a375;
+            background: #fffcf3;
         }
-        .col {
-            flex: 1 1 280px;
-            background: #fcf7f0f2;
-            border-radius: 32px;
-            padding: 2rem 1.8rem;
-            box-shadow: 0 10px 18px -8px #7b5e4180, inset 0 0 0 1px #fffefc, inset 0 0 0 3px #f0dfcd;
-            transition: transform 0.2s ease;
+        .slide:last-of-type {
+            border-bottom: none;
         }
-        .col:hover {
-            transform: scale(1.01);
-        }
-        .col.past {
-            background: #f5ead9f2;
-        }
-        .col.now {
-            background: #fffbf2f2;
-        }
-        .col h3 {
+
+        .slide-title {
             font-size: 2.3rem;
             font-weight: 600;
-            margin-bottom: 1.8rem;
+            color: #1f4f2b;
+            margin-bottom: 20px;
             display: flex;
             align-items: center;
-            gap: 10px;
-            border-bottom: 3px dotted #c7a77b;
-            padding-bottom: 0.8rem;
+            gap: 12px;
+            border-left: 18px solid #c53b3b;
+            padding-left: 25px;
         }
-        .col.past h3 {
-            color: #5d3e1e;
+        .slide-title i {
+            color: #b1531f;
+            font-size: 2.2rem;
         }
-        .col.now h3 {
-            color: #863a2b;
+
+        /* two-column comparison (slide 2) */
+        .row-compare {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+            margin: 30px 0 15px;
         }
-        .list-block p {
-            font-size: 1.2rem;
-            margin: 1rem 0 0.8rem 0;
+        .card {
+            flex: 1 1 280px;
+            background: #fff9ef;
+            border-radius: 40px;
+            padding: 28px 25px;
+            box-shadow: 0 10px 20px -5px #896e4d, inset 0 -2px 0 #ffe6bf, inset 0 2px 10px #fffaea;
+            border: 1px solid #eedbba;
+        }
+        .card.past {
+            background: #f9edd9;
+        }
+        .card.now {
+            background: #fef7e9;
+        }
+        .card h3 {
+            font-size: 2.2rem;
+            margin-bottom: 20px;
+            border-bottom: 4px dotted #b48751;
+            padding-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .list-group p {
+            font-size: 1.3rem;
             font-weight: 600;
-            color: #4d3e2c;
-            display: flex;
-            align-items: center;
-            gap: 10px;
+            margin: 20px 0 8px 0;
+            color: #5d4000;
         }
-        .list-block ul {
+        .list-group ul {
             list-style: none;
         }
-        .list-block li {
-            font-size: 1.1rem;
-            margin-bottom: 0.85rem;
-            padding-left: 1.8rem;
+        .list-group li {
+            font-size: 1.2rem;
+            margin-bottom: 12px;
+            padding-left: 30px;
             position: relative;
-            line-height: 1.5;
-            color: #2c1f13;
+            line-height: 1.4;
         }
-        .list-block li::before {
-            content: "✨";
+        .card.past li::before {
+            content: "🕯️";
             position: absolute;
-            left: -2px;
+            left: 0;
             top: -2px;
             font-size: 1.2rem;
         }
-        .col.now li::before {
-            content: "🎄";
-        }
-        /* food highlight */
-        .food-note {
-            background: #e1cfb0;
-            border-radius: 28px;
-            margin-top: 2rem;
-            padding: 1.3rem 1.8rem;
-            border: 2px solid #fef6e6;
-        }
-        .food-note p {
-            font-size: 1.2rem;
-            font-weight: 600;
-            margin-bottom: 0.8rem;
-            color: #3f280f;
-        }
-        .food-note ul {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 1rem 2.5rem;
-            list-style: none;
-        }
-        .food-note li {
-            font-size: 1.2rem;
-            background: white;
-            padding: 0.4rem 1.3rem 0.4rem 2rem;
-            border-radius: 40px;
-            box-shadow: 0 4px 6px #856e4d50;
-            position: relative;
-        }
-        .food-note li::before {
-            content: "🍴";
+        .card.now li::before {
+            content: "📱";
             position: absolute;
-            left: 8px;
-            top: 4px;
-            font-size: 1.1rem;
-        }
-
-        /* extra food section (now & past) */
-        .food-details {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 2rem;
-            margin: 2.2rem 0 1.8rem;
-        }
-        .food-card {
-            flex: 1 1 250px;
-            background: #fffcf5;
-            border-radius: 30px;
-            padding: 1.6rem 1.5rem;
-            border: 1px solid #ebd5ba;
-            box-shadow: inset 0 1px 5px #fff9ee, 0 10px 15px -12px #795d41;
-        }
-        .food-card h4 {
-            font-size: 1.8rem;
-            font-weight: 500;
-            color: #b1532e;
-            border-left: 6px solid #c08142;
-            padding-left: 1rem;
-            margin-bottom: 1.4rem;
-        }
-        .food-grid {
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-        }
-        .food-item {
-            display: flex;
-            align-items: center;
-            gap: 14px;
+            left: 0;
+            top: -2px;
             font-size: 1.2rem;
-            background: #f3e7d9;
-            padding: 0.6rem 1rem;
-            border-radius: 50px;
-        }
-        .food-item i {
-            font-size: 1.8rem;
-            min-width: 38px;
-            text-align: center;
         }
 
-        /* download button area */
-        .download-area {
-            display: flex;
-            justify-content: center;
-            margin: 2.8rem 0 1rem;
+        /* food slides (extra) */
+        .food-spotlight {
+            background: #e9d9be;
+            border-radius: 45px;
+            padding: 25px 30px;
+            margin: 30px 0 15px;
+            border: 3px solid #fcf2dd;
+            box-shadow: inset 0 0 0 3px #fff1d2, 0 12px 12px -12px #422f1c;
         }
-        .download-btn {
-            background: #1f4f2b;
-            border: none;
-            color: white;
-            font-size: 2rem;
-            font-weight: 600;
-            padding: 1rem 3.5rem;
-            border-radius: 60px;
-            display: inline-flex;
+        .food-spotlight p.big {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #1e3d23;
+            display: flex;
             align-items: center;
             gap: 20px;
-            box-shadow: 0 15px 0 #0a2b12, 0 10px 30px #2f4d2e;
+            margin-bottom: 20px;
+        }
+        .food-grid-2 {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+        }
+        .food-col {
+            flex: 1 1 250px;
+            background: #fffcf2;
+            border-radius: 35px;
+            padding: 22px;
+        }
+        .food-col h4 {
+            font-size: 2rem;
+            font-weight: 500;
+            color: #9b3f1f;
+            margin-bottom: 20px;
+            background: #ffe4bc;
+            display: inline-block;
+            padding: 4px 28px;
+            border-radius: 40px;
+        }
+        .food-items {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        .food-item {
+            background: #f5e9d9;
+            border-radius: 50px;
+            padding: 12px 20px;
+            font-size: 1.3rem;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            border: 1px solid #eeb77e;
+        }
+        .food-item i {
+            font-size: 2rem;
+            width: 40px;
+            text-align: center;
+        }
+
+        /* download button (like pptx export) */
+        .download-slide {
+            background: #1d4829;
+            padding: 20px 40px;
+            display: flex;
+            justify-content: center;
+            border-top: 8px solid #c5a156;
+        }
+        .download-pptx-btn {
+            background: #facc6f;
+            border: none;
+            font-size: 2.2rem;
+            font-weight: 700;
+            padding: 18px 60px;
+            border-radius: 60px;
+            color: #273d1c;
+            box-shadow: 0 12px 0 #7b4a1e, 0 15px 25px #2c462e;
             cursor: pointer;
             transition: 0.07s linear;
-            border: 2px solid #f5cf8c;
+            display: inline-flex;
+            align-items: center;
+            gap: 30px;
+            border: 3px solid #ffeecc;
+        }
+        .download-pptx-btn i {
+            font-size: 2.4rem;
+            color: #2c4b21;
+        }
+        .download-pptx-btn:active {
+            transform: translateY(8px);
+            box-shadow: 0 6px 0 #7b4a1e, 0 12px 25px #1a311b;
+        }
+
+        /* page footer */
+        .ppt-footer {
+            background: #4f3722;
+            color: #eadbc3;
+            text-align: center;
+            padding: 18px;
+            font-size: 1.3rem;
             letter-spacing: 1px;
         }
-        .download-btn i {
-            font-size: 2.2rem;
-            filter: drop-shadow(2px 4px 4px #00000030);
-        }
-        .download-btn:active {
-            transform: translateY(8px);
-            box-shadow: 0 7px 0 #0a2b12, 0 12px 28px #1f3f1e;
+
+        /* extra polish */
+        .highlight {
+            background: #faecd6;
+            border-radius: 30px;
+            padding: 12px 25px;
+            margin: 20px 0 0;
+            font-size: 1.3rem;
+            border-left: 15px solid #be5a2c;
         }
 
-        /* footer note */
-        .footer-note {
-            text-align: center;
-            margin-top: 2rem;
-            font-size: 1.1rem;
-            color: #563e23;
-            background: #faead6;
-            width: fit-content;
-            margin-left: auto;
-            margin-right: auto;
-            padding: 0.6rem 2rem;
-            border-radius: 60px;
-            border: 1px solid #eccdab;
-        }
-
-        /* responsiveness */
-        @media (max-width: 650px) {
-            .project-card { padding: 1.8rem; }
-            .header h1 { font-size: 2.6rem; }
-            .download-btn { font-size: 1.6rem; padding: 0.8rem 2rem; gap: 12px; }
+        @media (max-width: 700px) {
+            .ppt-header { flex-wrap: wrap; }
+            .slide { padding: 20px; }
         }
     </style>
 </head>
 <body>
-    <div class="project-card" id="projectContent">
-        <!-- main title -->
-        <div class="header">
-            <h1><i class="fas fa-candy-cane"></i> CHRISTMAS <i class="fas fa-candy-cane"></i></h1>
-            <h2>✦ now & past ✦</h2>
-            <p style="margin-top: 0.6rem; font-size: 1.2rem; color:#392b1d;">how traditions changed · with festive food</p>
+    <div class="pptx-container" id="pptProject">
+        <!-- header like powerpoint template -->
+        <div class="ppt-header">
+            <i class="fas fa-crown icon"></i>
+            <span class="title">CHRISTMAS · NOW & PAST</span>
+            <span class="sub">project pptx</span>
         </div>
 
-        <!-- comparison columns: past vs now -->
-        <div class="comparison">
-            <!-- PAST column -->
-            <div class="col past">
-                <h3><i class="fas fa-hourglass-half"></i> Past Christmas</h3>
-                <div class="list-block">
-                    <p>🎁 customs & spirit</p>
-                    <ul>
-                        <li>church services · nativity plays</li>
-                        <li>handmade decorations (popcorn strings, paper)</li>
-                        <li>simple family gatherings, no screens</li>
-                        <li>carollers door‑to‑door</li>
-                        <li>presents: often practical (handmade, socks, books)</li>
-                    </ul>
-                    <p>📮 communication</p>
-                    <ul>
-                        <li>handwritten Christmas cards by post</li>
-                        <li>long distance calls (expensive, once a year)</li>
-                        <li>waiting weeks for relatives’ news</li>
-                    </ul>
+        <!-- SLIDE 1 : introduction + food overview -->
+        <div class="slide">
+            <div class="slide-title"><i class="fas fa-holly-berry"></i> 1 · overview & festive food</div>
+            <div style="display: flex; flex-wrap: wrap; gap: 30px; align-items: center;">
+                <div style="flex: 2; min-width: 260px;">
+                    <p style="font-size: 1.5rem; margin-bottom: 10px;"><i class="fas fa-quote-left" style="color: #8b3f3f;"></i> Christmas traditions have transformed over decades — from handmade ornaments to smart lights, from pudding to platters.</p>
+                </div>
+                <div style="flex: 1; background: #b44242; border-radius: 30px; padding: 18px; color: white; text-align: center;">
+                    <i class="fas fa-utensils" style="font-size: 3rem;"></i>
+                    <div style="font-size: 2rem; font-weight: 600;">FOOD</div>
+                    <div>central piece</div>
                 </div>
             </div>
-
-            <!-- NOW column -->
-            <div class="col now">
-                <h3><i class="fas fa-rocket"></i> Now Christmas</h3>
-                <div class="list-block">
-                    <p>🎄 modern style</p>
-                    <ul>
-                        <li>Netflix marathons / Disney+ specials</li>
-                        <li>smart led trees · projector lights</li>
-                        <li>virtual gatherings via zoom / facetime</li>
-                        <li>elf on the shelf, trendy countdown calendars</li>
-                        <li>gifts: tech gadgets, amazon wish lists</li>
-                    </ul>
-                    <p>🌍 global mix</p>
-                    <ul>
-                        <li>influences from different cultures</li>
-                        <li>online shopping, next‑day delivery</li>
-                        <li>digital cards / whatsapp greetings</li>
-                        <li>instagram‑worthy tables & outfits</li>
-                    </ul>
-                </div>
+            <!-- quick food badges -->
+            <div style="display: flex; flex-wrap: wrap; gap: 12px; margin-top: 25px;">
+                <span style="background: #fff; padding: 8px 22px; border-radius: 40px; border: 2px solid #d56f2c; font-size: 1.3rem;">🍗 turkey</span>
+                <span style="background: #fff; padding: 8px 22px; border-radius: 40px; border: 2px solid #d56f2c; font-size: 1.3rem;">🥧 mince pie</span>
+                <span style="background: #fff; padding: 8px 22px; border-radius: 40px; border: 2px solid #d56f2c; font-size: 1.3rem;">🍮 plum pudding</span>
+                <span style="background: #fff; padding: 8px 22px; border-radius: 40px; border: 2px solid #d56f2c; font-size: 1.3rem;">🍪 gingerbread</span>
+                <span style="background: #fff; padding: 8px 22px; border-radius: 40px; border: 2px solid #d56f2c; font-size: 1.3rem;">🥂 eggnog</span>
+                <span style="background: #fff; padding: 8px 22px; border-radius: 40px; border: 2px solid #d56f2c; font-size: 1.3rem;">🌰 chestnuts</span>
             </div>
         </div>
 
-        <!-- FOOD focus (as requested: extra emphasis on food) -->
-        <div class="food-note">
-            <p>🍽️  FOOD: then vs now (special section)  🍽️</p>
-            <ul>
-                <li>roast turkey</li>
-                <li>mince pies</li>
-                <li>Christmas pudding</li>
-                <li>eggnog</li>
-                <li>sugar cookies</li>
-                <li>gingerbread</li>
-            </ul>
-        </div>
-
-        <!-- detailed food side by side: past specialties / now favorites -->
-        <div class="food-details">
-            <div class="food-card">
-                <h4><i class="fas fa-utensils"></i> past favourites</h4>
-                <div class="food-grid">
-                    <div class="food-item"><i>🍲</i> roast goose / beef</div>
-                    <div class="food-item"><i>🥧</i> suet pudding / figgy pudding</div>
-                    <div class="food-item"><i>🍊</i> clove‑studied oranges</div>
-                    <div class="food-item"><i>🍷</i> wassail / spiced ale</div>
-                    <div class="food-item"><i>🌰</i> chestnut stuffing</div>
-                    <div class="food-item"><i>🍎</i> homemade cider</div>
+        <!-- SLIDE 2 : past vs now (main comparison) -->
+        <div class="slide">
+            <div class="slide-title"><i class="fas fa-clock"></i> 2 · past christmas  vs  now</div>
+            <div class="row-compare">
+                <!-- past column -->
+                <div class="card past">
+                    <h3><i class="fas fa-tree" style="color: #386b3a;"></i> PAST</h3>
+                    <div class="list-group">
+                        <p>🎶 traditions</p>
+                        <ul>
+                            <li>church nativity / midnight mass</li>
+                            <li>handmade popcorn & paper garlands</li>
+                            <li>carollers singing door to door</li>
+                            <li>real candles on tree (carefully!)</li>
+                        </ul>
+                        <p>📮 communication & gifts</p>
+                        <ul>
+                            <li>handwritten cards via post</li>
+                            <li>practical gifts: knitted socks, books</li>
+                            <li>long distance calls (once a year)</li>
+                        </ul>
+                    </div>
                 </div>
-            </div>
-            <div class="food-card">
-                <h4><i class="fas fa-pizza-slice"></i> now trends</h4>
-                <div class="food-grid">
-                    <div class="food-item"><i>🍗</i> turkey + gravy / ham</div>
-                    <div class="food-item"><i>🧀</i> charcuterie boards</div>
-                    <div class="food-item"><i>🍣</i> seafood platters (luxury)</div>
-                    <div class="food-item"><i>☕</i> pumpkin spice / peppermint mocha</div>
-                    <div class="food-item"><i>🍰</i> bûche de Noël (Yule log)</div>
-                    <div class="food-item"><i>🍪</i> unicorn / themed cookies</div>
+                <!-- now column -->
+                <div class="card now">
+                    <h3><i class="fas fa-snowman"></i> NOW</h3>
+                    <div class="list-group">
+                        <p>🎄 modern vibes</p>
+                        <ul>
+                            <li>Netflix / Disney+ holiday specials</li>
+                            <li>elf on the shelf, smart led trees</li>
+                            <li>virtual gatherings (zoom, facetime)</li>
+                            <li>instagrammable decorations</li>
+                        </ul>
+                        <p>📱 gifts & connection</p>
+                        <ul>
+                            <li>amazon wish lists / next‑day delivery</li>
+                            <li>tech gadgets, airpods, tablets</li>
+                            <li>digital cards / whatsapp / memes</li>
+                        </ul>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <!-- download button -->
-        <div class="download-area">
-            <button class="download-btn" id="downloadPageBtn">
-                <i class="fas fa-download"></i> DOWNLOAD PROJECT
-                <i class="fas fa-download"></i>
+        <!-- SLIDE 3 : FOOD deep-dive (past & now) – extra as requested -->
+        <div class="slide">
+            <div class="slide-title"><i class="fas fa-utensil-spoon"></i> 3 · food then & now</div>
+            <div class="food-spotlight">
+                <p class="big"><i class="fas fa-cheese"></i> Christmas dishes: past vs present <i class="fas fa-cookie-bite"></i></p>
+                <div class="food-grid-2">
+                    <div class="food-col">
+                        <h4>🥣 past favourites</h4>
+                        <div class="food-items">
+                            <div class="food-item"><i>🍲</i> roast goose / beef</div>
+                            <div class="food-item"><i>🍞</i> suet pudding / figgy pudding</div>
+                            <div class="food-item"><i>🍊</i> clove‑studded oranges</div>
+                            <div class="food-item"><i>🍷</i> wassail / spiced ale</div>
+                            <div class="food-item"><i>🌰</i> chestnut stuffing</div>
+                            <div class="food-item"><i>🍎</i> homemade cider</div>
+                        </div>
+                    </div>
+                    <div class="food-col">
+                        <h4>🍴 now trends</h4>
+                        <div class="food-items">
+                            <div class="food-item"><i>🍗</i> turkey + gravy / honey ham</div>
+                            <div class="food-item"><i>🧀</i> charcuterie boards</div>
+                            <div class="food-item"><i>🦐</i> seafood platters (lobster, shrimp)</div>
+                            <div class="food-item"><i>☕</i> peppermint mocha / pumpkin spice</div>
+                            <div class="food-item"><i>🍰</i> bûche de Noël (yule log)</div>
+                            <div class="food-item"><i>🍪</i> unicorn / themed cookies</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- extra note: both eras love roast & pie -->
+            <div class="highlight">
+                <i class="fas fa-star" style="color: #c94f1e;"></i>  timeless classics: roast turkey, mince pies, christmas pudding — but recipes and presentation have evolved!
+            </div>
+        </div>
+
+        <!-- SLIDE 4 : fun facts / summary + food fusion -->
+        <div class="slide">
+            <div class="slide-title"><i class="fas fa-chart-line"></i> 4 · christmas now · more differences</div>
+            <div style="display: flex; flex-wrap: wrap; gap: 20px; justify-content: center;">
+                <div style="background: #af5833; border-radius: 40px; padding: 20px; color: white; flex: 1 1 200px;">
+                    <i class="fas fa-lightbulb" style="font-size: 2.5rem;"></i>
+                    <div style="font-size: 1.8rem;">1920s</div>
+                    <ul style="margin-top: 15px; list-style: none; font-size: 1.2rem;">
+                        <li>🔹 handmade toys</li>
+                        <li>🔹 orange as a gift</li>
+                        <li>🔹 real tree from forest</li>
+                    </ul>
+                </div>
+                <div style="background: #27743b; border-radius: 40px; padding: 20px; color: white; flex: 1 1 200px;">
+                    <i class="fas fa-mobile-alt" style="font-size: 2.5rem;"></i>
+                    <div style="font-size: 1.8rem;">2020s</div>
+                    <ul style="margin-top: 15px; list-style: none; font-size: 1.2rem;">
+                        <li>🔹 unboxing videos</li>
+                        <li>🔹 smart home gifts</li>
+                        <li>🔹 delivery drones?</li>
+                    </ul>
+                </div>
+                <div style="background: #b1974b; border-radius: 40px; padding: 20px; color: white; flex: 1 1 200px;">
+                    <i class="fas fa-cookie" style="font-size: 2.5rem;"></i>
+                    <div style="font-size: 1.8rem;">food fusion</div>
+                    <ul style="margin-top: 15px; list-style: none; font-size: 1.2rem;">
+                        <li>🔹 vegan turkey</li>
+                        <li>🔹 gluten‑free pudding</li>
+                        <li>🔹 global spices</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- download button area (pptx style) -->
+        <div class="download-slide">
+            <button class="download-pptx-btn" id="downloadPPTX">
+                <i class="fas fa-file-powerpoint"></i> DOWNLOAD PROJECT (PPTX) <i class="fas fa-download"></i>
             </button>
         </div>
 
-        <div class="footer-note">
-            ✦  Christmas now & past · project by student  ✦  enjoy the festive differences  ✦
+        <!-- footer -->
+        <div class="ppt-footer">
+            <i class="fas fa-candy-cane"></i>  now & past · student presentation  <i class="fas fa-candy-cane"></i>
         </div>
     </div>
 
     <script>
-        (function() {
-            const downloadBtn = document.getElementById('downloadPageBtn');
+        (function(){
+            const downloadBtn = document.getElementById('downloadPPTX');
 
-            function downloadProject() {
-                // get the entire project card content (with styles inline + proper layout)
-                const projectElement = document.getElementById('projectContent');
-                // clone it deeply to avoid altering the live DOM
-                const contentClone = projectElement.cloneNode(true);
-                // remove the button from clone? but we actually want to keep the button for display? 
-                // we might leave the button, but the downloaded file will have an active button (no script though)
-                // we want the static project as it appears, including the download button (which won't work in downloaded file, but looks nice)
-                // also preserve styles. We'll embed style and font-awesome link.
+            function generatePPTXStyleHTML() {
+                // get the whole ppt container
+                const pptElement = document.getElementById('pptProject');
+                const clone = pptElement.cloneNode(true);
 
-                // get the computed styles? simpler: take entire document's style by getting style tags.
-                // easier: rebuild with outerHTML + embedded css and fontawesome.
-                // but we already have style in head. We'll capture styles and add them to a new html string.
-                
-                const styleElements = document.querySelectorAll('style');
-                let stylesString = '';
-                styleElements.forEach(style => {
-                    stylesString += style.outerHTML;   // includes our beautiful styles
+                // capture all styles (including FontAwesome and our internal)
+                const styleNodes = document.querySelectorAll('style');
+                let styleText = '';
+                styleNodes.forEach(style => {
+                    styleText += style.outerHTML;
                 });
 
-                // also need Font Awesome for icons
-                const fontAwesomeLink = document.querySelector('link[href*="font-awesome"]') || document.querySelector('link[href*="fontawesome"]');
+                // get font awesome link (reuse from head)
                 let faLink = '';
-                if (fontAwesomeLink) {
-                    faLink = fontAwesomeLink.outerHTML;
+                const faHref = document.querySelector('link[href*="font-awesome"]') || document.querySelector('link[href*="fontawesome"]');
+                if (faHref) {
+                    faLink = faHref.outerHTML;
                 } else {
-                    // fallback — include manually just in case
                     faLink = '<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">';
                 }
 
-                // get the project card fully (with all nested elements)
-                const cardHTML = contentClone.outerHTML;
+                // extra styles to keep background when standalone
+                const standaloneStyle = `
+                    <style>
+                        body { background: #3b2b1a; display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 20px; margin: 0; }
+                        .pptx-container { max-width: 1200px; width: 100%; }
+                    </style>
+                `;
 
-                // create a complete html page, with proper meta for display
-                const fullDoc = `
-<!DOCTYPE html>
+                // build full html file
+                return `<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Christmas now vs past · project</title>
+    <title>Christmas now & past · project pptx</title>
     ${faLink}
-    ${stylesString}
-    <style>
-        body { background: #ecdcc5; display: flex; justify-content: center; align-items: center; padding: 20px; margin: 0; min-height: 100vh; }
-        .project-card { margin: 0 auto; }
-    </style>
+    ${styleText}
+    ${standaloneStyle}
 </head>
 <body>
-    ${cardHTML}
+    ${clone.outerHTML}
 </body>
-</html>
-                `;
+</html>`;
+            }
 
-                // create blob and download
-                const blob = new Blob([fullDoc], { type: 'text/html' });
+            downloadBtn.addEventListener('click', function() {
+                const fullHtml = generatePPTXStyleHTML();
+                const blob = new Blob([fullHtml], { type: 'text/html' });
                 const url = URL.createObjectURL(blob);
                 const link = document.createElement('a');
                 link.href = url;
-                link.download = 'Christmas_now_past_project.html';  // filename
+                link.download = 'Christmas_Now_Past_PPTX.html';  // .html but looks like pptx style
                 document.body.appendChild(link);
                 link.click();
                 document.body.removeChild(link);
                 URL.revokeObjectURL(url);
-            }
+            });
 
-            downloadBtn.addEventListener('click', downloadProject);
         })();
     </script>
-    <!-- extra note: the button triggers download of an HTML file with full layout -->
 </body>
 </html>
