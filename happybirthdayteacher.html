@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>给詹詹老师的生日惊喜</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600&display=swap" rel="stylesheet">
+
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+    font-family: 'Noto Serif SC', serif;
+    background: linear-gradient(135deg,#0f2027,#203a43,#2c5364);
+    color: white;
+    display: flex; justify-content: center; align-items: center;
+    min-height: 100vh; padding: 20px;
+}
+.container { width:100%; max-width:700px; text-align:center; }
+.card {
+    background: rgba(255,255,255,0.08); backdrop-filter: blur(10px);
+    padding: 40px; border-radius: 20px; box-shadow:0 20px 60px rgba(0,0,0,0.3);
+    transition:0.6s;
+}
+h1 { margin-bottom:20px; font-size:28px; }
+input { padding:12px; width:80%; border-radius:8px; border:none; margin-top:20px; font-size:16px; text-align:center; }
+button {
+    margin-top:20px; padding:10px 25px; border-radius:8px; border:none;
+    background:#4facfe; color:white; font-size:16px; cursor:pointer; transition:0.3s;
+}
+button:hover { background:#00c6ff; }
+.hidden { display:none; }
+.message { margin-top:30px; text-align:left; line-height:1.9; animation:fadeIn 1.2s ease forwards; }
+@keyframes fadeIn { from {opacity:0; transform:translateY(20px);} to {opacity:1; transform:translateY(0);} }
+</style>
+</head>
+<body>
+
+<div class="container">
+    <div class="card" id="lock">
+        <h1>🎁 在打开礼物前</h1>
+        <p>请回答一个小问题：</p>
+        <p><strong>热传递有分什么？</strong></p>
+
+        <input type="text" id="answer" placeholder="输入答案...">
+        <br>
+        <button onclick="checkAnswer()">解锁</button>
+    </div>
+
+    <div class="card hidden" id="content">
+        <h1>詹詹，生日快乐 🎂</h1>
+
+        <div class="message">
+            <p><strong>许家弟：</strong>老师生日快乐～</p>
+            <p><strong>陈语捷：</strong>詹詹生日快乐</p>
+            <p><strong>黄宥敏：</strong>生日快乐！</p>
+            <p><strong>李韡翰：</strong>詹詹生日快乐，今年是最后一年您教导我们了，祝您身体健康，万事如意，心想事成。</p>
+
+            <br>
+
+            <p><strong>—— J3K 全体四人</strong></p>
+
+            <p>
+            这三年来，您一直陪伴着我们成长。<br>
+            从最初的懵懂无知，到如今渐渐学会承担与思考，
+            每一步都离不开您的教导与鼓励。<br><br>
+            今年是您教我们的最后一年了，想到即将分别，心中难免不舍。<br>
+            三年的时光，说长不长，说短不短，却留下了许多难忘的回忆。<br>
+            您不仅教会了我们课本上的知识，更教会了我们做人的道理与面对挑战的勇气。<br><br>
+            感谢您这三年的耐心、包容与付出。<br>
+            未来无论我们走到哪里，都会记得曾经有一位如此认真、负责的老师陪伴过我们的青春。<br><br>
+            衷心祝您生日快乐，身体健康，万事顺遂。<br>
+            愿您岁岁平安，常被温柔以待。
+            </p>
+        </div>
+    </div>
+</div>
+
+<script>
+function checkAnswer() {
+    const input = document.getElementById("answer").value.trim().toLowerCase();
+    // 答案可包含“传导”“对流”“辐射”任意组合即可解锁
+    const validAnswers = ["传导,对流,辐射", "对流,传导,辐射", "传导 对流 辐射", "对流 传导 辐射", "传导对流辐射", "传导+对流+辐射"];
+    if (validAnswers.some(ans => input.replace(/\s+/g,'').includes(ans.replace(/\s+/g,'')))) {
+        document.getElementById("lock").classList.add("hidden");
+        document.getElementById("content").classList.remove("hidden");
+    } else {
+        alert("再想一想哦 😊 热传递分为 传导、对流、辐射");
+    }
+}
+</script>
+
+</body>
+</html>
