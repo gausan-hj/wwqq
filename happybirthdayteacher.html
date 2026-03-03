@@ -6,38 +6,46 @@
 <title>詹詹老师生日惊喜</title>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600&display=swap" rel="stylesheet">
 <style>
+/* ===== 基础样式 ===== */
 *{margin:0;padding:0;box-sizing:border-box;}
 body{
   font-family:'Noto Serif SC', serif;
   background: linear-gradient(135deg,#001f4d,#004aad,#007fff);
   color:white;
-  overflow-x:hidden;
   min-height:100vh;
+  overflow-x:hidden;
+  -webkit-tap-highlight-color: transparent;
 }
 .container{
-  width:100%; max-width:900px; margin:auto; text-align:center; padding:40px 20px; min-height:100vh; display:flex; flex-direction:column; justify-content:center; align-items:center;
+  width:90%; max-width:900px;
+  margin:auto;
+  text-align:center;
+  padding:20px;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  min-height:100vh;
   position:relative;
-  pointer-events:auto;
 }
 
-/* 答题卡片 */
-#lock{
-  position: relative;
-  z-index:9999;
+/* ===== 卡片/按钮 ===== */
+.card{
   background: rgba(0,102,204,0.15); backdrop-filter: blur(10px);
-  padding:40px; border-radius:20px; box-shadow:0 20px 60px rgba(0,0,0,0.3); transition:0.6s;
+  padding:30px; border-radius:20px; box-shadow:0 20px 60px rgba(0,0,0,0.3);
+  transition:0.6s;
+  position:relative;
+  z-index:2;
 }
-#lock input{padding:12px; width:80%; border-radius:8px; border:none; margin-top:20px; font-size:16px; text-align:center;}
-#lock button{
-  margin-top:20px; padding:10px 25px; border-radius:25px; border:none; background:#4facfe; color:white; font-size:16px; cursor:pointer; transition:0.3s;
+input{padding:12px; width:80%; border-radius:8px; border:none; margin-top:20px; font-size:16px; text-align:center;}
+button{
+  margin-top:20px; padding:12px 30px; border-radius:25px; border:none; background:#4facfe; color:white; font-size:16px; cursor:pointer; transition:0.3s;
 }
-#lock button:hover{background:#00c6ff;}
-
-/* 隐藏元素 */
+button:hover{background:#00c6ff;}
 .hidden{display:none !important;}
 
-/* 气球 */
-#balloonPage{position:relative; width:100%; height:400px; overflow:hidden; z-index:2;}
+/* ===== 气球动画 ===== */
+#balloonPage{position:relative; width:100%; height:400px; overflow:hidden;}
 .balloon{
   position:absolute; bottom:-100px; width:50px; height:70px; border-radius:50%;
   animation:rise 6s linear forwards, sway 3s ease-in-out infinite alternate, bounce 2s ease-in-out infinite alternate;
@@ -46,21 +54,27 @@ body{
   width:2px; height:50px; background:white; position:absolute; bottom:-50px; left:50%; transform:translateX(-50%);
 }
 #balloonText{
-  position:absolute; top:40%; width:100%; font-size:36px; opacity:0; transition:1s; text-align:center;
+  position:absolute; top:40%; width:100%; font-size:28px; opacity:0; transition:1s; text-align:center;
 }
 @keyframes rise{0%{bottom:-100px;} 100%{bottom:500px;}}
 @keyframes sway{0%{transform:translateX(0);} 50%{transform:translateX(10px);} 100%{transform:translateX(-10px);}}
 @keyframes bounce{0%,100%{transform:translateY(0);} 50%{transform:translateY(-10px);}}
 
-/* 照片页面 */
-#photoPage{position:relative; width:100%; height:550px; overflow:hidden; z-index:2;}
+/* ===== 照片页面 ===== */
+#photoPage{position:relative; width:100%; height:auto; overflow:visible;}
 .photo-container{
-  position:relative; width:100%; height:100%; display:flex; justify-content:space-around; align-items:flex-end; padding-bottom:120px;
+  display:flex; justify-content:center; flex-wrap:wrap; align-items:flex-end; padding-bottom:120px; gap:10px;
 }
-.photo-wrapper{position:relative; text-align:center; cursor:pointer; transition:transform 0.3s ease;}
-.photo-wrapper:hover{transform:scale(1.2); z-index:10;}
+.photo-wrapper{position:relative; text-align:center; cursor:pointer; transition: transform 0.3s ease; z-index:1;}
+.photo-wrapper:hover{transform: scale(1.2); z-index:10;}
+.photo-wrapper.active{
+  position: fixed; top:50%; left:50%;
+  transform: translate(-50%, -50%) scale(2);
+  z-index:999;
+  transition: transform 0.5s ease;
+}
 .photo{
-  width:160px; border-radius:12px; box-shadow:0 10px 30px rgba(0,0,0,0.5);
+  width:40vw; max-width:160px; border-radius:12px; box-shadow:0 10px 30px rgba(0,0,0,0.5);
   opacity:0; transform:translateY(220px);
   animation:photoRise 1.5s ease forwards;
 }
@@ -71,7 +85,10 @@ body{
 .photo-wrapper:nth-child(5) .photo{animation-delay:1.2s;}
 .photo-wrapper:nth-child(6) .photo{animation-delay:1.5s;}
 .photo-wrapper:nth-child(7) .photo{animation-delay:1.8s;}
-.caption{margin-top:6px; font-size:14px; color:#cce7ff; opacity:0; animation:captionFade 1s forwards;}
+.caption{
+  position:absolute; bottom:120%; left:50%; transform:translateX(-50%);
+  font-size:3.5vw; color:#cce7ff; opacity:0; animation:captionFade 1s forwards;
+}
 .photo-wrapper:nth-child(1) .caption{animation-delay:1.5s;}
 .photo-wrapper:nth-child(2) .caption{animation-delay:1.8s;}
 .photo-wrapper:nth-child(3) .caption{animation-delay:2.1s;}
@@ -82,27 +99,27 @@ body{
 @keyframes photoRise{0%{transform:translateY(220px); opacity:0;} 100%{transform:translateY(0); opacity:1;}}
 @keyframes captionFade{from{opacity:0;} to{opacity:1;}}
 
-/* 历史回展文字 */
+/* ===== 历史回展文字 ===== */
 #historyText{
   position:absolute; top:35%; left:50%; transform:translateX(-50%);
-  padding:10px 40px; background:rgba(0,0,102,0.5); border-radius:50px; font-size:22px; opacity:0;
+  padding:10px 30px; background:rgba(0,0,102,0.5); border-radius:50px; font-size:5vw; opacity:0;
   animation:fadeUp 1s forwards 3.5s;
 }
 
-/* 继续按钮 */
+/* ===== 继续按钮 ===== */
 #continueBtn{
   position:absolute; bottom:20px; left:50%; transform:translateX(-50%);
   padding:12px 50px; border-radius:30px; border:none; background:#4facfe; color:white; font-size:16px; cursor:pointer; display:none;
 }
 
-/* 白色弹跳圆圈 */
+/* ===== 白色弹跳圆圈 ===== */
 #circleJump{
   position:fixed; width:100px; height:100px; border-radius:50%;
   border:2px solid white; background:rgba(255,255,255,0.2); top:0; left:0;
   transform:scale(0); z-index:999; transition:all 1s cubic-bezier(.68,-0.55,.27,1.55);
 }
 
-/* 留言内容 */
+/* ===== 留言内容 ===== */
 #circleContent{
   position:fixed; top:50%; left:50%; transform:translate(-50%,-50%);
   width:80%; max-width:600px; padding:20px; background:rgba(255,255,255,0.95); color:#001f4d;
@@ -137,7 +154,7 @@ body{
       <div class="photo-wrapper"><img src="fig1.jpg" class="photo"><div class="caption">无花果园 · 2025年</div></div>
       <div class="photo-wrapper"><img src="fig2.jpg" class="photo"><div class="caption">无花果园 · 2025年</div></div>
       <div class="photo-wrapper"><img src="duckfarm.jpg" class="photo"><div class="caption">鸭场 · 2025年</div></div>
-      <div class="photo-wrapper"><img src="herb.jpg" class="photo"><div class="caption">中药厂 · 2025年</div></div>
+      <div class="photo-wrapper"><img src="herb1.jpg" class="photo"><div class="caption">中药厂 · 2025年</div></div>
       <div class="photo-wrapper"><img src="herb2.jpg" class="photo"><div class="caption">中药厂 · 2025年</div></div>
       <div class="photo-wrapper"><img src="herb3.jpg" class="photo"><div class="caption">中药厂 · 2025年</div></div>
       <div class="photo-wrapper"><img src="van.jpg" class="photo"><div class="caption">车上 · 2025年</div></div>
@@ -154,7 +171,7 @@ body{
     <p><strong>黄宥敏：</strong>生日快乐！</p>
     <p><strong>李韡翰：</strong>詹詹生日快乐，今年是最后一年您教导我们了，祝您身体健康，万事如意，心想事成。</p>
     <br>
-    <p><strong>—— J3K 人留言</strong></p>
+    <p><strong>—— J3K 全体四人留言</strong></p>
     <p>这三年来，您一直陪伴着我们成长。从最初的懵懂无知，到如今渐渐学会承担与思考，每一步都离不开您的教导与鼓励。</p>
     <p>今年是您教我们的最后一年了，想到即将分别，心中难免不舍。三年的时光，说长不长，说短不短，却留下了许多难忘的回忆。您不仅教会了我们课本上的知识，更教会了我们做人的道理与面对挑战的勇气。</p>
     <p>感谢您这三年的耐心、包容与付出。未来无论我们走到哪里，都会记得曾经有一位如此认真、负责的老师陪伴过我们的青春。</p>
@@ -163,6 +180,7 @@ body{
 </div>
 
 <script>
+// ===== 答题解锁 =====
 function checkAnswer(){
   const input=document.getElementById("answer").value.trim();
   if(input.includes("传导")||input.includes("对流")||input.includes("辐射")){
@@ -180,6 +198,7 @@ function checkAnswer(){
   }
 }
 
+// ===== 点击继续弹跳圆圈 =====
 function startCircle(){
   const circle=document.getElementById("circleJump");
   const content=document.getElementById("circleContent");
@@ -190,19 +209,17 @@ function startCircle(){
   circle.style.left='50%';
   circle.style.transform='translate(-50%,-50%) scale(1)';
 
-  setTimeout(()=>{
-    content.style.opacity=1;
-  },800);
-
-  setTimeout(()=>{
-    circle.style.width='200vw';
-    circle.style.height='200vw';
-  },1400);
-
-  setTimeout(()=>{
-    document.getElementById("photoPage").classList.add("hidden");
-  },2000);
+  setTimeout(()=>{content.style.opacity=1;},800);
+  setTimeout(()=>{circle.style.width='200vw'; circle.style.height='200vw';},1400);
+  setTimeout(()=>{document.getElementById("photoPage").classList.add("hidden");},2000);
 }
+
+// ===== 点击放大图片 =====
+document.querySelectorAll('.photo-wrapper').forEach(wrapper=>{
+  wrapper.addEventListener('click', ()=>{
+    wrapper.classList.toggle('active');
+  });
+});
 </script>
 </body>
 </html>
