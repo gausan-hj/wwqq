@@ -17,20 +17,26 @@ body{
 }
 .container{
   width:100%; max-width:900px; margin:auto; text-align:center; padding:40px 20px; min-height:100vh; display:flex; flex-direction:column; justify-content:center; align-items:center;
+  position:relative;
+  z-index:1;
 }
 .card{
   background: rgba(0,102,204,0.15); backdrop-filter: blur(10px);
   padding:40px; border-radius:20px; box-shadow:0 20px 60px rgba(0,0,0,0.3); transition:0.6s;
+  position: relative;
+  z-index:2;
 }
 input{padding:12px; width:80%; border-radius:8px; border:none; margin-top:20px; font-size:16px; text-align:center;}
 button{
   margin-top:20px; padding:10px 25px; border-radius:25px; border:none; background:#4facfe; color:white; font-size:16px; cursor:pointer; transition:0.3s;
+  position: relative;
+  z-index:3;
 }
 button:hover{background:#00c6ff;}
-.hidden{display:none;}
+.hidden{display:none !important;}
 
 /* 气球 */
-#balloonPage{position:relative; width:100%; height:400px; overflow:hidden;}
+#balloonPage{position:relative; width:100%; height:400px; overflow:hidden; z-index:2;}
 .balloon{
   position:absolute; bottom:-100px; width:50px; height:70px; border-radius:50%;
   animation:rise 6s linear forwards, sway 3s ease-in-out infinite alternate, bounce 2s ease-in-out infinite alternate;
@@ -46,9 +52,9 @@ button:hover{background:#00c6ff;}
 @keyframes bounce{0%,100%{transform:translateY(0);} 50%{transform:translateY(-10px);}}
 
 /* 照片页面 */
-#photoPage{position:relative; width:100%; height:550px; overflow:hidden;}
+#photoPage{position:relative; width:100%; height:550px; overflow:hidden; z-index:2;}
 .photo-container{
-  position:relative; width:100%; height:100%; display:flex; justify-content:space-around; align-items:flex-end; padding-bottom:60px;
+  position:relative; width:100%; height:100%; display:flex; justify-content:space-around; align-items:flex-end; padding-bottom:80px;
 }
 .photo-wrapper{position:relative; text-align:center; cursor:pointer; transition:transform 0.3s ease;}
 .photo-wrapper:hover{transform:scale(1.2); z-index:10;}
@@ -92,7 +98,7 @@ button:hover{background:#00c6ff;}
 #circleJump{
   position:fixed; width:100px; height:100px; border-radius:50%;
   border:2px solid white; background:rgba(255,255,255,0.2); top:0; left:0;
-  transform:scale(0); z-index:999; transition:all 0.8s cubic-bezier(.68,-0.55,.27,1.55);
+  transform:scale(0); z-index:999; transition:all 1s cubic-bezier(.68,-0.55,.27,1.55);
 }
 
 /* 留言内容 */
@@ -176,28 +182,31 @@ function checkAnswer(){
 function startCircle(){
   const circle=document.getElementById("circleJump");
   const content=document.getElementById("circleContent");
+
+  // 初始显示圆圈
   circle.style.transform='scale(1)';
 
-  // 顺滑弹跳到中心
+  // 使用顺滑弹跳曲线到中心
+  circle.style.transition='all 1s cubic-bezier(.68,-0.55,.27,1.55)';
   circle.style.top='50%';
   circle.style.left='50%';
   circle.style.transform='translate(-50%,-50%) scale(1)';
 
-  // 显示内容并淡入
+  // 显示留言内容
   setTimeout(()=>{
     content.style.opacity=1;
-  },600);
+  },800);
 
-  // 扩展覆盖页面
+  // 扩散覆盖页面
   setTimeout(()=>{
     circle.style.width='200vw';
     circle.style.height='200vw';
-  },1200);
+  },1400);
 
   // 隐藏照片页面
   setTimeout(()=>{
     document.getElementById("photoPage").classList.add("hidden");
-  },1800);
+  },2000);
 }
 </script>
 </body>
