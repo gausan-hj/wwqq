@@ -12,27 +12,28 @@ body{
   background: linear-gradient(135deg,#001f4d,#004aad,#007fff);
   color:white;
   overflow-x:hidden;
-  position:relative;
   min-height:100vh;
 }
 .container{
   width:100%; max-width:900px; margin:auto; text-align:center; padding:40px 20px; min-height:100vh; display:flex; flex-direction:column; justify-content:center; align-items:center;
   position:relative;
-  z-index:1;
+  pointer-events:auto;
 }
-.card{
+
+/* 答题卡片 */
+#lock{
+  position: relative;
+  z-index:9999;
   background: rgba(0,102,204,0.15); backdrop-filter: blur(10px);
   padding:40px; border-radius:20px; box-shadow:0 20px 60px rgba(0,0,0,0.3); transition:0.6s;
-  position: relative;
-  z-index:2;
 }
-input{padding:12px; width:80%; border-radius:8px; border:none; margin-top:20px; font-size:16px; text-align:center;}
-button{
+#lock input{padding:12px; width:80%; border-radius:8px; border:none; margin-top:20px; font-size:16px; text-align:center;}
+#lock button{
   margin-top:20px; padding:10px 25px; border-radius:25px; border:none; background:#4facfe; color:white; font-size:16px; cursor:pointer; transition:0.3s;
-  position: relative;
-  z-index:3;
 }
-button:hover{background:#00c6ff;}
+#lock button:hover{background:#00c6ff;}
+
+/* 隐藏元素 */
 .hidden{display:none !important;}
 
 /* 气球 */
@@ -54,12 +55,12 @@ button:hover{background:#00c6ff;}
 /* 照片页面 */
 #photoPage{position:relative; width:100%; height:550px; overflow:hidden; z-index:2;}
 .photo-container{
-  position:relative; width:100%; height:100%; display:flex; justify-content:space-around; align-items:flex-end; padding-bottom:80px;
+  position:relative; width:100%; height:100%; display:flex; justify-content:space-around; align-items:flex-end; padding-bottom:120px;
 }
 .photo-wrapper{position:relative; text-align:center; cursor:pointer; transition:transform 0.3s ease;}
 .photo-wrapper:hover{transform:scale(1.2); z-index:10;}
 .photo{
-  width:140px; border-radius:12px; box-shadow:0 10px 30px rgba(0,0,0,0.5);
+  width:160px; border-radius:12px; box-shadow:0 10px 30px rgba(0,0,0,0.5);
   opacity:0; transform:translateY(220px);
   animation:photoRise 1.5s ease forwards;
 }
@@ -83,15 +84,15 @@ button:hover{background:#00c6ff;}
 
 /* 历史回展文字 */
 #historyText{
-  position:absolute; top:40%; left:50%; transform:translateX(-50%);
-  padding:10px 30px; background:rgba(0,0,102,0.5); border-radius:50px; font-size:22px; opacity:0;
+  position:absolute; top:35%; left:50%; transform:translateX(-50%);
+  padding:10px 40px; background:rgba(0,0,102,0.5); border-radius:50px; font-size:22px; opacity:0;
   animation:fadeUp 1s forwards 3.5s;
 }
 
 /* 继续按钮 */
 #continueBtn{
   position:absolute; bottom:20px; left:50%; transform:translateX(-50%);
-  padding:12px 40px; border-radius:30px; border:none; background:#4facfe; color:white; font-size:16px; cursor:pointer; display:none;
+  padding:12px 50px; border-radius:30px; border:none; background:#4facfe; color:white; font-size:16px; cursor:pointer; display:none;
 }
 
 /* 白色弹跳圆圈 */
@@ -183,27 +184,21 @@ function startCircle(){
   const circle=document.getElementById("circleJump");
   const content=document.getElementById("circleContent");
 
-  // 初始显示圆圈
   circle.style.transform='scale(1)';
-
-  // 使用顺滑弹跳曲线到中心
   circle.style.transition='all 1s cubic-bezier(.68,-0.55,.27,1.55)';
   circle.style.top='50%';
   circle.style.left='50%';
   circle.style.transform='translate(-50%,-50%) scale(1)';
 
-  // 显示留言内容
   setTimeout(()=>{
     content.style.opacity=1;
   },800);
 
-  // 扩散覆盖页面
   setTimeout(()=>{
     circle.style.width='200vw';
     circle.style.height='200vw';
   },1400);
 
-  // 隐藏照片页面
   setTimeout(()=>{
     document.getElementById("photoPage").classList.add("hidden");
   },2000);
