@@ -13,7 +13,7 @@ body{
   color:white;
   overflow-x:hidden;
   position:relative;
-  height:100vh;
+  min-height:100vh;
 }
 .container{
   width:100%; max-width:900px; margin:auto; text-align:center; padding:40px 20px; min-height:100vh; display:flex; flex-direction:column; justify-content:center; align-items:center;
@@ -46,13 +46,15 @@ button:hover{background:#00c6ff;}
 @keyframes bounce{0%,100%{transform:translateY(0);} 50%{transform:translateY(-10px);}}
 
 /* 照片页面 */
-#photoPage{position:relative; width:100%; height:500px; overflow:hidden;}
+#photoPage{position:relative; width:100%; height:550px; overflow:hidden;}
 .photo-container{
-  position:relative; width:100%; height:100%; display:flex; justify-content:space-around; align-items:flex-end;
+  position:relative; width:100%; height:100%; display:flex; justify-content:space-around; align-items:flex-end; padding-bottom:60px;
 }
-.photo-wrapper{position:relative; text-align:center;}
+.photo-wrapper{position:relative; text-align:center; cursor:pointer; transition:transform 0.3s ease;}
+.photo-wrapper:hover{transform:scale(1.2); z-index:10;}
 .photo{
-  width:120px; border-radius:10px; box-shadow:0 10px 30px rgba(0,0,0,0.5); opacity:0; transform:translateY(200px);
+  width:140px; border-radius:12px; box-shadow:0 10px 30px rgba(0,0,0,0.5);
+  opacity:0; transform:translateY(220px);
   animation:photoRise 1.5s ease forwards;
 }
 .photo-wrapper:nth-child(1) .photo{animation-delay:0s;}
@@ -62,10 +64,7 @@ button:hover{background:#00c6ff;}
 .photo-wrapper:nth-child(5) .photo{animation-delay:1.2s;}
 .photo-wrapper:nth-child(6) .photo{animation-delay:1.5s;}
 .photo-wrapper:nth-child(7) .photo{animation-delay:1.8s;}
-
-.caption{
-  margin-top:6px; font-size:14px; color:#cce7ff; opacity:0; animation:captionFade 1s forwards;
-}
+.caption{margin-top:6px; font-size:14px; color:#cce7ff; opacity:0; animation:captionFade 1s forwards;}
 .photo-wrapper:nth-child(1) .caption{animation-delay:1.5s;}
 .photo-wrapper:nth-child(2) .caption{animation-delay:1.8s;}
 .photo-wrapper:nth-child(3) .caption{animation-delay:2.1s;}
@@ -73,18 +72,17 @@ button:hover{background:#00c6ff;}
 .photo-wrapper:nth-child(5) .caption{animation-delay:2.7s;}
 .photo-wrapper:nth-child(6) .caption{animation-delay:3s;}
 .photo-wrapper:nth-child(7) .caption{animation-delay:3.3s;}
-
-@keyframes photoRise{0%{transform:translateY(200px); opacity:0;} 100%{transform:translateY(0); opacity:1;}}
+@keyframes photoRise{0%{transform:translateY(220px); opacity:0;} 100%{transform:translateY(0); opacity:1;}}
 @keyframes captionFade{from{opacity:0;} to{opacity:1;}}
 
-/* 历史回展 */
+/* 历史回展文字 */
 #historyText{
   position:absolute; top:40%; left:50%; transform:translateX(-50%);
   padding:10px 30px; background:rgba(0,0,102,0.5); border-radius:50px; font-size:22px; opacity:0;
   animation:fadeUp 1s forwards 3.5s;
 }
 
-/* 继续按钮 pill */
+/* 继续按钮 */
 #continueBtn{
   position:absolute; bottom:20px; left:50%; transform:translateX(-50%);
   padding:12px 40px; border-radius:30px; border:none; background:#4facfe; color:white; font-size:16px; cursor:pointer; display:none;
@@ -94,68 +92,67 @@ button:hover{background:#00c6ff;}
 #circleJump{
   position:fixed; width:100px; height:100px; border-radius:50%;
   border:2px solid white; background:rgba(255,255,255,0.2); top:0; left:0;
-  transform:scale(0); z-index:999;
+  transform:scale(0); z-index:999; transition:all 0.8s cubic-bezier(.68,-0.55,.27,1.55);
 }
 
-/* 留言内容在圆圈内 */
+/* 留言内容 */
 #circleContent{
   position:fixed; top:50%; left:50%; transform:translate(-50%,-50%);
   width:80%; max-width:600px; padding:20px; background:rgba(255,255,255,0.95); color:#001f4d;
-  border-radius:20px; opacity:0; line-height:1.8; font-size:16px; text-align:left; z-index:1000;
+  border-radius:20px; opacity:0; line-height:1.8; font-size:16px; text-align:left; z-index:1000; transition:opacity 0.5s ease;
 }
 </style>
 </head>
 <body>
 <div class="container">
-    <!-- 答题页面 -->
-    <div class="card" id="lock">
-        <h1>🎁 在打开礼物前</h1>
-        <p>请回答一个小问题：</p>
-        <p><strong>热传递有分什么？</strong></p>
-        <input type="text" id="answer" placeholder="输入答案...">
-        <br>
-        <button onclick="checkAnswer()">解锁</button>
-    </div>
+  <!-- 答题页面 -->
+  <div class="card" id="lock">
+    <h1>🎁 在打开礼物前</h1>
+    <p>请回答一个小问题：</p>
+    <p><strong>热传递有分什么？</strong></p>
+    <input type="text" id="answer" placeholder="输入答案..."><br>
+    <button onclick="checkAnswer()">解锁</button>
+  </div>
 
-    <!-- 气球页面 -->
-    <div class="card hidden" id="balloonPage">
-        <div class="balloon" style="left:10%; background:#4facfe;"><div class="balloon-string"></div></div>
-        <div class="balloon" style="left:25%; background:#00c6ff;"><div class="balloon-string"></div></div>
-        <div class="balloon" style="left:40%; background:#2196f3;"><div class="balloon-string"></div></div>
-        <div class="balloon" style="left:55%; background:#1e90ff;"><div class="balloon-string"></div></div>
-        <div class="balloon" style="left:70%; background:#00bfff;"><div class="balloon-string"></div></div>
-        <div id="balloonText">生日快乐，老师！🎉</div>
-    </div>
+  <!-- 气球页面 -->
+  <div class="card hidden" id="balloonPage">
+    <div class="balloon" style="left:10%; background:#4facfe;"><div class="balloon-string"></div></div>
+    <div class="balloon" style="left:25%; background:#00c6ff;"><div class="balloon-string"></div></div>
+    <div class="balloon" style="left:40%; background:#2196f3;"><div class="balloon-string"></div></div>
+    <div class="balloon" style="left:55%; background:#1e90ff;"><div class="balloon-string"></div></div>
+    <div class="balloon" style="left:70%; background:#00bfff;"><div class="balloon-string"></div></div>
+    <div id="balloonText">生日快乐，老师！🎉</div>
+  </div>
 
-    <!-- 照片升起页面 -->
-    <div class="card hidden" id="photoPage">
-        <div class="photo-container">
-            <div class="photo-wrapper"><img src="fig1.jpg" class="photo"><div class="caption">无花果园 · 2025年</div></div>
-            <div class="photo-wrapper"><img src="fig2.jpg" class="photo"><div class="caption">无花果园 · 2025年</div></div>
-            <div class="photo-wrapper"><img src="duckfarm.jpg" class="photo"><div class="caption">鸭场 · 2025年</div></div>
-            <div class="photo-wrapper"><img src="herb1.jpg" class="photo"><div class="caption">中药厂 · 2025年</div></div>
-            <div class="photo-wrapper"><img src="herb2.jpg" class="photo"><div class="caption">中药厂 · 2025年</div></div>
-            <div class="photo-wrapper"><img src="herb3.jpg" class="photo"><div class="caption">中药厂 · 2025年</div></div>
-            <div class="photo-wrapper"><img src="van.jpg" class="photo"><div class="caption">车上 · 2025年</div></div>
-        </div>
-        <div id="historyText">历史回展</div>
-        <button id="continueBtn" onclick="startCircle()">继续</button>
-        <div id="circleJump"></div>
+  <!-- 照片升起页面 -->
+  <div class="card hidden" id="photoPage">
+    <div class="photo-container">
+      <div class="photo-wrapper"><img src="fig1.jpg" class="photo"><div class="caption">无花果园 · 2025年</div></div>
+      <div class="photo-wrapper"><img src="fig2.jpg" class="photo"><div class="caption">无花果园 · 2025年</div></div>
+      <div class="photo-wrapper"><img src="duckfarm.jpg" class="photo"><div class="caption">鸭场 · 2025年</div></div>
+      <div class="photo-wrapper"><img src="herb1.jpg" class="photo"><div class="caption">中药厂 · 2025年</div></div>
+      <div class="photo-wrapper"><img src="herb2.jpg" class="photo"><div class="caption">中药厂 · 2025年</div></div>
+      <div class="photo-wrapper"><img src="herb3.jpg" class="photo"><div class="caption">中药厂 · 2025年</div></div>
+      <div class="photo-wrapper"><img src="van.jpg" class="photo"><div class="caption">车上 · 2025年</div></div>
     </div>
+    <div id="historyText">历史回展</div>
+    <button id="continueBtn" onclick="startCircle()">继续</button>
+    <div id="circleJump"></div>
+  </div>
 
-    <!-- 留言内容 -->
-    <div id="circleContent" class="hidden">
-        <p><strong>许家弟：</strong>老师生日快乐～</p>
-        <p><strong>陈语捷：</strong>詹詹生日快乐</p>
-        <p><strong>黄宥敏：</strong>生日快乐！</p>
-        <p><strong>李韡翰：</strong>詹詹生日快乐，今年是最后一年您教导我们了，祝您身体健康，万事如意，心想事成。</p>
-        <br>
-        <p><strong>—— J3K 全体四人留言</strong></p>
-        <p>这三年来，您一直陪伴着我们成长。从最初的懵懂无知，到如今渐渐学会承担与思考，每一步都离不开您的教导与鼓励。</p>
-        <p>今年是您教我们的最后一年了，想到即将分别，心中难免不舍。三年的时光，说长不长，说短不短，却留下了许多难忘的回忆。您不仅教会了我们课本上的知识，更教会了我们做人的道理与面对挑战的勇气。</p>
-        <p>感谢您这三年的耐心、包容与付出。未来无论我们走到哪里，都会记得曾经有一位如此认真、负责的老师陪伴过我们的青春。</p>
-        <p>衷心祝您生日快乐，身体健康，万事顺遂，愿您岁岁平安，常被温柔以待。</p>
-    </div>
+  <!-- 留言内容 -->
+  <div id="circleContent">
+    <p><strong>许家弟：</strong>老师生日快乐～</p>
+    <p><strong>陈语捷：</strong>詹詹生日快乐</p>
+    <p><strong>黄宥敏：</strong>生日快乐！</p>
+    <p><strong>李韡翰：</strong>詹詹生日快乐，今年是最后一年您教导我们了，祝您身体健康，万事如意，心想事成。</p>
+    <br>
+    <p><strong>—— J3K 全体四人留言</strong></p>
+    <p>这三年来，您一直陪伴着我们成长。从最初的懵懂无知，到如今渐渐学会承担与思考，每一步都离不开您的教导与鼓励。</p>
+    <p>今年是您教我们的最后一年了，想到即将分别，心中难免不舍。三年的时光，说长不长，说短不短，却留下了许多难忘的回忆。您不仅教会了我们课本上的知识，更教会了我们做人的道理与面对挑战的勇气。</p>
+    <p>感谢您这三年的耐心、包容与付出。未来无论我们走到哪里，都会记得曾经有一位如此认真、负责的老师陪伴过我们的青春。</p>
+    <p>衷心祝您生日快乐，身体健康，万事顺遂，愿您岁岁平安，常被温柔以待。</p>
+  </div>
 </div>
 
 <script>
@@ -169,9 +166,7 @@ function checkAnswer(){
     setTimeout(()=>{
       balloonPage.classList.add("hidden");
       document.getElementById("photoPage").classList.remove("hidden");
-      setTimeout(()=>{
-        document.getElementById("continueBtn").style.display='block';
-      },4000);
+      setTimeout(()=>{document.getElementById("continueBtn").style.display='block';},4000);
     },4000);
   }else{
     alert("再想一想哦 😊 热传递分为传导、对流、辐射之一");
@@ -182,36 +177,27 @@ function startCircle(){
   const circle=document.getElementById("circleJump");
   const content=document.getElementById("circleContent");
   circle.style.transform='scale(1)';
-  circle.style.top='0';
-  circle.style.left='0';
 
-  // 弹跳到中心
-  let steps=[{top:'10%', left:'10%'},{top:'20%', left:'20%'},{top:'40%', left:'40%'},{top:'50%', left:'50%'}];
-  let i=0;
-  function jumpStep(){
-    if(i<steps.length){
-      circle.style.transition='top 0.2s ease, left 0.2s ease';
-      circle.style.top=steps[i].top;
-      circle.style.left=steps[i].left;
-      i++;
-      setTimeout(jumpStep,200);
-    }else{
-      // 显示内容
-      content.classList.remove('hidden');
-      content.style.opacity=1;
-      // 扩展覆盖
-      setTimeout(()=>{
-        circle.style.transition='width 0.6s ease, height 0.6s ease';
-        circle.style.width='200vw';
-        circle.style.height='200vw';
-      },200);
-      // 隐藏照片页面
-      setTimeout(()=>{
-        document.getElementById("photoPage").classList.add("hidden");
-      },800);
-    }
-  }
-  jumpStep();
+  // 顺滑弹跳到中心
+  circle.style.top='50%';
+  circle.style.left='50%';
+  circle.style.transform='translate(-50%,-50%) scale(1)';
+
+  // 显示内容并淡入
+  setTimeout(()=>{
+    content.style.opacity=1;
+  },600);
+
+  // 扩展覆盖页面
+  setTimeout(()=>{
+    circle.style.width='200vw';
+    circle.style.height='200vw';
+  },1200);
+
+  // 隐藏照片页面
+  setTimeout(()=>{
+    document.getElementById("photoPage").classList.add("hidden");
+  },1800);
 }
 </script>
 </body>
