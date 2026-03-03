@@ -17,16 +17,18 @@ button:hover{background:#00c6ff;}
 
 /* 气球动画 */
 #balloonPage{position:relative; width:100%; height:400px;}
-.balloon{position:absolute; bottom:-100px; width:50px; height:70px; border-radius:50%; animation:rise 5s linear forwards;}
+.balloon{position:absolute; bottom:-100px; width:50px; height:70px; border-radius:50%; background:#4facfe; animation:rise 6s linear infinite;}
 .balloon-string{width:2px; height:50px; background:white; position:absolute; bottom:-50px; left:50%; transform:translateX(-50%);}
-.balloon:nth-child(1){left:10%; background:#ff4b5c;}
-.balloon:nth-child(2){left:25%; background:#ffb347;}
-.balloon:nth-child(3){left:40%; background:#00c6ff;}
-.balloon:nth-child(4){left:55%; background:#7b68ee;}
-.balloon:nth-child(5){left:70%; background:#00ff7f;}
-@keyframes rise{0%{bottom:-100px;}100%{bottom:110%;}}
-
 #balloonText{position:absolute; top:40%; width:100%; font-size:36px; opacity:0; transition:1s; text-align:center;}
+
+/* 给每个气球一个随机左右摆动动画 */
+@keyframes rise{
+  0%{bottom:-100px; transform:translateX(0);}
+  25%{transform:translateX(-10px);}
+  50%{bottom:420px; transform:translateX(10px);}
+  75%{transform:translateX(-5px);}
+  100%{bottom:500px; transform:translateX(0);}
+}
 
 /* 照片升起 */
 #photoPage{position:relative; width:100%; height:400px;}
@@ -59,11 +61,12 @@ button:hover{background:#00c6ff;}
 
     <!-- 气球页面 -->
     <div class="card hidden" id="balloonPage">
-        <div class="balloon"><div class="balloon-string"></div></div>
-        <div class="balloon"><div class="balloon-string"></div></div>
-        <div class="balloon"><div class="balloon-string"></div></div>
-        <div class="balloon"><div class="balloon-string"></div></div>
-        <div class="balloon"><div class="balloon-string"></div></div>
+        <div class="balloon" style="left:10%; animation-duration:6s;"></div>
+        <div class="balloon" style="left:25%; animation-duration:5.5s;"></div>
+        <div class="balloon" style="left:40%; animation-duration:6.2s;"></div>
+        <div class="balloon" style="left:55%; animation-duration:5.8s;"></div>
+        <div class="balloon" style="left:70%; animation-duration:6.1s;"></div>
+        <div class="balloon-string"></div>
         <div id="balloonText">生日快乐，老师！🎉</div>
     </div>
 
@@ -117,8 +120,8 @@ function checkAnswer(){
             setTimeout(()=>{
                 document.getElementById("photoPage").classList.add("hidden");
                 document.getElementById("content").classList.remove("hidden");
-            },3500); // 照片升起动画持续时间
-        },4000); // 气球动画时间
+            },3500);
+        },4000);
     }else{
         alert("再想一想哦 😊 热传递分为传导、对流、辐射之一");
     }
