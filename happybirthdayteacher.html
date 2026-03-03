@@ -6,7 +6,6 @@
 <title>詹晋沣老师生日惊喜</title>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600&display=swap" rel="stylesheet">
 <style>
-/* ===== 基础样式 ===== */
 *{margin:0;padding:0;box-sizing:border-box;}
 body{
   font-family:'Noto Serif SC', serif;
@@ -14,43 +13,40 @@ body{
   color:white;
   min-height:100vh;
   overflow-x:hidden;
-  -webkit-tap-highlight-color: transparent;
-}
-.container{
-  width:90%; max-width:900px;
-  margin:auto;
-  text-align:center;
-  padding:20px;
-  display:flex;
-  flex-direction:column;
-  justify-content:center;
-  align-items:center;
-  min-height:100vh;
-  position:relative;
 }
 
-/* ===== 答题卡 ===== */
-.card{
-  background: rgba(0,102,204,0.15); backdrop-filter: blur(10px);
-  padding:30px; border-radius:20px; box-shadow:0 20px 60px rgba(0,0,0,0.3);
-  transition:0.6s;
-  position:relative;
-}
+/* 答题卡固定在最上层 */
 #lock{
-  z-index:1000; /* 确保在最上层 */
+  position:fixed;
+  top:50%;
+  left:50%;
+  transform:translate(-50%,-50%);
+  background: rgba(0,102,204,0.15);
+  backdrop-filter: blur(10px);
+  padding:30px; border-radius:20px; box-shadow:0 20px 60px rgba(0,0,0,0.3);
+  z-index:9999;
+  text-align:center;
 }
 #lock input, #lock button{
-  position: relative;
-  z-index:1001; /* 输入框和按钮可点击 */
+  margin-top:15px;
+  padding:12px;
+  border-radius:8px;
+  border:none;
+  font-size:16px;
+  width:80%;
 }
-input{padding:12px; width:80%; border-radius:8px; border:none; margin-top:20px; font-size:16px; text-align:center;}
 button{
-  margin-top:20px; padding:12px 30px; border-radius:25px; border:none; background:#4facfe; color:white; font-size:16px; cursor:pointer; transition:0.3s;
+  cursor:pointer;
+  background:#4facfe;
+  color:white;
+  transition:0.3s;
 }
 button:hover{background:#00c6ff;}
+
+/* 隐藏类 */
 .hidden{display:none !important;}
 
-/* ===== 气球动画 ===== */
+/* 气球页面 */
 #balloonPage{position:relative; width:100%; height:400px; overflow:hidden; z-index:1;}
 .balloon{
   position:absolute; bottom:-100px; width:50px; height:70px; border-radius:50%;
@@ -60,23 +56,22 @@ button:hover{background:#00c6ff;}
   width:2px; height:50px; background:white; position:absolute; bottom:-50px; left:50%; transform:translateX(-50%);
 }
 #balloonText{
-  position:absolute; top:40%; width:100%; font-size:28px; opacity:0; transition:1s; text-align:center;
+  position:absolute; top:40%; width:100%; font-size:28px; opacity:0; text-align:center;
+  transition:1s;
 }
-@keyframes rise{0%{bottom:-100px;} 100%{bottom:500px;}}
-@keyframes sway{0%{transform:translateX(0);} 50%{transform:translateX(10px);} 100%{transform:translateX(-10px);}}
-@keyframes bounce{0%,100%{transform:translateY(0);} 50%{transform:translateY(-10px);}}
+@keyframes rise{0%{bottom:-100px;}100%{bottom:500px;}}
+@keyframes sway{0%{transform:translateX(0);}50%{transform:translateX(10px);}100%{transform:translateX(-10px);}}
+@keyframes bounce{0%,100%{transform:translateY(0);}50%{transform:translateY(-10px);}}
 
-/* ===== 照片页面 ===== */
-#photoPage{position:relative; width:100%; height:auto; overflow:visible; z-index:1;}
+/* 照片页面 */
+#photoPage{position:relative; width:100%; min-height:500px; overflow:visible; z-index:1;}
 .photo-container{
-  display:flex; justify-content:center; flex-wrap:wrap; align-items:flex-end; padding-bottom:120px; gap:10px;
+  display:flex; justify-content:center; flex-wrap:wrap; gap:10px; padding-bottom:120px;
 }
-.photo-wrapper{position:relative; text-align:center; cursor:pointer; transition: transform 0.3s ease; z-index:1;}
-.photo-wrapper:hover{transform: scale(1.2); z-index:10;}
+.photo-wrapper{position:relative; text-align:center; cursor:pointer; transition:transform 0.3s ease; z-index:1;}
+.photo-wrapper:hover{transform:scale(1.2); z-index:10;}
 .photo-wrapper.active{
-  position: fixed; top:50%; left:50%;
-  transform: translate(-50%, -50%) scale(2);
-  z-index:999;
+  position:fixed; top:50%; left:50%; transform:translate(-50%,-50%) scale(2); z-index:999;
   transition: transform 0.5s ease;
 }
 .photo{
@@ -84,49 +79,35 @@ button:hover{background:#00c6ff;}
   opacity:0; transform:translateY(220px);
   animation:photoRise 1.5s ease forwards;
 }
-.photo-wrapper:nth-child(1) .photo{animation-delay:0s;}
-.photo-wrapper:nth-child(2) .photo{animation-delay:0.3s;}
-.photo-wrapper:nth-child(3) .photo{animation-delay:0.6s;}
-.photo-wrapper:nth-child(4) .photo{animation-delay:0.9s;}
-.photo-wrapper:nth-child(5) .photo{animation-delay:1.2s;}
-.photo-wrapper:nth-child(6) .photo{animation-delay:1.5s;}
-.photo-wrapper:nth-child(7) .photo{animation-delay:1.8s;}
+@keyframes photoRise{0%{transform:translateY(220px);opacity:0;}100%{transform:translateY(0);opacity:1;}}
 .caption{
   position:absolute; bottom:120%; left:50%; transform:translateX(-50%);
-  font-size:3.5vw; color:#cce7ff; opacity:0; animation:captionFade 1s forwards;
+  font-size:3.5vw; color:#cce7ff; opacity:0;
+  animation:captionFade 1s forwards;
 }
-.photo-wrapper:nth-child(1) .caption{animation-delay:1.5s;}
-.photo-wrapper:nth-child(2) .caption{animation-delay:1.8s;}
-.photo-wrapper:nth-child(3) .caption{animation-delay:2.1s;}
-.photo-wrapper:nth-child(4) .caption{animation-delay:2.4s;}
-.photo-wrapper:nth-child(5) .caption{animation-delay:2.7s;}
-.photo-wrapper:nth-child(6) .caption{animation-delay:3s;}
-.photo-wrapper:nth-child(7) .caption{animation-delay:3.3s;}
-@keyframes photoRise{0%{transform:translateY(220px); opacity:0;} 100%{transform:translateY(0); opacity:1;}}
 @keyframes captionFade{from{opacity:0;} to{opacity:1;}}
 
-/* ===== 历史回展文字 ===== */
+/* 历史回展文字 */
 #historyText{
   position:absolute; top:35%; left:50%; transform:translateX(-50%);
   padding:10px 30px; background:rgba(0,0,102,0.5); border-radius:50px; font-size:5vw; opacity:0;
-  animation:fadeUp 1s forwards 3.5s;
 }
 
-/* ===== 继续按钮 ===== */
+/* 继续按钮 */
 #continueBtn{
   position:absolute; bottom:20px; left:50%; transform:translateX(-50%);
-  padding:12px 50px; border-radius:30px; border:none; background:#4facfe; color:white; font-size:16px; cursor:pointer; display:none;
-  z-index:10;
+  padding:12px 50px; border-radius:30px; border:none; background:#4facfe; color:white; font-size:16px; cursor:pointer;
+  display:none; z-index:10;
 }
 
-/* ===== 白色弹跳圆圈 ===== */
+/* 弹跳圆圈 */
 #circleJump{
   position:fixed; width:100px; height:100px; border-radius:50%;
   border:2px solid white; background:rgba(255,255,255,0.2); top:0; left:0;
   transform:scale(0); z-index:999; transition:all 1s cubic-bezier(.68,-0.55,.27,1.55);
 }
 
-/* ===== 留言内容 ===== */
+/* 留言内容 */
 #circleContent{
   position:fixed; top:50%; left:50%; transform:translate(-50%,-50%);
   width:80%; max-width:600px; padding:20px; background:rgba(255,255,255,0.95); color:#001f4d;
@@ -136,8 +117,8 @@ button:hover{background:#00c6ff;}
 </head>
 <body>
 <div class="container">
-  <!-- 答题页面 -->
-  <div class="card" id="lock">
+  <!-- 答题卡 -->
+  <div id="lock">
     <h1>🎁 在打开礼物前</h1>
     <p>请回答一个小问题：</p>
     <p><strong>热传递有分什么？</strong></p>
@@ -146,7 +127,7 @@ button:hover{background:#00c6ff;}
   </div>
 
   <!-- 气球页面 -->
-  <div class="card hidden" id="balloonPage">
+  <div id="balloonPage" class="hidden">
     <div class="balloon" style="left:10%; background:#4facfe;"><div class="balloon-string"></div></div>
     <div class="balloon" style="left:25%; background:#00c6ff;"><div class="balloon-string"></div></div>
     <div class="balloon" style="left:40%; background:#2196f3;"><div class="balloon-string"></div></div>
@@ -155,8 +136,8 @@ button:hover{background:#00c6ff;}
     <div id="balloonText">生日快乐，詹晋沣老师！🎉</div>
   </div>
 
-  <!-- 照片升起页面 -->
-  <div class="card hidden" id="photoPage">
+  <!-- 照片页面 -->
+  <div id="photoPage" class="hidden">
     <div class="photo-container">
       <div class="photo-wrapper"><img src="fig1.jpg" class="photo"><div class="caption">无花果园 · 2025年</div></div>
       <div class="photo-wrapper"><img src="fig2.jpg" class="photo"><div class="caption">无花果园 · 2025年</div></div>
@@ -187,7 +168,7 @@ button:hover{background:#00c6ff;}
 </div>
 
 <script>
-// ===== 答题解锁 =====
+// 答题解锁
 function checkAnswer(){
   const input=document.getElementById("answer").value.trim();
   if(input.includes("传导")||input.includes("对流")||input.includes("辐射")){
@@ -205,23 +186,21 @@ function checkAnswer(){
   }
 }
 
-// ===== 点击继续弹跳圆圈 =====
+// 点击继续弹跳圆圈
 function startCircle(){
   const circle=document.getElementById("circleJump");
   const content=document.getElementById("circleContent");
-
   circle.style.transform='scale(1)';
   circle.style.transition='all 1s cubic-bezier(.68,-0.55,.27,1.55)';
   circle.style.top='50%';
   circle.style.left='50%';
   circle.style.transform='translate(-50%,-50%) scale(1)';
-
   setTimeout(()=>{content.style.opacity=1;},800);
   setTimeout(()=>{circle.style.width='200vw'; circle.style.height='200vw';},1400);
   setTimeout(()=>{document.getElementById("photoPage").classList.add("hidden");},2000);
 }
 
-// ===== 点击放大图片 =====
+// 点击放大图片
 document.querySelectorAll('.photo-wrapper').forEach(wrapper=>{
   wrapper.addEventListener('click', ()=>{
     wrapper.classList.toggle('active');
