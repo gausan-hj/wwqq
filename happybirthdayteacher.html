@@ -8,33 +8,51 @@
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
 body{
-    font-family:'Noto Serif SC', serif;
-    background: linear-gradient(135deg,#001f4d,#004aad,#007fff);
-    color:white;
-    overflow-x:hidden;
+  font-family:'Noto Serif SC', serif;
+  background: linear-gradient(135deg,#001f4d,#004aad,#007fff);
+  color:white;
+  overflow-x:hidden;
 }
-.container{width:100%; max-width:900px; margin:auto; text-align:center; padding:40px 20px; min-height:100vh; display:flex; flex-direction:column; justify-content:center; align-items:center;}
-.card{background: rgba(0,102,204,0.15); backdrop-filter: blur(10px); padding:40px; border-radius:20px; box-shadow:0 20px 60px rgba(0,0,0,0.3); transition:0.6s;}
+.container{
+  width:100%; max-width:900px; margin:auto; text-align:center; padding:40px 20px; min-height:100vh; display:flex; flex-direction:column; justify-content:center; align-items:center;
+}
+.card{
+  background: rgba(0,102,204,0.15); backdrop-filter: blur(10px);
+  padding:40px; border-radius:20px; box-shadow:0 20px 60px rgba(0,0,0,0.3); transition:0.6s;
+}
 input{padding:12px; width:80%; border-radius:8px; border:none; margin-top:20px; font-size:16px; text-align:center;}
-button{margin-top:20px; padding:10px 25px; border-radius:8px; border:none; background:#4facfe; color:white; font-size:16px; cursor:pointer; transition:0.3s;}
+button{
+  margin-top:20px; padding:10px 25px; border-radius:25px; border:none; background:#4facfe; color:white; font-size:16px; cursor:pointer; transition:0.3s;
+}
 button:hover{background:#00c6ff;}
 .hidden{display:none;}
 
 /* 气球 */
 #balloonPage{position:relative; width:100%; height:400px; overflow:hidden;}
-.balloon{position:absolute; bottom:-100px; width:50px; height:70px; border-radius:50%; animation:rise 6s linear forwards, sway 3s ease-in-out infinite alternate, bounce 2s ease-in-out infinite alternate;}
-.balloon-string{width:2px; height:50px; background:white; position:absolute; bottom:-50px; left:50%; transform:translateX(-50%);}
-#balloonText{position:absolute; top:40%; width:100%; font-size:36px; opacity:0; transition:1s; text-align:center;}
-
+.balloon{
+  position:absolute; bottom:-100px; width:50px; height:70px; border-radius:50%;
+  animation:rise 6s linear forwards, sway 3s ease-in-out infinite alternate, bounce 2s ease-in-out infinite alternate;
+}
+.balloon-string{
+  width:2px; height:50px; background:white; position:absolute; bottom:-50px; left:50%; transform:translateX(-50%);
+}
+#balloonText{
+  position:absolute; top:40%; width:100%; font-size:36px; opacity:0; transition:1s; text-align:center;
+}
 @keyframes rise{0%{bottom:-100px;} 100%{bottom:500px;}}
 @keyframes sway{0%{transform:translateX(0);} 50%{transform:translateX(10px);} 100%{transform:translateX(-10px);}}
 @keyframes bounce{0%,100%{transform:translateY(0);} 50%{transform:translateY(-10px);}}
 
 /* 照片页面 */
 #photoPage{position:relative; width:100%; height:500px; overflow:hidden;}
-.photo-container{position:relative; width:100%; height:100%; display:flex; justify-content:space-around; align-items:flex-end;}
+.photo-container{
+  position:relative; width:100%; height:100%; display:flex; justify-content:space-around; align-items:flex-end;
+}
 .photo-wrapper{position:relative; text-align:center;}
-.photo{width:120px; border-radius:10px; box-shadow:0 10px 30px rgba(0,0,0,0.5); opacity:0; transform:translateY(200px); animation:photoRise 1.5s ease forwards;}
+.photo{
+  width:120px; border-radius:10px; box-shadow:0 10px 30px rgba(0,0,0,0.5); opacity:0; transform:translateY(200px);
+  animation:photoRise 1.5s ease forwards;
+}
 .photo-wrapper:nth-child(1) .photo{animation-delay:0s;}
 .photo-wrapper:nth-child(2) .photo{animation-delay:0.3s;}
 .photo-wrapper:nth-child(3) .photo{animation-delay:0.6s;}
@@ -43,7 +61,9 @@ button:hover{background:#00c6ff;}
 .photo-wrapper:nth-child(6) .photo{animation-delay:1.5s;}
 .photo-wrapper:nth-child(7) .photo{animation-delay:1.8s;}
 
-.caption{margin-top:6px; font-size:14px; color:#cce7ff; opacity:0; animation:captionFade 1s forwards;}
+.caption{
+  margin-top:6px; font-size:14px; color:#cce7ff; opacity:0; animation:captionFade 1s forwards;
+}
 .photo-wrapper:nth-child(1) .caption{animation-delay:1.5s;}
 .photo-wrapper:nth-child(2) .caption{animation-delay:1.8s;}
 .photo-wrapper:nth-child(3) .caption{animation-delay:2.1s;}
@@ -55,17 +75,29 @@ button:hover{background:#00c6ff;}
 @keyframes photoRise{0%{transform:translateY(200px); opacity:0;} 100%{transform:translateY(0); opacity:1;}}
 @keyframes captionFade{from{opacity:0;} to{opacity:1;}}
 
-/* 历史回展文字 */
-#historyText{position:absolute; bottom:80px; width:100%; text-align:center; font-size:28px; opacity:0; animation:fadeUp 1s forwards 3.5s;}
-@keyframes fadeUp{from{opacity:0; transform:translateY(20px);} to{opacity:1; transform:translateY(0);}}
+/* 历史回展 */
+#historyText{
+  position:absolute; top:40%; left:50%; transform:translateX(-50%);
+  padding:10px 30px; background:rgba(0,0,102,0.5); border-radius:50px; font-size:22px; opacity:0;
+  animation:fadeUp 1s forwards 3.5s;
+}
 
-/* 继续按钮 */
-#continueBtn{position:absolute; bottom:20px; left:50%; transform:translateX(-50%); width:80px; height:80px; border-radius:50%; border:none; background:#4facfe; color:white; font-size:16px; cursor:pointer; display:none; box-shadow:0 5px 20px rgba(0,0,0,0.4);}
-#expandCircle{position:fixed; top:50%; left:50%; width:0; height:0; border-radius:50%; background:#001f4d; transform:translate(-50%,-50%) scale(0); z-index:999; pointer-events:none; transition:transform 0.6s ease;}
+/* 继续按钮 pill */
+#continueBtn{
+  position:absolute; bottom:20px; left:50%; transform:translateX(-50%);
+  padding:12px 40px; border-radius:30px; border:none; background:#4facfe; color:white; font-size:16px; cursor:pointer; display:none;
+}
+
+/* 扩展圆圈动画 */
+#expandCircle{
+  position:fixed; top:0; left:0; width:50px; height:50px; border-radius:50%; background:white; z-index:999;
+  transform:translate(0,0) scale(0); transition:transform 0.6s ease, width 0.6s ease, height 0.6s ease;
+}
+
+@keyframes fadeUp{from{opacity:0; transform:translateY(20px);} to{opacity:1; transform:translateY(0);}}
 </style>
 </head>
 <body>
-
 <div class="container">
     <!-- 答题页面 -->
     <div class="card" id="lock">
@@ -90,20 +122,20 @@ button:hover{background:#00c6ff;}
     <!-- 照片升起页面 -->
     <div class="card hidden" id="photoPage">
         <div class="photo-container">
-            <div class="photo-wrapper"><img src="fig1.jpg" class="photo"><div class="caption">无花果园 · 2026年</div></div>
-            <div class="photo-wrapper"><img src="fig2.jpg" class="photo"><div class="caption">无花果园 · 2026年</div></div>
-            <div class="photo-wrapper"><img src="duckfarm.jpg" class="photo"><div class="caption">鸭场 · 2026年</div></div>
-            <div class="photo-wrapper"><img src="herb1.jpg" class="photo"><div class="caption">中药厂 · 2026年</div></div>
-            <div class="photo-wrapper"><img src="herb2.jpg" class="photo"><div class="caption">中药厂 · 2026年</div></div>
-            <div class="photo-wrapper"><img src="herb3.jpg" class="photo"><div class="caption">中药厂 · 2026年</div></div>
-            <div class="photo-wrapper"><img src="van.jpg" class="photo"><div class="caption">车上 · 2026年</div></div>
+            <div class="photo-wrapper"><img src="fig1.jpg" class="photo"><div class="caption">无花果园 · 2025年</div></div>
+            <div class="photo-wrapper"><img src="fig2.jpg" class="photo"><div class="caption">无花果园 · 2025年</div></div>
+            <div class="photo-wrapper"><img src="duckfarm.jpg" class="photo"><div class="caption">鸭场 · 2025年</div></div>
+            <div class="photo-wrapper"><img src="herb1.jpg" class="photo"><div class="caption">中药厂 · 2025年</div></div>
+            <div class="photo-wrapper"><img src="herb2.jpg" class="photo"><div class="caption">中药厂 · 2025年</div></div>
+            <div class="photo-wrapper"><img src="herb3.jpg" class="photo"><div class="caption">中药厂 · 2025年</div></div>
+            <div class="photo-wrapper"><img src="van.jpg" class="photo"><div class="caption">车上 · 2025年</div></div>
         </div>
         <div id="historyText">历史回展</div>
-        <button id="continueBtn" onclick="expandCircle()">继续</button>
+        <button id="continueBtn" onclick="startExpand()">继续</button>
         <div id="expandCircle"></div>
     </div>
 
-    <!-- 正式祝福页面 -->
+    <!-- 留言页面 -->
     <div class="card hidden" id="content">
         <h1>詹詹，生日快乐 🎂</h1>
         <div class="message">
@@ -120,37 +152,47 @@ button:hover{background:#00c6ff;}
 
 <script>
 function checkAnswer(){
-    const input=document.getElementById("answer").value.trim();
-    if(input.includes("传导")||input.includes("对流")||input.includes("辐射")){
-        document.getElementById("lock").classList.add("hidden");
-        const balloonPage=document.getElementById("balloonPage");
-        balloonPage.classList.remove("hidden");
-        setTimeout(()=>{document.getElementById("balloonText").style.opacity=1;},1000);
-        setTimeout(()=>{
-            balloonPage.classList.add("hidden");
-            document.getElementById("photoPage").classList.remove("hidden");
-            setTimeout(()=>{
-                document.getElementById("continueBtn").style.display='block';
-            },4000);
-        },4000);
-    }else{
-        alert("再想一想哦 😊 热传递分为传导、对流、辐射之一");
-    }
+  const input=document.getElementById("answer").value.trim();
+  if(input.includes("传导")||input.includes("对流")||input.includes("辐射")){
+    document.getElementById("lock").classList.add("hidden");
+    const balloonPage=document.getElementById("balloonPage");
+    balloonPage.classList.remove("hidden");
+    setTimeout(()=>{document.getElementById("balloonText").style.opacity=1;},1000);
+    setTimeout(()=>{
+      balloonPage.classList.add("hidden");
+      document.getElementById("photoPage").classList.remove("hidden");
+      setTimeout(()=>{
+        document.getElementById("continueBtn").style.display='block';
+      },4000);
+    },4000);
+  }else{
+    alert("再想一想哦 😊 热传递分为传导、对流、辐射之一");
+  }
 }
 
-function expandCircle(){
-    const circle=document.getElementById("expandCircle");
+function startExpand(){
+  const circle=document.getElementById("expandCircle");
+  circle.style.top='0'; circle.style.left='0'; circle.style.transform='scale(1)';
+  circle.style.transition='transform 0.6s ease, top 0.4s ease, left 0.4s ease';
+  // 弹跳到中心
+  setTimeout(()=>{
+    circle.style.top='50%'; circle.style.left='50%'; circle.style.transform='translate(-50%,-50%) scale(1)';
+  },50);
+  // 扩展覆盖
+  setTimeout(()=>{
     circle.style.width='200vw';
     circle.style.height='200vw';
-    circle.style.transition='transform 0.6s ease, width 0.6s ease, height 0.6s ease';
-    circle.style.transform='translate(-50%, -50%) scale(1)';
-    setTimeout(()=>{
-        document.getElementById("photoPage").classList.add("hidden");
-        document.getElementById("content").classList.remove("hidden");
-        circle.style.width='0';
-        circle.style.height='0';
-        circle.style.transform='translate(-50%, -50%) scale(0)';
-    },600);
+    circle.style.borderRadius='50%';
+  },650);
+  setTimeout(()=>{
+    document.getElementById("photoPage").classList.add("hidden");
+    document.getElementById("content").classList.remove("hidden");
+    circle.style.width='50px';
+    circle.style.height='50px';
+    circle.style.top='0';
+    circle.style.left='0';
+    circle.style.transform='scale(0)';
+  },1300);
 }
 </script>
 </body>
