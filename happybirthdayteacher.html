@@ -29,7 +29,7 @@ body{
   position:relative;
 }
 
-/* ===== 卡片/按钮 ===== */
+/* ===== 答题卡 ===== */
 .card{
   background: rgba(0,102,204,0.15); backdrop-filter: blur(10px);
   padding:30px; border-radius:20px; box-shadow:0 20px 60px rgba(0,0,0,0.3);
@@ -37,14 +37,15 @@ body{
   position:relative;
 }
 #lock{
+  z-index:1000; /* 确保在最上层 */
+}
+#lock input, #lock button{
   position: relative;
-  z-index:10; /* 确保可点击 */
+  z-index:1001; /* 输入框和按钮可点击 */
 }
 input{padding:12px; width:80%; border-radius:8px; border:none; margin-top:20px; font-size:16px; text-align:center;}
 button{
   margin-top:20px; padding:12px 30px; border-radius:25px; border:none; background:#4facfe; color:white; font-size:16px; cursor:pointer; transition:0.3s;
-  position: relative;
-  z-index:11;
 }
 button:hover{background:#00c6ff;}
 .hidden{display:none !important;}
@@ -115,6 +116,7 @@ button:hover{background:#00c6ff;}
 #continueBtn{
   position:absolute; bottom:20px; left:50%; transform:translateX(-50%);
   padding:12px 50px; border-radius:30px; border:none; background:#4facfe; color:white; font-size:16px; cursor:pointer; display:none;
+  z-index:10;
 }
 
 /* ===== 白色弹跳圆圈 ===== */
