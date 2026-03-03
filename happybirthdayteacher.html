@@ -13,52 +13,28 @@ body{
     color:white;
     overflow-x:hidden;
 }
-.container{
-    width:100%; max-width:900px; margin:auto; text-align:center; padding:40px 20px; min-height:100vh; display:flex; flex-direction:column; justify-content:center; align-items:center;
-}
-.card{
-    background: rgba(0, 102, 204, 0.15); 
-    backdrop-filter: blur(10px); 
-    padding:40px; border-radius:20px; box-shadow:0 20px 60px rgba(0,0,0,0.3); 
-    transition:0.6s;
-}
+.container{width:100%; max-width:900px; margin:auto; text-align:center; padding:40px 20px; min-height:100vh; display:flex; flex-direction:column; justify-content:center; align-items:center;}
+.card{background: rgba(0,102,204,0.15); backdrop-filter: blur(10px); padding:40px; border-radius:20px; box-shadow:0 20px 60px rgba(0,0,0,0.3); transition:0.6s;}
 input{padding:12px; width:80%; border-radius:8px; border:none; margin-top:20px; font-size:16px; text-align:center;}
 button{margin-top:20px; padding:10px 25px; border-radius:8px; border:none; background:#4facfe; color:white; font-size:16px; cursor:pointer; transition:0.3s;}
 button:hover{background:#00c6ff;}
 .hidden{display:none;}
 
-/* 气球页面 */
+/* 气球 */
 #balloonPage{position:relative; width:100%; height:400px; overflow:hidden;}
-.balloon{
-    position:absolute; bottom:-100px; width:50px; height:70px; border-radius:50%;
-    animation:rise 6s linear forwards, sway 3s ease-in-out infinite alternate, bounce 2s ease-in-out infinite alternate;
-}
-.balloon-string{
-    width:2px; height:50px; background:white; position:absolute; bottom:-50px; left:50%; transform:translateX(-50%);
-}
-#balloonText{
-    position:absolute; top:40%; width:100%; font-size:36px; opacity:0; transition:1s; text-align:center;
-}
+.balloon{position:absolute; bottom:-100px; width:50px; height:70px; border-radius:50%; animation:rise 6s linear forwards, sway 3s ease-in-out infinite alternate, bounce 2s ease-in-out infinite alternate;}
+.balloon-string{width:2px; height:50px; background:white; position:absolute; bottom:-50px; left:50%; transform:translateX(-50%);}
+#balloonText{position:absolute; top:40%; width:100%; font-size:36px; opacity:0; transition:1s; text-align:center;}
 
-/* 气球动画 */
-@keyframes rise{
-  0%{bottom:-100px;}
-  100%{bottom:500px;}
-}
-@keyframes sway{
-  0%{transform:translateX(0);}
-  50%{transform:translateX(10px);}
-  100%{transform:translateX(-10px);}
-}
-@keyframes bounce{
-  0%,100%{transform:translateY(0);}
-  50%{transform:translateY(-10px);}
-}
+@keyframes rise{0%{bottom:-100px;} 100%{bottom:500px;}}
+@keyframes sway{0%{transform:translateX(0);} 50%{transform:translateX(10px);} 100%{transform:translateX(-10px);}}
+@keyframes bounce{0%,100%{transform:translateY(0);} 50%{transform:translateY(-10px);}}
 
 /* 照片页面 */
-#photoPage{position:relative; width:100%; height:500px;}
-.photo-wrapper{position:absolute; bottom:-200px; text-align:center;}
-.photo{width:120px; border-radius:10px; box-shadow:0 10px 30px rgba(0,0,0,0.5); opacity:0; animation:photoRise 1.5s ease forwards;}
+#photoPage{position:relative; width:100%; height:500px; overflow:hidden;}
+.photo-container{position:relative; width:100%; height:100%; display:flex; justify-content:space-around; align-items:flex-end;}
+.photo-wrapper{position:relative; text-align:center;}
+.photo{width:120px; border-radius:10px; box-shadow:0 10px 30px rgba(0,0,0,0.5); opacity:0; transform:translateY(200px); animation:photoRise 1.5s ease forwards;}
 .photo-wrapper:nth-child(1) .photo{animation-delay:0s;}
 .photo-wrapper:nth-child(2) .photo{animation-delay:0.3s;}
 .photo-wrapper:nth-child(3) .photo{animation-delay:0.6s;}
@@ -67,9 +43,7 @@ button:hover{background:#00c6ff;}
 .photo-wrapper:nth-child(6) .photo{animation-delay:1.5s;}
 .photo-wrapper:nth-child(7) .photo{animation-delay:1.8s;}
 
-.caption{
-    margin-top:6px; font-size:14px; color:#cce7ff; opacity:0; animation:captionFade 1s forwards;
-}
+.caption{margin-top:6px; font-size:14px; color:#cce7ff; opacity:0; animation:captionFade 1s forwards;}
 .photo-wrapper:nth-child(1) .caption{animation-delay:1.5s;}
 .photo-wrapper:nth-child(2) .caption{animation-delay:1.8s;}
 .photo-wrapper:nth-child(3) .caption{animation-delay:2.1s;}
@@ -78,18 +52,16 @@ button:hover{background:#00c6ff;}
 .photo-wrapper:nth-child(6) .caption{animation-delay:3s;}
 .photo-wrapper:nth-child(7) .caption{animation-delay:3.3s;}
 
-@keyframes photoRise{0%{bottom:-200px; opacity:0;}50%{opacity:1;}100%{bottom:50%; opacity:1; transform:translateY(-50%);}}
-@keyframes captionFade{from{opacity:0;}to{opacity:1;}}
+@keyframes photoRise{0%{transform:translateY(200px); opacity:0;} 100%{transform:translateY(0); opacity:1;}}
+@keyframes captionFade{from{opacity:0;} to{opacity:1;}}
 
+/* 历史回展文字 */
 #historyText{position:absolute; bottom:80px; width:100%; text-align:center; font-size:28px; opacity:0; animation:fadeUp 1s forwards 3.5s;}
 @keyframes fadeUp{from{opacity:0; transform:translateY(20px);} to{opacity:1; transform:translateY(0);}}
 
 /* 继续按钮 */
-#continueBtn{
-    position:absolute; bottom:20px; left:50%; transform:translateX(-50%);
-    width:80px; height:80px; border-radius:50%; border:none; background:#4facfe; color:white; font-size:16px; cursor:pointer; display:none;
-    box-shadow:0 5px 20px rgba(0,0,0,0.4);
-}
+#continueBtn{position:absolute; bottom:20px; left:50%; transform:translateX(-50%); width:80px; height:80px; border-radius:50%; border:none; background:#4facfe; color:white; font-size:16px; cursor:pointer; display:none; box-shadow:0 5px 20px rgba(0,0,0,0.4);}
+#expandCircle{position:fixed; top:50%; left:50%; width:0; height:0; border-radius:50%; background:#001f4d; transform:translate(-50%,-50%) scale(0); z-index:999; pointer-events:none; transition:transform 0.6s ease;}
 </style>
 </head>
 <body>
@@ -117,37 +89,18 @@ button:hover{background:#00c6ff;}
 
     <!-- 照片升起页面 -->
     <div class="card hidden" id="photoPage">
-        <div class="photo-wrapper" style="left:5%;">
-            <img src="fig1.jpg" class="photo">
-            <div class="caption">无花果园 · 2026年</div>
+        <div class="photo-container">
+            <div class="photo-wrapper"><img src="fig1.jpg" class="photo"><div class="caption">无花果园 · 2026年</div></div>
+            <div class="photo-wrapper"><img src="fig2.jpg" class="photo"><div class="caption">无花果园 · 2026年</div></div>
+            <div class="photo-wrapper"><img src="duckfarm.jpg" class="photo"><div class="caption">鸭场 · 2026年</div></div>
+            <div class="photo-wrapper"><img src="herb1.jpg" class="photo"><div class="caption">中药厂 · 2026年</div></div>
+            <div class="photo-wrapper"><img src="herb2.jpg" class="photo"><div class="caption">中药厂 · 2026年</div></div>
+            <div class="photo-wrapper"><img src="herb3.jpg" class="photo"><div class="caption">中药厂 · 2026年</div></div>
+            <div class="photo-wrapper"><img src="van.jpg" class="photo"><div class="caption">车上 · 2026年</div></div>
         </div>
-        <div class="photo-wrapper" style="left:20%;">
-            <img src="fig2.jpg" class="photo">
-            <div class="caption">无花果园 · 2026年</div>
-        </div>
-        <div class="photo-wrapper" style="left:35%;">
-            <img src="duckfarm.jpg" class="photo">
-            <div class="caption">鸭场 · 2026年</div>
-        </div>
-        <div class="photo-wrapper" style="left:50%;">
-            <img src="herb1.jpg" class="photo">
-            <div class="caption">中药厂 · 2026年</div>
-        </div>
-        <div class="photo-wrapper" style="left:60%;">
-            <img src="herb2.jpg" class="photo">
-            <div class="caption">中药厂 · 2026年</div>
-        </div>
-        <div class="photo-wrapper" style="left:70%;">
-            <img src="herb3.jpg" class="photo">
-            <div class="caption">中药厂 · 2026年</div>
-        </div>
-        <div class="photo-wrapper" style="left:85%;">
-            <img src="van.jpg" class="photo">
-            <div class="caption">车上 · 2026年</div>
-        </div>
-
         <div id="historyText">历史回展</div>
-        <button id="continueBtn" onclick="showContent()">继续</button>
+        <button id="continueBtn" onclick="expandCircle()">继续</button>
+        <div id="expandCircle"></div>
     </div>
 
     <!-- 正式祝福页面 -->
@@ -160,17 +113,7 @@ button:hover{background:#00c6ff;}
             <p><strong>李韡翰：</strong>詹詹生日快乐，今年是最后一年您教导我们了，祝您身体健康，万事如意，心想事成。</p>
             <br>
             <p><strong>—— J3K 全体四人</strong></p>
-            <p>
-            这三年来，您一直陪伴着我们成长。<br>
-            从最初的懵懂无知，到如今渐渐学会承担与思考，每一步都离不开您的教导与鼓励。<br><br>
-            今年是您教我们的最后一年了，想到即将分别，心中难免不舍。<br>
-            三年的时光，说长不长，说短不短，却留下了许多难忘的回忆。<br>
-            您不仅教会了我们课本上的知识，更教会了我们做人的道理与面对挑战的勇气。<br><br>
-            感谢您这三年的耐心、包容与付出。<br>
-            未来无论我们走到哪里，都会记得曾经有一位如此认真、负责的老师陪伴过我们的青春。<br><br>
-            衷心祝您生日快乐，身体健康，万事顺遂。<br>
-            愿您岁岁平安，常被温柔以待。
-            </p>
+            <p>这三年来，您一直陪伴着我们成长……</p>
         </div>
     </div>
 </div>
@@ -191,15 +134,24 @@ function checkAnswer(){
             },4000);
         },4000);
     }else{
-        alert("再想一想 热传递分为传导、对流、辐射之一");
+        alert("再想一想哦 😊 热传递分为传导、对流、辐射之一");
     }
 }
 
-function showContent(){
-    document.getElementById("photoPage").classList.add("hidden");
-    document.getElementById("content").classList.remove("hidden");
+function expandCircle(){
+    const circle=document.getElementById("expandCircle");
+    circle.style.width='200vw';
+    circle.style.height='200vw';
+    circle.style.transition='transform 0.6s ease, width 0.6s ease, height 0.6s ease';
+    circle.style.transform='translate(-50%, -50%) scale(1)';
+    setTimeout(()=>{
+        document.getElementById("photoPage").classList.add("hidden");
+        document.getElementById("content").classList.remove("hidden");
+        circle.style.width='0';
+        circle.style.height='0';
+        circle.style.transform='translate(-50%, -50%) scale(0)';
+    },600);
 }
 </script>
-
 </body>
 </html>
