@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>学生记录展示</title>
+<style>
+  table { border-collapse: collapse; width: 100%; }
+  th, td { border: 1px solid #ccc; padding: 5px; text-align: center; }
+  th { background-color: #f0f0f0; }
+</style>
+</head>
+<body>
+<h2>学生记录展示</h2>
+<table id="studentTable">
+  <thead></thead>
+  <tbody></tbody>
+</table>
+
+<script>
+// 填入你的 Google Sheet ID
+const sheetID = "https://docs.google.com/spreadsheets/d/1MH2Ew4Q0fQFYPzynXulOAUC7z35O__c2/edit?usp=drivesdk&ouid=114159947288109919655&rtpof=true&sd=true";
+const gid = "0"; // 第一个 Sheet 默认 gid=0
+const url = `https://docs.google.com/spreadsheets/d/${sheetID}/gviz/tq?tqx=out:json&gid=${gid}`;
+
+fetch(url)
+  .then(res => res.text())
+  .then(txt => {
+    // Google Sheet 返回的是 JSONP，需要处理
+    const json = JSON.parse(txt.substring(47).slice(0, -2));
+    const cols = json.table.cols.map(c => c.label);
+    const rows = json.table.rows.map(r => r.c.map(c => c ? c.v : ""));
+    
+    // 生成表头
+    const thead = document.querySelector("#studentTable thead");
+    const trHead = document.createElement("tr");
+    cols.forEach(col => {
+      const th = document.createElement("th");
+      th.textContent = col;
+      trHead.appendChild(th);
+    });
+    thead.appendChild(trHead);
+    
+    // 生成表格内容
+    const tbody = document.querySelector("#studentTable tbody");
+    
+    // 用一个对象按学号合并最新数据
+    const latestData = {};
+    rows.forEach(r => {
+      const sid = r[0]; // 学号假设在第0列
+      if (!latestData[sid]) latestData[sid] = r;
+      else {
+        // 合并每日列，优先非空值
+        for (let i = 5; i < r.length; i++) { // 日期列从第5列开始
+          if (r[i] !== "" && r[i] !== null) latestData[sid][i] = r[i];
+        }
+      }
+    });
+    
+    Object.values(latestData).forEach(r => {
+      const tr = document.createElement("tr");
+      r.forEach(cell => {
+        const td = document.createElement("td");
+        td.textContent = cell;
+        tr.appendChild(td);
+      });
+      tbody.appendChild(tr);
+    });
+  });
+</script>
+</body>
+</html>
