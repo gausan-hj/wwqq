@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NFC打卡 · 卡片飞入效果</title>
+    <title>NFC打卡 · 卡片飞入融入</title>
     <style>
         * {
             margin: 0;
@@ -93,7 +93,7 @@
             margin: 20px 0;
         }
 
-        /* 圆圈 - 恢复白色变橙色 */
+        /* 圆圈 - 白色变橙色 */
         .circle-wrapper {
             position: absolute;
             top: 50%;
@@ -252,7 +252,7 @@
         }
 
         .info-card.fly-out {
-            transform: translate(calc(50vw - 200px), -50%) scale(0.3);
+            transform: translate(calc(50vw - 200px), -50%) scale(0.2);
             opacity: 0;
         }
 
@@ -373,6 +373,7 @@
             display: flex;
             flex-direction: column;
             gap: 12px;
+            position: relative;
         }
 
         .history-list::-webkit-scrollbar {
@@ -396,31 +397,49 @@
             display: flex;
             align-items: center;
             gap: 16px;
-            animation: slideIn 0.3s ease;
-            transform-origin: right;
+            transition: all 0.3s ease;
+            position: relative;
+            transform-origin: top;
         }
 
+        /* 新记录飞入动画 */
         .history-item.new-item {
-            animation: newItemPop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+            animation: flyAndPush 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
 
-        @keyframes newItemPop {
-            0% { 
-                transform: scale(0.3) translateX(100px); 
+        @keyframes flyAndPush {
+            0% {
+                transform: scale(0.2) translateX(100px);
                 opacity: 0;
+                margin-top: -60px;
             }
-            70% { 
-                transform: scale(1.05); 
-            }
-            100% { 
-                transform: scale(1) translateX(0); 
+            40% {
+                transform: scale(1.05) translateX(0);
                 opacity: 1;
+                margin-top: 0;
+            }
+            70% {
+                transform: scale(1.02);
+            }
+            100% {
+                transform: scale(1);
+                opacity: 1;
+                margin-top: 0;
             }
         }
 
-        @keyframes slideIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+        /* 被推下的记录动画 */
+        .history-item.push-down {
+            animation: pushDown 0.5s ease forwards;
+        }
+
+        @keyframes pushDown {
+            0% {
+                transform: translateY(0);
+            }
+            100% {
+                transform: translateY(72px); /* 推下一个卡片的高度 */
+            }
         }
 
         .history-avatar {
@@ -479,23 +498,30 @@
             border-radius: 30px;
         }
 
-        /* 飞入目标提示 */
-        .fly-target {
+        /* 飞入目标区域 */
+        .fly-zone {
             position: absolute;
             top: 100px;
-            right: 30px;
+            right: 20px;
             width: 60px;
             height: 60px;
             border-radius: 30px;
-            background: rgba(255, 140, 0, 0.2);
+            background: rgba(255, 140, 0, 0.1);
             border: 2px dashed #ff8c00;
             opacity: 0;
             transition: opacity 0.3s;
             pointer-events: none;
+            z-index: 100;
         }
 
-        .fly-target.show {
+        .fly-zone.show {
             opacity: 1;
+            animation: pulse 0.5s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
         }
     </style>
 </head>
@@ -526,7 +552,7 @@
                 <!-- 状态文字 -->
                 <div class="status-text" id="statusText">⚪ 等待NFC卡片...</div>
 
-                <!-- 个人资讯卡片 - 将飞入右侧 -->
+                <!-- 个人资讯卡片 -->
                 <div class="info-card" id="infoCard">
                     <div class="info-header">
                         <div class="info-avatar" id="infoAvatar">👨‍💻</div>
@@ -555,8 +581,8 @@
 
         <!-- 右侧：历史记录 -->
         <div class="right-panel">
-            <!-- 飞入目标提示 -->
-            <div class="fly-target" id="flyTarget"></div>
+            <!-- 飞入目标区域 -->
+            <div class="fly-zone" id="flyZone">📥</div>
 
             <div class="history-header">
                 <h2>📋 今日打卡</h2>
@@ -589,7 +615,7 @@
             const checkContainer = document.getElementById('checkContainer');
             const statusText = document.getElementById('statusText');
             const infoCard = document.getElementById('infoCard');
-            const flyTarget = document.getElementById('flyTarget');
+            const flyZone = document.getElementById('flyZone');
             const testBtn = document.getElementById('testBtn');
             const historyList = document.getElementById('historyList');
             const todayCount = document.getElementById('todayCount');
@@ -666,7 +692,7 @@
                 return staffDatabase[nfcId.trim()] || staffDatabase['default'];
             }
 
-            // 添加历史记录（带飞入动画）
+            // 添加历史记录（带飞入融入动画）
             function addHistoryRecord(employee, source) {
                 const time = getCurrentTime();
                 const record = {
@@ -678,23 +704,28 @@
                     source: source
                 };
                 
+                // 保存当前所有记录（用于动画）
+                const oldRecords = [...historyRecords];
+                
+                // 添加新记录到开头
                 historyRecords.unshift(record);
                 if (historyRecords.length > 15) historyRecords.pop();
                 
-                // 显示飞入目标提示
-                flyTarget.classList.add('show');
+                // 显示飞入目标
+                flyZone.classList.add('show');
                 
-                // 延迟渲染，让飞入动画完成
+                // 渲染所有记录，但标记新记录
+                renderHistoryWithFlyIn(record, oldRecords);
+                
                 setTimeout(() => {
-                    renderHistory(true); // true表示新记录
-                    flyTarget.classList.remove('show');
-                }, 500);
+                    flyZone.classList.remove('show');
+                }, 1000);
                 
                 updateStats();
             }
 
-            // 渲染历史
-            function renderHistory(isNew = false) {
+            // 渲染历史（带飞入和推动动画）
+            function renderHistoryWithFlyIn(newRecord, oldRecords) {
                 if (historyRecords.length === 0) {
                     historyList.innerHTML = `
                         <div class="history-item" style="opacity: 0.6;">
@@ -709,24 +740,33 @@
                     return;
                 }
 
-                let html = '';
-                historyRecords.forEach((r, index) => {
-                    const isNewClass = (isNew && index === 0) ? 'new-item' : '';
-                    html += `
-                        <div class="history-item ${isNewClass}">
-                            <div class="history-avatar">${r.avatar}</div>
-                            <div class="history-info">
-                                <div class="history-name">${r.name}</div>
-                                <div class="history-meta">
-                                    <span>${r.dept}</span>
-                                    <span>${r.source === 'test' ? '🧪测试' : '📱NFC'}</span>
-                                </div>
-                            </div>
-                            <div class="history-time">${r.time}</div>
-                        </div>
-                    `;
+                // 先给旧记录添加推动动画的类
+                const oldItems = document.querySelectorAll('.history-item:not(.placeholder)');
+                oldItems.forEach(item => {
+                    item.classList.add('push-down');
                 });
-                historyList.innerHTML = html;
+
+                // 短暂延迟后重新渲染
+                setTimeout(() => {
+                    let html = '';
+                    historyRecords.forEach((r, index) => {
+                        const isNew = index === 0 && r.id === newRecord.id;
+                        html += `
+                            <div class="history-item ${isNew ? 'new-item' : ''}">
+                                <div class="history-avatar">${r.avatar}</div>
+                                <div class="history-info">
+                                    <div class="history-name">${r.name}</div>
+                                    <div class="history-meta">
+                                        <span>${r.dept}</span>
+                                        <span>${r.source === 'test' ? '🧪测试' : '📱NFC'}</span>
+                                    </div>
+                                </div>
+                                <div class="history-time">${r.time}</div>
+                            </div>
+                        `;
+                    });
+                    historyList.innerHTML = html;
+                }, 300);
             }
 
             // 更新统计
@@ -743,7 +783,7 @@
                 checkContainer.replaceChild(newSvg, svg);
             }
 
-            // 打卡成功动画 - 卡片飞入效果
+            // 打卡成功动画
             function showPunchSuccess(employee, source) {
                 // 清除之前的定时器
                 if (timeoutId) clearTimeout(timeoutId);
@@ -770,10 +810,10 @@
                     // 卡片飞入动画
                     infoCard.classList.add('fly-out');
                     
-                    // 添加历史记录（会触发飞入目标提示）
+                    // 添加历史记录（触发飞入融入动画）
                     addHistoryRecord(employee, source);
                     
-                    // 0.5秒后（飞入完成）显示对勾
+                    // 0.8秒后（飞入完成）显示对勾
                     setTimeout(() => {
                         // 隐藏资讯卡片
                         infoCard.classList.remove('show', 'fly-out');
@@ -800,9 +840,9 @@
                             checkTimeoutId = null;
                         }, 1500);
                         
-                    }, 500);
+                    }, 800);
                     
-                }, 1500); // 1.5秒显示个人资讯
+                }, 1500);
             }
 
             // 初始化NFC
@@ -867,7 +907,7 @@
                             time: '08:45',
                             source: 'test'
                         });
-                        renderHistory();
+                        renderHistoryWithFlyIn(null, []);
                         updateStats();
                     }
                 }, 1000);
