@@ -21,7 +21,6 @@
             padding: 20px;
         }
 
-        /* 主容器 */
         .dashboard {
             max-width: 1400px;
             width: 100%;
@@ -48,7 +47,7 @@
 
         /* 右侧面板 */
         .right-panel {
-            width: 400px;
+            width: 450px;
             background: rgba(255, 255, 255, 0.9);
             backdrop-filter: blur(10px);
             border-radius: 60px;
@@ -61,7 +60,6 @@
             overflow: visible;
         }
 
-        /* 标题 */
         .title-section {
             text-align: center;
             margin-bottom: 20px;
@@ -94,7 +92,7 @@
             margin: 20px 0;
         }
 
-        /* 圆圈 - 白色变橙色 */
+        /* 圆圈 */
         .circle-wrapper {
             position: absolute;
             top: 50%;
@@ -109,7 +107,6 @@
             z-index: 10;
         }
 
-        /* 空心圆 - 白色变橙色 */
         .hollow-circle {
             width: 100%;
             height: 100%;
@@ -121,7 +118,6 @@
             transition: all 0.3s ease;
         }
 
-        /* 跳动动画 - 白色变橙色 */
         .circle-pulse {
             animation: circleScale 2s ease-in-out infinite;
         }
@@ -130,7 +126,6 @@
             0%, 100% { 
                 transform: scale(1); 
                 border-color: white;
-                box-shadow: 0 0 0 2px rgba(45, 55, 72, 0.1), 0 20px 40px -10px rgba(0, 0, 0, 0.2);
             }
             50% { 
                 transform: scale(1.1); 
@@ -139,7 +134,6 @@
             }
         }
 
-        /* 内圈虚线 */
         .hollow-circle::after {
             content: '';
             position: absolute;
@@ -172,7 +166,6 @@
             opacity: 1;
         }
 
-        /* 对勾SVG动画 */
         .checkmark-svg {
             width: 100px;
             height: 100px;
@@ -229,7 +222,7 @@
             pointer-events: none;
         }
 
-        /* 个人资讯卡片 - 将飞入右侧 */
+        /* 个人资讯卡片 */
         .info-card {
             position: absolute;
             top: 50%;
@@ -252,17 +245,11 @@
             pointer-events: auto;
         }
 
-        .info-card.fly-to-target {
-            transform: translate(calc(50vw - 200px), -50%) scale(0.2);
-            opacity: 0.5;
-        }
-
-        .info-card.fly-down {
-            transform: translate(calc(50vw - 200px), 200px) scale(0.1);
+        .info-card.fly-to-list {
+            transform: translate(calc(50vw - 200px), -200px) scale(0.1);
             opacity: 0;
         }
 
-        /* 资讯头部 */
         .info-header {
             display: flex;
             align-items: center;
@@ -295,7 +282,6 @@
             margin-top: 4px;
         }
 
-        /* 资讯详情 */
         .info-details {
             background: #f7fafc;
             border-radius: 28px;
@@ -365,7 +351,7 @@
             font-size: 1.5rem;
         }
 
-        .history-header .count {
+        .count {
             background: white;
             color: #2d3748;
             padding: 4px 12px;
@@ -381,6 +367,7 @@
             flex-direction: column;
             gap: 12px;
             position: relative;
+            min-height: 400px;
         }
 
         .history-list::-webkit-scrollbar {
@@ -407,35 +394,41 @@
             transition: all 0.3s ease;
             position: relative;
             border: 1px solid #e2e8f0;
+            transform-origin: top;
         }
 
-        /* 新记录出现动画 */
-        .history-item.new-item {
-            animation: appearFromTop 0.5s ease;
+        /* 新记录飞入动画 */
+        .history-item.fly-in {
+            animation: flyIntoList 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
 
-        @keyframes appearFromTop {
+        @keyframes flyIntoList {
             0% {
-                transform: translateY(-20px);
+                transform: scale(0.1) translateY(-100px);
                 opacity: 0;
             }
+            50% {
+                transform: scale(1.05);
+            }
             100% {
-                transform: translateY(0);
+                transform: scale(1) translateY(0);
                 opacity: 1;
             }
         }
 
-        /* 被顶掉的记录动画 */
-        .history-item.pushed-down {
-            animation: pushDown 0.3s ease forwards;
+        /* 被顶替的卡片动画 */
+        .history-item.push-down {
+            animation: pushDown 0.4s ease forwards;
         }
 
         @keyframes pushDown {
             0% {
                 transform: translateY(0);
+                opacity: 1;
             }
             100% {
                 transform: translateY(calc(100% + 12px));
+                opacity: 0.8;
             }
         }
 
@@ -496,10 +489,10 @@
             border: 1px solid #e2e8f0;
         }
 
-        /* 飞入目标位置 */
+        /* 飞入目标 */
         .fly-target {
             position: absolute;
-            top: 100px;
+            top: 80px;
             right: 30px;
             width: 40px;
             height: 40px;
@@ -510,6 +503,10 @@
             transition: opacity 0.3s;
             pointer-events: none;
             z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
         }
 
         .fly-target.show {
@@ -522,7 +519,7 @@
             50% { transform: scale(1.1); }
         }
 
-        /* 飞入路径提示 */
+        /* 飞入路径 */
         .flight-path {
             position: fixed;
             top: 0;
@@ -551,7 +548,7 @@
                 opacity: 1;
             }
             100% {
-                transform: translate(calc(50vw - 200px), 100px) scale(0);
+                transform: translate(calc(50vw - 200px), -150px) scale(0);
                 opacity: 0;
             }
         }
@@ -571,7 +568,7 @@
 
             <!-- NFC卡片容器 -->
             <div class="nfc-card-container">
-                <!-- 圆圈 - 白色变橙色 -->
+                <!-- 圆圈 -->
                 <div class="circle-wrapper" id="circleWrapper">
                     <div class="hollow-circle circle-pulse" id="hollowCircle"></div>
                 </div>
@@ -621,12 +618,23 @@
 
             <div class="history-header">
                 <h2>📋 今日打卡</h2>
-                <div class="count" id="todayCount">2 人</div>
+                <div class="count" id="todayCount">5 人</div>
             </div>
 
             <div class="history-list" id="historyList">
-                <!-- 示例记录 -->
-                <div class="history-item" id="history1">
+                <!-- 5个打卡记录 -->
+                <div class="history-item" data-id="1">
+                    <div class="history-avatar">👨‍💻</div>
+                    <div class="history-info">
+                        <div class="history-name">张明远</div>
+                        <div class="history-meta">
+                            <span>研发中心</span>
+                            <span>📱NFC</span>
+                        </div>
+                    </div>
+                    <div class="history-time">08:30</div>
+                </div>
+                <div class="history-item" data-id="2">
                     <div class="history-avatar">👩‍🎨</div>
                     <div class="history-info">
                         <div class="history-name">李思睿</div>
@@ -637,7 +645,7 @@
                     </div>
                     <div class="history-time">08:45</div>
                 </div>
-                <div class="history-item" id="history2">
+                <div class="history-item" data-id="3">
                     <div class="history-avatar">👨‍🔧</div>
                     <div class="history-info">
                         <div class="history-name">王华强</div>
@@ -646,13 +654,35 @@
                             <span>📱NFC</span>
                         </div>
                     </div>
-                    <div class="history-time">08:30</div>
+                    <div class="history-time">09:00</div>
+                </div>
+                <div class="history-item" data-id="4">
+                    <div class="history-avatar">👩‍💼</div>
+                    <div class="history-info">
+                        <div class="history-name">赵一鸣</div>
+                        <div class="history-meta">
+                            <span>销售部</span>
+                            <span>📱NFC</span>
+                        </div>
+                    </div>
+                    <div class="history-time">09:15</div>
+                </div>
+                <div class="history-item" data-id="5">
+                    <div class="history-avatar">👨‍🏫</div>
+                    <div class="history-info">
+                        <div class="history-name">孙小美</div>
+                        <div class="history-meta">
+                            <span>人事部</span>
+                            <span>📱NFC</span>
+                        </div>
+                    </div>
+                    <div class="history-time">09:30</div>
                 </div>
             </div>
 
             <div class="stats-footer">
                 <span>📊 累计</span>
-                <span class="today-count" id="totalCountSpan">2 次</span>
+                <span class="today-count" id="totalCountSpan">5 次</span>
             </div>
         </div>
     </div>
@@ -669,8 +699,6 @@
             const flightPath = document.getElementById('flightPath');
             const testBtn = document.getElementById('testBtn');
             const historyList = document.getElementById('historyList');
-            const history1 = document.getElementById('history1');
-            const history2 = document.getElementById('history2');
             const todayCount = document.getElementById('todayCount');
             const totalCountSpan = document.getElementById('totalCountSpan');
             
@@ -686,101 +714,37 @@
             let isScanning = false;
             let timeoutId = null;
             let checkTimeoutId = null;
-            let recordCount = 2;
+            let recordCount = 5;
 
             // 员工数据库
-            const staffDatabase = {
-                '04:12:34:56:78:9A:BC': {
-                    name: '张明远',
-                    dept: '研发中心 · 架构组',
-                    id: 'HW-2304',
-                    avatar: '👨‍💻'
+            const staffDatabase = [
+                {
+                    name: '周检测',
+                    dept: '质量部 · 检测组',
+                    id: 'TEST-006',
+                    avatar: '🔍',
+                    time: '10:15'
                 },
-                'test-user-1': {
-                    name: '赵测试',
-                    dept: '测试部 · 功能组',
-                    id: 'TEST-001',
-                    avatar: '🧪'
+                {
+                    name: '吴验证',
+                    dept: '验证部 · 流程组',
+                    id: 'TEST-007',
+                    avatar: '📋',
+                    time: '10:30'
                 },
-                'test-user-2': {
-                    name: '钱试用',
-                    dept: '质量部 · 质检',
-                    id: 'TEST-002',
-                    avatar: '🔬'
-                },
-                'test-user-3': {
-                    name: '孙实验',
-                    dept: '实验室 · 研发',
-                    id: 'TEST-003',
-                    avatar: '⚗️'
+                {
+                    name: '郑确认',
+                    dept: '确认部 · 验收组',
+                    id: 'TEST-008',
+                    avatar: '✅',
+                    time: '10:45'
                 }
-            };
+            ];
 
             // 获取当前时间
             function getCurrentTime() {
                 const now = new Date();
                 return `${now.getHours().toString().padStart(2,'0')}:${now.getMinutes().toString().padStart(2,'0')}`;
-            }
-
-            // 查找员工
-            function findEmployeeByNfcId(nfcId) {
-                return staffDatabase[nfcId.trim()] || staffDatabase['test-user-1'];
-            }
-
-            // 添加新记录
-            function addNewRecord(employee) {
-                recordCount++;
-                todayCount.textContent = `${recordCount} 人`;
-                totalCountSpan.textContent = `${recordCount} 次`;
-
-                // 获取第一条记录（将被顶掉）
-                const firstItem = historyList.firstElementChild;
-                
-                // 创建新记录元素
-                const newItem = document.createElement('div');
-                newItem.className = 'history-item new-item';
-                newItem.innerHTML = `
-                    <div class="history-avatar">${employee.avatar}</div>
-                    <div class="history-info">
-                        <div class="history-name">${employee.name}</div>
-                        <div class="history-meta">
-                            <span>${employee.dept.split('·')[0].trim()}</span>
-                            <span>📱NFC</span>
-                        </div>
-                    </div>
-                    <div class="history-time">${getCurrentTime()}</div>
-                `;
-
-                // 给第一条记录添加被顶掉的动画
-                if (firstItem) {
-                    firstItem.classList.add('pushed-down');
-                    
-                    // 动画结束后移除旧记录，插入新记录
-                    setTimeout(() => {
-                        if (firstItem.parentNode) {
-                            firstItem.remove();
-                        }
-                        // 在列表顶部插入新记录
-                        historyList.insertBefore(newItem, historyList.firstChild);
-                        
-                        // 如果超过3条，删除最后一条
-                        if (historyList.children.length > 3) {
-                            historyList.lastElementChild.remove();
-                            recordCount--;
-                            todayCount.textContent = `${recordCount} 人`;
-                            totalCountSpan.textContent = `${recordCount} 次`;
-                        }
-                    }, 300);
-                } else {
-                    historyList.insertBefore(newItem, historyList.firstChild);
-                }
-            }
-
-            // 重置对勾动画
-            function resetCheckAnimation() {
-                const svg = checkContainer.querySelector('svg');
-                const newSvg = svg.cloneNode(true);
-                checkContainer.replaceChild(newSvg, svg);
             }
 
             // 显示飞入路径
@@ -794,8 +758,73 @@
                 }, 800);
             }
 
+            // 重置对勾动画
+            function resetCheckAnimation() {
+                const svg = checkContainer.querySelector('svg');
+                const newSvg = svg.cloneNode(true);
+                checkContainer.replaceChild(newSvg, svg);
+            }
+
+            // 顶替记录
+            function pushAndInsertNewRecord(employee) {
+                // 获取所有记录
+                const items = Array.from(document.querySelectorAll('.history-item'));
+                
+                if (items.length === 0) return;
+
+                // 随机选择一个位置插入（1-5之间）
+                const insertPosition = Math.floor(Math.random() * 5); // 0-4
+                
+                // 从insertPosition开始，所有后面的记录都要被顶下去
+                for (let i = insertPosition; i < items.length; i++) {
+                    items[i].classList.add('push-down');
+                }
+
+                // 创建新记录
+                const newItem = document.createElement('div');
+                newItem.className = 'history-item fly-in';
+                newItem.setAttribute('data-id', 'new');
+                newItem.innerHTML = `
+                    <div class="history-avatar">${employee.avatar}</div>
+                    <div class="history-info">
+                        <div class="history-name">${employee.name}</div>
+                        <div class="history-meta">
+                            <span>${employee.dept.split('·')[0].trim()}</span>
+                            <span>📱NFC</span>
+                        </div>
+                    </div>
+                    <div class="history-time">${getCurrentTime()}</div>
+                `;
+
+                // 动画结束后移除旧记录并插入新记录
+                setTimeout(() => {
+                    // 移除被顶替位置的原记录
+                    if (items[insertPosition] && items[insertPosition].parentNode) {
+                        items[insertPosition].remove();
+                    }
+                    
+                    // 在指定位置插入新记录
+                    if (items[insertPosition]) {
+                        historyList.insertBefore(newItem, items[insertPosition]);
+                    } else {
+                        historyList.appendChild(newItem);
+                    }
+
+                    // 更新计数
+                    recordCount = Math.min(recordCount + 1, 5);
+                    todayCount.textContent = `${recordCount} 人`;
+                    totalCountSpan.textContent = `${recordCount} 次`;
+
+                    // 移除所有push-down类
+                    items.forEach(item => item.classList.remove('push-down'));
+                }, 400);
+            }
+
             // 打卡成功动画
-            function showPunchSuccess(employee) {
+            function showPunchSuccess() {
+                // 随机选择一个员工
+                const employee = staffDatabase[Math.floor(Math.random() * staffDatabase.length)];
+
                 // 清除之前的定时器
                 if (timeoutId) clearTimeout(timeoutId);
                 if (checkTimeoutId) clearTimeout(checkTimeoutId);
@@ -825,46 +854,39 @@
                     showFlightPath();
                     
                     // 卡片飞向目标
-                    infoCard.classList.add('fly-to-target');
+                    infoCard.classList.add('fly-to-list');
                     
-                    // 0.3秒后（飞到目标）再飞下去
+                    // 0.3秒后顶替记录
                     setTimeout(() => {
-                        infoCard.classList.add('fly-down');
+                        // 隐藏卡片和飞入目标
+                        infoCard.classList.remove('show', 'fly-to-list');
+                        flyTarget.classList.remove('show');
                         
-                        // 0.2秒后（飞下去完成）添加新记录
-                        setTimeout(() => {
-                            // 隐藏卡片
-                            infoCard.classList.remove('show', 'fly-to-target', 'fly-down');
+                        // 顶替记录
+                        pushAndInsertNewRecord(employee);
+                        
+                        // 重置对勾动画
+                        resetCheckAnimation();
+                        
+                        // 显示对勾
+                        checkContainer.classList.add('show');
+                        
+                        // 1.5秒后恢复待机
+                        checkTimeoutId = setTimeout(() => {
+                            // 隐藏对勾
+                            checkContainer.classList.remove('show');
                             
-                            // 隐藏飞入目标
-                            flyTarget.classList.remove('show');
+                            // 恢复圆圈跳动
+                            hollowCircle.classList.add('circle-pulse');
                             
-                            // 添加新记录（顶掉旧记录）
-                            addNewRecord(employee);
+                            // 显示状态文字
+                            statusText.classList.remove('hidden');
+                            statusText.innerHTML = '⚪ 等待NFC卡片...';
                             
-                            // 重置对勾动画
-                            resetCheckAnimation();
-                            
-                            // 显示对勾
-                            checkContainer.classList.add('show');
-                            
-                            // 1.5秒后恢复待机
-                            checkTimeoutId = setTimeout(() => {
-                                // 隐藏对勾
-                                checkContainer.classList.remove('show');
-                                
-                                // 恢复圆圈跳动
-                                hollowCircle.classList.add('circle-pulse');
-                                
-                                // 显示状态文字
-                                statusText.classList.remove('hidden');
-                                statusText.innerHTML = '⚪ 等待NFC卡片...';
-                                
-                                timeoutId = null;
-                                checkTimeoutId = null;
-                            }, 1500);
-                            
-                        }, 200);
+                            timeoutId = null;
+                            checkTimeoutId = null;
+                        }, 1500);
+                        
                     }, 300);
                     
                 }, 1500);
@@ -881,9 +903,7 @@
                     nfcReader = new NDEFReader();
                     
                     nfcReader.addEventListener('reading', event => {
-                        const nfcId = event.serialNumber || '未知ID';
-                        const employee = findEmployeeByNfcId(nfcId);
-                        showPunchSuccess(employee);
+                        showPunchSuccess();
                     });
 
                     await nfcReader.scan();
@@ -897,10 +917,7 @@
 
             // 测试打卡
             function handleTestPunch() {
-                const testUsers = ['test-user-1', 'test-user-2', 'test-user-3'];
-                const randomUser = testUsers[Math.floor(Math.random() * testUsers.length)];
-                const employee = staffDatabase[randomUser];
-                showPunchSuccess(employee);
+                showPunchSuccess();
             }
 
             // 事件监听
