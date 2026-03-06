@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NFC打卡 · 卡片飞入顶替</title>
+    <title>NFC打卡 · 完整记录</title>
     <style>
         * {
             margin: 0;
@@ -32,7 +32,7 @@
         /* 左侧 - NFC打卡区域 */
         .left-panel {
             flex: 1;
-            background: rgba(255, 255, 255, 0.9);
+            background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(10px);
             border-radius: 60px;
             padding: 30px;
@@ -48,7 +48,7 @@
         /* 右侧面板 */
         .right-panel {
             width: 450px;
-            background: rgba(255, 255, 255, 0.9);
+            background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(10px);
             border-radius: 60px;
             padding: 28px 20px;
@@ -57,7 +57,6 @@
             display: flex;
             flex-direction: column;
             position: relative;
-            overflow: visible;
         }
 
         .title-section {
@@ -245,11 +244,6 @@
             pointer-events: auto;
         }
 
-        .info-card.fly-to-list {
-            transform: translate(calc(50vw - 200px), -200px) scale(0.1);
-            opacity: 0;
-        }
-
         .info-header {
             display: flex;
             align-items: center;
@@ -366,7 +360,6 @@
             display: flex;
             flex-direction: column;
             gap: 12px;
-            position: relative;
             min-height: 400px;
         }
 
@@ -391,44 +384,18 @@
             display: flex;
             align-items: center;
             gap: 16px;
-            transition: all 0.3s ease;
-            position: relative;
             border: 1px solid #e2e8f0;
-            transform-origin: top;
+            animation: slideIn 0.3s ease;
         }
 
-        /* 新记录飞入动画 */
-        .history-item.fly-in {
-            animation: flyIntoList 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
-        }
-
-        @keyframes flyIntoList {
-            0% {
-                transform: scale(0.1) translateY(-100px);
+        @keyframes slideIn {
+            from {
                 opacity: 0;
+                transform: translateY(-20px);
             }
-            50% {
-                transform: scale(1.05);
-            }
-            100% {
-                transform: scale(1) translateY(0);
+            to {
                 opacity: 1;
-            }
-        }
-
-        /* 被顶替的卡片动画 */
-        .history-item.push-down {
-            animation: pushDown 0.4s ease forwards;
-        }
-
-        @keyframes pushDown {
-            0% {
                 transform: translateY(0);
-                opacity: 1;
-            }
-            100% {
-                transform: translateY(calc(100% + 12px));
-                opacity: 0.8;
             }
         }
 
@@ -618,71 +585,16 @@
 
             <div class="history-header">
                 <h2>📋 今日打卡</h2>
-                <div class="count" id="todayCount">5 人</div>
+                <div class="count" id="todayCount">0 人</div>
             </div>
 
             <div class="history-list" id="historyList">
-                <!-- 5个打卡记录 -->
-                <div class="history-item" data-id="1">
-                    <div class="history-avatar">👨‍💻</div>
-                    <div class="history-info">
-                        <div class="history-name">张明远</div>
-                        <div class="history-meta">
-                            <span>研发中心</span>
-                            <span>📱NFC</span>
-                        </div>
-                    </div>
-                    <div class="history-time">08:30</div>
-                </div>
-                <div class="history-item" data-id="2">
-                    <div class="history-avatar">👩‍🎨</div>
-                    <div class="history-info">
-                        <div class="history-name">李思睿</div>
-                        <div class="history-meta">
-                            <span>产品部</span>
-                            <span>📱NFC</span>
-                        </div>
-                    </div>
-                    <div class="history-time">08:45</div>
-                </div>
-                <div class="history-item" data-id="3">
-                    <div class="history-avatar">👨‍🔧</div>
-                    <div class="history-info">
-                        <div class="history-name">王华强</div>
-                        <div class="history-meta">
-                            <span>测试部</span>
-                            <span>📱NFC</span>
-                        </div>
-                    </div>
-                    <div class="history-time">09:00</div>
-                </div>
-                <div class="history-item" data-id="4">
-                    <div class="history-avatar">👩‍💼</div>
-                    <div class="history-info">
-                        <div class="history-name">赵一鸣</div>
-                        <div class="history-meta">
-                            <span>销售部</span>
-                            <span>📱NFC</span>
-                        </div>
-                    </div>
-                    <div class="history-time">09:15</div>
-                </div>
-                <div class="history-item" data-id="5">
-                    <div class="history-avatar">👨‍🏫</div>
-                    <div class="history-info">
-                        <div class="history-name">孙小美</div>
-                        <div class="history-meta">
-                            <span>人事部</span>
-                            <span>📱NFC</span>
-                        </div>
-                    </div>
-                    <div class="history-time">09:30</div>
-                </div>
+                <!-- 初始为空，等待打卡 -->
             </div>
 
             <div class="stats-footer">
                 <span>📊 累计</span>
-                <span class="today-count" id="totalCountSpan">5 次</span>
+                <span class="today-count" id="totalCountSpan">0 次</span>
             </div>
         </div>
     </div>
@@ -714,30 +626,58 @@
             let isScanning = false;
             let timeoutId = null;
             let checkTimeoutId = null;
-            let recordCount = 5;
+            let recordCount = 0;
+            let historyRecords = [];
 
             // 员工数据库
             const staffDatabase = [
                 {
+                    name: '张明远',
+                    dept: '研发中心 · 架构组',
+                    id: 'HW-2304',
+                    avatar: '👨‍💻'
+                },
+                {
+                    name: '李思睿',
+                    dept: '产品部 · 设计组',
+                    id: 'HW-1789',
+                    avatar: '👩‍🎨'
+                },
+                {
+                    name: '王华强',
+                    dept: '测试部 · 自动化',
+                    id: 'HW-5521',
+                    avatar: '👨‍🔧'
+                },
+                {
+                    name: '赵一鸣',
+                    dept: '销售部 · 华东区',
+                    id: 'HW-3321',
+                    avatar: '👨‍💼'
+                },
+                {
+                    name: '孙小美',
+                    dept: '人事部 · 招聘组',
+                    id: 'HW-7788',
+                    avatar: '👩‍💼'
+                },
+                {
                     name: '周检测',
                     dept: '质量部 · 检测组',
                     id: 'TEST-006',
-                    avatar: '🔍',
-                    time: '10:15'
+                    avatar: '🔍'
                 },
                 {
                     name: '吴验证',
                     dept: '验证部 · 流程组',
                     id: 'TEST-007',
-                    avatar: '📋',
-                    time: '10:30'
+                    avatar: '📋'
                 },
                 {
                     name: '郑确认',
                     dept: '确认部 · 验收组',
                     id: 'TEST-008',
-                    avatar: '✅',
-                    time: '10:45'
+                    avatar: '✅'
                 }
             ];
 
@@ -765,59 +705,55 @@
                 checkContainer.replaceChild(newSvg, svg);
             }
 
-            // 顶替记录
-            function pushAndInsertNewRecord(employee) {
-                // 获取所有记录
-                const items = Array.from(document.querySelectorAll('.history-item'));
+            // 添加新记录到历史列表
+            function addHistoryRecord(employee) {
+                const time = getCurrentTime();
                 
-                if (items.length === 0) return;
+                // 创建新记录对象
+                const newRecord = {
+                    id: Date.now(),
+                    name: employee.name,
+                    dept: employee.dept.split('·')[0].trim(),
+                    avatar: employee.avatar,
+                    time: time
+                };
+                
+                // 添加到数组开头
+                historyRecords.unshift(newRecord);
+                
+                // 重新渲染列表
+                renderHistoryList();
+                
+                // 更新计数
+                recordCount = historyRecords.length;
+                todayCount.textContent = `${recordCount} 人`;
+                totalCountSpan.textContent = `${recordCount} 次`;
+            }
 
-                // 随机选择一个位置插入（1-5之间）
-                const insertPosition = Math.floor(Math.random() * 5); // 0-4
-                
-                // 从insertPosition开始，所有后面的记录都要被顶下去
-                for (let i = insertPosition; i < items.length; i++) {
-                    items[i].classList.add('push-down');
+            // 渲染历史列表
+            function renderHistoryList() {
+                if (historyRecords.length === 0) {
+                    historyList.innerHTML = '<div class="history-item" style="opacity: 0.6;"><div class="history-avatar">⏳</div><div class="history-info"><div class="history-name">等待打卡...</div><div class="history-meta"><span>--</span></div></div><div class="history-time">--:--</div></div>';
+                    return;
                 }
 
-                // 创建新记录
-                const newItem = document.createElement('div');
-                newItem.className = 'history-item fly-in';
-                newItem.setAttribute('data-id', 'new');
-                newItem.innerHTML = `
-                    <div class="history-avatar">${employee.avatar}</div>
-                    <div class="history-info">
-                        <div class="history-name">${employee.name}</div>
-                        <div class="history-meta">
-                            <span>${employee.dept.split('·')[0].trim()}</span>
-                            <span>📱NFC</span>
+                let html = '';
+                historyRecords.forEach(record => {
+                    html += `
+                        <div class="history-item">
+                            <div class="history-avatar">${record.avatar}</div>
+                            <div class="history-info">
+                                <div class="history-name">${record.name}</div>
+                                <div class="history-meta">
+                                    <span>${record.dept}</span>
+                                    <span>📱NFC</span>
+                                </div>
+                            </div>
+                            <div class="history-time">${record.time}</div>
                         </div>
-                    </div>
-                    <div class="history-time">${getCurrentTime()}</div>
-                `;
-
-                // 动画结束后移除旧记录并插入新记录
-                setTimeout(() => {
-                    // 移除被顶替位置的原记录
-                    if (items[insertPosition] && items[insertPosition].parentNode) {
-                        items[insertPosition].remove();
-                    }
-                    
-                    // 在指定位置插入新记录
-                    if (items[insertPosition]) {
-                        historyList.insertBefore(newItem, items[insertPosition]);
-                    } else {
-                        historyList.appendChild(newItem);
-                    }
-
-                    // 更新计数
-                    recordCount = Math.min(recordCount + 1, 5);
-                    todayCount.textContent = `${recordCount} 人`;
-                    totalCountSpan.textContent = `${recordCount} 次`;
-
-                    // 移除所有push-down类
-                    items.forEach(item => item.classList.remove('push-down'));
-                }, 400);
+                    `;
+                });
+                historyList.innerHTML = html;
             }
 
             // 打卡成功动画
@@ -853,41 +789,34 @@
                     // 显示飞入路径
                     showFlightPath();
                     
-                    // 卡片飞向目标
-                    infoCard.classList.add('fly-to-list');
+                    // 添加记录到历史列表
+                    addHistoryRecord(employee);
                     
-                    // 0.3秒后顶替记录
-                    setTimeout(() => {
-                        // 隐藏卡片和飞入目标
-                        infoCard.classList.remove('show', 'fly-to-list');
-                        flyTarget.classList.remove('show');
+                    // 隐藏卡片和飞入目标
+                    infoCard.classList.remove('show');
+                    flyTarget.classList.remove('show');
+                    
+                    // 重置对勾动画
+                    resetCheckAnimation();
+                    
+                    // 显示对勾
+                    checkContainer.classList.add('show');
+                    
+                    // 1.5秒后恢复待机
+                    checkTimeoutId = setTimeout(() => {
+                        // 隐藏对勾
+                        checkContainer.classList.remove('show');
                         
-                        // 顶替记录
-                        pushAndInsertNewRecord(employee);
+                        // 恢复圆圈跳动
+                        hollowCircle.classList.add('circle-pulse');
                         
-                        // 重置对勾动画
-                        resetCheckAnimation();
+                        // 显示状态文字
+                        statusText.classList.remove('hidden');
+                        statusText.innerHTML = '⚪ 等待NFC卡片...';
                         
-                        // 显示对勾
-                        checkContainer.classList.add('show');
-                        
-                        // 1.5秒后恢复待机
-                        checkTimeoutId = setTimeout(() => {
-                            // 隐藏对勾
-                            checkContainer.classList.remove('show');
-                            
-                            // 恢复圆圈跳动
-                            hollowCircle.classList.add('circle-pulse');
-                            
-                            // 显示状态文字
-                            statusText.classList.remove('hidden');
-                            statusText.innerHTML = '⚪ 等待NFC卡片...';
-                            
-                            timeoutId = null;
-                            checkTimeoutId = null;
-                        }, 1500);
-                        
-                    }, 300);
+                        timeoutId = null;
+                        checkTimeoutId = null;
+                    }, 1500);
                     
                 }, 1500);
             }
@@ -926,6 +855,15 @@
             // 初始化
             window.addEventListener('load', () => {
                 initNfc();
+                
+                // 添加一些示例记录
+                setTimeout(() => {
+                    if (historyRecords.length === 0) {
+                        addHistoryRecord(staffDatabase[0]);
+                        setTimeout(() => addHistoryRecord(staffDatabase[1]), 300);
+                        setTimeout(() => addHistoryRecord(staffDatabase[2]), 600);
+                    }
+                }, 1000);
             });
 
             // 清理
