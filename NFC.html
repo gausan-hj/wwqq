@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NFC打卡 · 橙韵黑白</title>
+    <title>NFC打卡 · 动态缩放</title>
     <style>
         * {
             margin: 0;
@@ -14,9 +14,7 @@
 
         body {
             min-height: 100vh;
-            background: #f8f8fa;
-            background-image: radial-gradient(circle at 20% 30%, rgba(255, 140, 0, 0.03) 0%, transparent 30%),
-                              radial-gradient(circle at 80% 70%, rgba(255, 100, 0, 0.02) 0%, transparent 35%);
+            background: linear-gradient(145deg, #f0f4ff 0%, #e6ecfa 100%);
             display: flex;
             justify-content: center;
             align-items: center;
@@ -35,25 +33,29 @@
         /* 左侧 - NFC打卡区域 */
         .left-panel {
             flex: 1;
-            background: #ffffff;
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(10px);
             border-radius: 48px;
             padding: 36px 28px;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
-            border: 1px solid #eaeaea;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.8);
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
+            position: relative;
+            overflow: hidden;
         }
 
         /* 右侧 - 历史记录面板 */
         .right-panel {
             width: 400px;
-            background: #ffffff;
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(10px);
             border-radius: 48px;
             padding: 28px 20px;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
-            border: 1px solid #eaeaea;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.8);
             display: flex;
             flex-direction: column;
         }
@@ -61,69 +63,54 @@
         /* 标题区域 */
         .title-section {
             text-align: center;
-            margin-bottom: 30px;
+            margin-bottom: 20px;
+            z-index: 2;
         }
 
         .title-section h1 {
-            color: #1a1a1a;
+            color: #1a2b4c;
             font-size: 2.2rem;
             font-weight: 600;
-            letter-spacing: 1px;
             margin-bottom: 8px;
         }
 
         .title-section .sub {
-            color: #666666;
-            font-size: 0.95rem;
-            background: #f0f0f0;
-            padding: 6px 16px;
-            border-radius: 60px;
+            color: #4a5b7a;
+            font-size: 1rem;
+            background: rgba(255, 255, 255, 0.5);
+            padding: 6px 20px;
+            border-radius: 40px;
             display: inline-block;
-            border: 1px solid #dddddd;
+            border: 1px solid rgba(255, 255, 255, 0.8);
         }
 
-        /* NFC 空心圆 - 持续跳动版 */
-        .nfc-container {
+        /* NFC 圆形容器 */
+        .nfc-wrapper {
             position: relative;
-            width: 280px;
-            height: 280px;
-            margin: 30px 0 40px 0;
-        }
-
-        /* 外发光 - 橙色 */
-        .glow-ring {
-            position: absolute;
-            inset: -15px;
-            border-radius: 50%;
-            background: radial-gradient(circle at 30% 30%, rgba(255, 140, 0, 0.25), rgba(255, 100, 0, 0.08) 70%);
-            filter: blur(20px);
-            opacity: 0.6;
-            animation: glowPulse 3s infinite;
-        }
-
-        @keyframes glowPulse {
-            0%, 100% { opacity: 0.5; transform: scale(1); }
-            50% { opacity: 0.8; transform: scale(1.05); }
-        }
-
-        /* 空心圆主体 - 黑白为主 */
-        .hollow-main {
-            position: absolute;
-            top: 0;
-            left: 0;
             width: 100%;
-            height: 100%;
-            border-radius: 50%;
-            background: #ffffff;
-            border: 4px solid #222222;
-            box-shadow: 
-                0 0 0 2px #cccccc inset,
-                0 20px 40px -10px rgba(0, 0, 0, 0.2);
-            z-index: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin: 20px 0;
         }
 
-        /* 内圈 - 橙色点缀 */
-        .hollow-main::after {
+        /* 空心圆 - 基础样式 */
+        .hollow-circle {
+            position: relative;
+            width: 240px;
+            height: 240px;
+            border-radius: 50%;
+            background: transparent;
+            border: 4px solid #ffffff;
+            box-shadow: 0 0 0 2px rgba(26, 43, 76, 0.1), 0 20px 40px -10px rgba(0, 0, 0, 0.2);
+            transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+            cursor: pointer;
+            z-index: 5;
+        }
+
+        /* 内圈 - 加强空心效果 */
+        .hollow-circle::after {
             content: '';
             position: absolute;
             top: 20px;
@@ -131,60 +118,34 @@
             right: 20px;
             bottom: 20px;
             border-radius: 50%;
-            border: 2px solid #ff8c00;
-            background: rgba(255, 140, 0, 0.02);
+            border: 2px dashed rgba(255, 255, 255, 0.6);
             pointer-events: none;
         }
 
-        /* 持续跳动波纹层 - 橙色 */
-        .ripple-permanent {
-            position: absolute;
-            top: -10px;
-            left: -10px;
-            width: calc(100% + 20px);
-            height: calc(100% + 20px);
-            border-radius: 50%;
-            z-index: 2;
-            pointer-events: none;
+        /* 缩放动画 - 持续跳动 */
+        .circle-pulse {
+            animation: circleScale 2s ease-in-out infinite;
         }
 
-        .pulse-ring-perm {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            border-radius: 50%;
-            border: 3px solid rgba(255, 140, 0, 0.5);
-            box-shadow: 0 0 25px rgba(255, 100, 0, 0.3);
-            animation: pulse-perm 2.2s cubic-bezier(0.4, 0, 0.2, 1) infinite;
-        }
-
-        .pulse-ring-perm:nth-child(2) {
-            animation-delay: 0.8s;
-            border-color: rgba(255, 120, 0, 0.4);
-            border-width: 2.5px;
-        }
-
-        .pulse-ring-perm:nth-child(3) {
-            animation-delay: 1.6s;
-            border-color: rgba(255, 100, 0, 0.3);
-            border-width: 2px;
-        }
-
-        @keyframes pulse-perm {
-            0% {
-                transform: scale(0.95);
-                opacity: 1;
+        @keyframes circleScale {
+            0%, 100% {
+                transform: scale(1);
+                border-color: #ffffff;
+                box-shadow: 0 0 0 2px rgba(26, 43, 76, 0.1), 0 20px 40px -10px rgba(0, 0, 0, 0.2);
             }
-            70% {
-                transform: scale(1.6);
-                opacity: 0;
+            50% {
+                transform: scale(1.08);
+                border-color: #ffd700;
+                box-shadow: 0 0 30px rgba(255, 215, 0, 0.3), 0 20px 40px -10px rgba(0, 0, 0, 0.2);
             }
-            100% {
-                transform: scale(2.0);
-                opacity: 0;
-            }
+        }
+
+        /* 打卡成功后的放大状态 */
+        .circle-success {
+            transform: scale(1.8) !important;
+            border-color: #4CAF50 !important;
+            opacity: 0.2;
+            transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
 
         /* 中央图标 */
@@ -193,83 +154,147 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            width: 100px;
-            height: 100px;
-            border-radius: 50%;
+            width: 80px;
+            height: 80px;
             display: flex;
             align-items: center;
             justify-content: center;
-            z-index: 5;
-            background: #ffffff;
-            border: 2px solid #222222;
-            transition: all 0.3s ease;
+            z-index: 10;
+            pointer-events: none;
         }
 
-        .check-svg {
-            width: 64px;
-            height: 64px;
-            stroke: #ff8c00;
-            stroke-width: 5;
-            stroke-linecap: round;
-            stroke-linejoin: round;
-            fill: none;
-            filter: drop-shadow(0 0 10px rgba(255, 140, 0, 0.3));
+        .nfc-icon {
+            font-size: 2.5rem;
+            color: #1a2b4c;
+            opacity: 0.7;
+            transition: all 0.3s;
         }
 
-        .nfc-svg {
-            width: 58px;
-            height: 58px;
-            stroke: #333333;
-            stroke-width: 2.5;
-            fill: none;
+        .check-icon {
+            font-size: 3rem;
+            color: #4CAF50;
+            animation: checkAppear 0.3s ease;
+        }
+
+        @keyframes checkAppear {
+            0% { transform: scale(0); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
         }
 
         .hidden {
             display: none !important;
         }
 
-        /* 状态文字 */
+        /* 状态文字容器 */
+        .status-container {
+            margin-top: 40px;
+            text-align: center;
+            transition: all 0.3s;
+            z-index: 20;
+        }
+
         .status-text {
-            color: #444444;
-            font-size: 1.1rem;
-            margin-top: 20px;
-            background: #f5f5f5;
-            padding: 10px 28px;
+            color: #1a2b4c;
+            font-size: 1.2rem;
+            background: rgba(255, 255, 255, 0.7);
+            padding: 12px 32px;
             border-radius: 60px;
-            border: 1px solid #dddddd;
-            letter-spacing: 0.5px;
+            border: 1px solid rgba(255, 255, 255, 0.9);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            margin-bottom: 16px;
         }
 
-        .status-text span {
-            color: #ff8c00;
+        /* 员工信息卡片 - 初始隐藏 */
+        .employee-card {
+            background: white;
+            border-radius: 32px;
+            padding: 24px;
+            width: 300px;
+            box-shadow: 0 20px 40px -12px rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.9);
+            margin-top: 20px;
+            transform: scale(0);
+            opacity: 0;
+            transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+            z-index: 30;
+            position: relative;
+        }
+
+        .employee-card.show {
+            transform: scale(1);
+            opacity: 1;
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+
+        .emp-avatar {
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(145deg, #1a2b4c, #2c3e5e);
+            border-radius: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            color: white;
+        }
+
+        .emp-info h2 {
+            color: #1a2b4c;
+            font-size: 1.8rem;
             font-weight: 600;
+            margin-bottom: 4px;
         }
 
-        /* 右侧历史记录标题 */
+        .emp-info p {
+            color: #4a5b7a;
+            font-size: 1rem;
+        }
+
+        .emp-details {
+            display: flex;
+            justify-content: space-between;
+            padding-top: 16px;
+            border-top: 2px dashed #e0e5f0;
+        }
+
+        .emp-details span {
+            background: #f0f4ff;
+            padding: 8px 16px;
+            border-radius: 30px;
+            color: #1a2b4c;
+            font-weight: 500;
+        }
+
+        /* 右侧历史记录样式 */
         .history-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
             padding: 0 12px 20px 12px;
-            border-bottom: 1px solid #eaeaea;
+            border-bottom: 1px solid rgba(26, 43, 76, 0.1);
         }
 
         .history-header h2 {
-            color: #1a1a1a;
+            color: #1a2b4c;
             font-size: 1.5rem;
             font-weight: 500;
         }
 
         .history-header .count {
-            background: #f0f0f0;
-            color: #ff8c00;
+            background: white;
+            color: #1a2b4c;
             padding: 4px 12px;
             border-radius: 40px;
             font-size: 0.9rem;
-            border: 1px solid #dddddd;
+            border: 1px solid rgba(26, 43, 76, 0.1);
         }
 
-        /* 历史记录列表 */
         .history-list {
             flex: 1;
             overflow-y: auto;
@@ -284,21 +309,20 @@
         }
 
         .history-list::-webkit-scrollbar-track {
-            background: #f0f0f0;
+            background: rgba(255, 255, 255, 0.5);
             border-radius: 10px;
         }
 
         .history-list::-webkit-scrollbar-thumb {
-            background: #cccccc;
+            background: #c0c8da;
             border-radius: 10px;
         }
 
-        /* 历史记录卡片 - 黑白为主 */
         .history-item {
-            background: #fafafa;
+            background: white;
             border-radius: 24px;
             padding: 16px;
-            border: 1px solid #eaeaea;
+            border: 1px solid rgba(255, 255, 255, 0.9);
             display: flex;
             align-items: center;
             gap: 16px;
@@ -318,23 +342,20 @@
         }
 
         .history-item:hover {
-            background: #f5f5f5;
-            border-color: #ff8c00;
             transform: translateX(4px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
         }
 
-        /* 头像 - 黑白 */
         .history-avatar {
             width: 52px;
             height: 52px;
-            background: #2a2a2a;
+            background: #1a2b4c;
             border-radius: 18px;
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 1.8rem;
-            color: #ffffff;
-            border: 2px solid #444444;
+            color: white;
         }
 
         .history-info {
@@ -342,7 +363,7 @@
         }
 
         .history-name {
-            color: #1a1a1a;
+            color: #1a2b4c;
             font-size: 1.2rem;
             font-weight: 600;
             margin-bottom: 4px;
@@ -351,67 +372,53 @@
         .history-meta {
             display: flex;
             gap: 12px;
-            color: #666666;
+            color: #4a5b7a;
             font-size: 0.85rem;
         }
 
         .history-meta span {
-            background: #f0f0f0;
+            background: #f0f4ff;
             padding: 2px 10px;
             border-radius: 20px;
         }
 
         .history-time {
-            color: #ff8c00;
+            color: #1a2b4c;
             font-weight: 600;
             font-size: 0.9rem;
         }
 
-        /* 今日统计 */
         .stats-footer {
             margin-top: 20px;
             padding: 16px 12px 8px 12px;
-            border-top: 1px solid #eaeaea;
-            color: #444444;
+            border-top: 1px solid rgba(26, 43, 76, 0.1);
+            color: #1a2b4c;
             display: flex;
             justify-content: space-between;
         }
 
         .stats-footer .today-count {
-            background: #f0f0f0;
+            background: white;
             padding: 6px 16px;
             border-radius: 30px;
-            color: #ff8c00;
             font-weight: 500;
         }
 
-        /* 测试按钮 */
-        .test-btn-small {
-            background: #f0f0f0;
-            border: 1px solid #dddddd;
-            color: #444444;
-            padding: 6px 16px;
-            border-radius: 30px;
-            font-size: 0.85rem;
+        .test-btn {
+            background: white;
+            border: 1px solid #1a2b4c;
+            color: #1a2b4c;
+            padding: 8px 24px;
+            border-radius: 40px;
+            font-size: 0.9rem;
             cursor: pointer;
             transition: all 0.2s;
             margin-top: 16px;
         }
 
-        .test-btn-small:hover {
-            background: #ff8c00;
-            color: #ffffff;
-            border-color: #ff8c00;
-        }
-
-        /* NFC标签徽章 */
-        .nfc-badge {
-            display: inline-block;
-            width: 8px;
-            height: 8px;
-            background: #ff8c00;
-            border-radius: 50%;
-            margin-right: 4px;
+        .test-btn:hover {
+            background: #1a2b4c;
+            color: white;
         }
     </style>
 </head>
@@ -420,56 +427,56 @@
         <!-- 左侧：NFC打卡区域 -->
         <div class="left-panel">
             <div class="title-section">
-                <h1>NFC 考勤系统</h1>
-                <div class="sub">⚡ 持续待机中 · 靠近即可打卡</div>
+                <h1>NFC 考勤</h1>
+                <div class="sub">⚡ 持续待机中</div>
             </div>
 
-            <!-- NFC 空心圆 (持续跳动) -->
-            <div class="nfc-container" id="circleContainer">
-                <div class="glow-ring"></div>
-                <div class="hollow-main"></div>
+            <!-- NFC 圆形容器 -->
+            <div class="nfc-wrapper">
+                <!-- 空心圆 -->
+                <div class="hollow-circle circle-pulse" id="hollowCircle"></div>
                 
-                <!-- 永久跳动波纹 - 橙色 -->
-                <div class="ripple-permanent" id="rippleLayer">
-                    <div class="pulse-ring-perm"></div>
-                    <div class="pulse-ring-perm"></div>
-                    <div class="pulse-ring-perm"></div>
-                </div>
-
                 <!-- 中央图标 -->
-                <div class="center-icon" id="centerIcon">
-                    <svg id="nfcSvg" class="nfc-svg" viewBox="0 0 40 40">
-                        <path d="M12 20 Q 20 10, 28 20" stroke="currentColor" fill="none"/>
-                        <path d="M8 25 Q 20 8, 32 25" stroke="currentColor" fill="none" opacity="0.8"/>
-                        <circle cx="20" cy="29" r="2.5" fill="currentColor"/>
-                    </svg>
-                    <svg id="checkSvg" class="check-svg hidden" viewBox="0 0 50 50">
-                        <path d="M10 27 L22 39 L42 13" stroke="currentColor" fill="none"/>
-                    </svg>
+                <div class="center-icon">
+                    <span class="nfc-icon" id="nfcIcon">📱</span>
+                    <span class="check-icon hidden" id="checkIcon">✓</span>
                 </div>
-            </div>
 
-            <!-- 状态显示 -->
-            <div class="status-text" id="statusText">
-                <span>⚪</span> 等待NFC卡片...
-            </div>
+                <!-- 状态文字区域 -->
+                <div class="status-container" id="statusContainer">
+                    <div class="status-text" id="statusText">
+                        <span>⚪</span> 等待NFC卡片...
+                    </div>
+                </div>
 
-            <!-- 测试按钮 -->
-            <div class="test-btn-small" id="testBtn">
-                🔄 模拟打卡 (测试)
+                <!-- 员工信息卡片 (打卡成功后显示) -->
+                <div class="employee-card" id="employeeCard">
+                    <div class="card-header">
+                        <div class="emp-avatar" id="empAvatar">👤</div>
+                        <div class="emp-info">
+                            <h2 id="empName">张明远</h2>
+                            <p id="empDept">研发中心 · 架构组</p>
+                        </div>
+                    </div>
+                    <div class="emp-details">
+                        <span id="empId">工号 HW-2304</span>
+                        <span id="empTime">08:32</span>
+                    </div>
+                </div>
+
+                <!-- 测试按钮 -->
+                <button class="test-btn" id="testBtn">🔄 模拟打卡</button>
             </div>
         </div>
 
         <!-- 右侧：历史记录面板 -->
         <div class="right-panel">
             <div class="history-header">
-                <h2>📋 今日打卡记录</h2>
+                <h2>📋 打卡记录</h2>
                 <div class="count" id="todayCount">0 人</div>
             </div>
 
-            <!-- 历史记录列表 -->
             <div class="history-list" id="historyList">
-                <!-- 动态插入历史记录 -->
                 <div class="history-item" style="opacity: 0.6;">
                     <div class="history-avatar">⏳</div>
                     <div class="history-info">
@@ -482,9 +489,8 @@
                 </div>
             </div>
 
-            <!-- 底部统计 -->
             <div class="stats-footer">
-                <span>📅 今日累计</span>
+                <span>📊 今日累计</span>
                 <span class="today-count" id="totalCountSpan">0 次</span>
             </div>
         </div>
@@ -493,93 +499,75 @@
     <script>
         (function() {
             // DOM 元素
-            const nfcSvg = document.getElementById('nfcSvg');
-            const checkSvg = document.getElementById('checkSvg');
-            const centerIcon = document.getElementById('centerIcon');
-            const testBtn = document.getElementById('testBtn');
+            const hollowCircle = document.getElementById('hollowCircle');
+            const nfcIcon = document.getElementById('nfcIcon');
+            const checkIcon = document.getElementById('checkIcon');
             const statusText = document.getElementById('statusText');
+            const employeeCard = document.getElementById('employeeCard');
+            const testBtn = document.getElementById('testBtn');
             const historyList = document.getElementById('historyList');
             const todayCount = document.getElementById('todayCount');
             const totalCountSpan = document.getElementById('totalCountSpan');
+            
+            // 员工信息元素
+            const empAvatar = document.getElementById('empAvatar');
+            const empName = document.getElementById('empName');
+            const empDept = document.getElementById('empDept');
+            const empId = document.getElementById('empId');
+            const empTime = document.getElementById('empTime');
 
             // 状态
             let nfcReader = null;
             let isScanning = false;
             let historyRecords = [];
 
-            // 员工数据库 (带头像表情) - 黑白头像为主
+            // 员工数据库
             const staffDatabase = {
-                // 真实NFC卡片ID
                 '04:12:34:56:78:9A:BC': {
                     name: '张明远',
-                    dept: '研发中心',
+                    dept: '研发中心 · 架构组',
                     id: 'HW-2304',
-                    avatar: '👨‍💻',
+                    avatar: '👨‍💻'
                 },
                 '04:23:45:67:89:AB:CD': {
                     name: '李思睿',
-                    dept: '产品部',
+                    dept: '产品部 · 设计组',
                     id: 'HW-1789',
-                    avatar: '👩‍💼',
+                    avatar: '👩‍🎨'
                 },
                 '04:34:56:78:9A:BC:DE': {
                     name: '王华强',
-                    dept: '测试部',
+                    dept: '测试部 · 自动化',
                     id: 'HW-5521',
-                    avatar: '👨‍🔧',
+                    avatar: '👨‍🔧'
                 },
-                '04:45:67:89:AB:CD:EF': {
-                    name: '赵一鸣',
-                    dept: '销售部',
-                    id: 'HW-3321',
-                    avatar: '👨‍💼',
-                },
-                '04:56:78:9A:BC:DE:F0': {
-                    name: '孙小美',
-                    dept: '人事部',
-                    id: 'HW-7788',
-                    avatar: '👩‍💼',
-                },
-                // 测试用户
                 'test-user-1': {
                     name: '赵测试',
-                    dept: '测试部',
+                    dept: '测试部 · 功能组',
                     id: 'TEST-001',
-                    avatar: '🧪',
+                    avatar: '🧪'
                 },
                 'test-user-2': {
                     name: '钱试用',
-                    dept: '质量部',
+                    dept: '质量部 · 质检',
                     id: 'TEST-002',
-                    avatar: '🔬',
+                    avatar: '🔬'
                 },
                 'test-user-3': {
                     name: '孙实验',
-                    dept: '实验室',
+                    dept: '实验室 · 研发',
                     id: 'TEST-003',
-                    avatar: '⚗️',
-                },
-                'test-user-4': {
-                    name: '李验证',
-                    dept: '验证部',
-                    id: 'TEST-004',
-                    avatar: '📊',
-                },
-                'test-user-5': {
-                    name: '周质检',
-                    dept: '质控部',
-                    id: 'TEST-005',
-                    avatar: '🔍',
+                    avatar: '⚗️'
                 },
                 'default': {
                     name: '访客用户',
-                    dept: '外部',
+                    dept: '外部协作',
                     id: 'TEMP-001',
-                    avatar: '👤',
+                    avatar: '👤'
                 }
             };
 
-            // 格式化当前时间 (时:分)
+            // 获取当前时间
             function getCurrentTime() {
                 const now = new Date();
                 const hours = now.getHours().toString().padStart(2, '0');
@@ -587,46 +575,30 @@
                 return `${hours}:${minutes}`;
             }
 
-            // 获取完整日期时间
-            function getFullDateTime() {
-                const now = new Date();
-                const month = (now.getMonth() + 1).toString().padStart(2, '0');
-                const day = now.getDate().toString().padStart(2, '0');
-                const hours = now.getHours().toString().padStart(2, '0');
-                const minutes = now.getMinutes().toString().padStart(2, '0');
-                return `${month}-${day} ${hours}:${minutes}`;
-            }
-
-            // 根据NFC ID查找员工
+            // 查找员工
             function findEmployeeByNfcId(nfcId) {
-                const cleanId = nfcId.trim();
-                return staffDatabase[cleanId] || staffDatabase['default'];
+                return staffDatabase[nfcId.trim()] || staffDatabase['default'];
             }
 
             // 添加历史记录
-            function addHistoryRecord(employee, source, nfcId = '') {
-                const timeStr = getCurrentTime();
-                const fullTimeStr = getFullDateTime();
-                
+            function addHistoryRecord(employee, source) {
+                const time = getCurrentTime();
                 const record = {
-                    id: Date.now() + Math.random(),
+                    id: Date.now(),
                     name: employee.name,
-                    dept: employee.dept,
-                    avatar: employee.avatar || '👤',
-                    time: timeStr,
-                    fullTime: fullTimeStr,
-                    nfcId: nfcId,
+                    dept: employee.dept.split('·')[0].trim(),
+                    avatar: employee.avatar,
+                    time: time,
                     source: source
                 };
                 
                 historyRecords.unshift(record);
-                if (historyRecords.length > 20) historyRecords.pop();
-                
+                if (historyRecords.length > 15) historyRecords.pop();
                 renderHistory();
                 updateStats();
             }
 
-            // 渲染历史记录
+            // 渲染历史
             function renderHistory() {
                 if (historyRecords.length === 0) {
                     historyList.innerHTML = `
@@ -634,9 +606,7 @@
                             <div class="history-avatar">⏳</div>
                             <div class="history-info">
                                 <div class="history-name">等待打卡...</div>
-                                <div class="history-meta">
-                                    <span>--</span>
-                                </div>
+                                <div class="history-meta"><span>--</span></div>
                             </div>
                             <div class="history-time">--:--</div>
                         </div>
@@ -645,19 +615,18 @@
                 }
 
                 let html = '';
-                historyRecords.forEach(record => {
-                    const sourceIcon = record.source === 'test' ? '🧪' : '📱';
+                historyRecords.forEach(r => {
                     html += `
                         <div class="history-item">
-                            <div class="history-avatar">${record.avatar}</div>
+                            <div class="history-avatar">${r.avatar}</div>
                             <div class="history-info">
-                                <div class="history-name">${record.name}</div>
+                                <div class="history-name">${r.name}</div>
                                 <div class="history-meta">
-                                    <span>${record.dept}</span>
-                                    <span>${sourceIcon} ${record.source === 'test' ? '测试' : 'NFC'}</span>
+                                    <span>${r.dept}</span>
+                                    <span>${r.source === 'test' ? '🧪测试' : '📱NFC'}</span>
                                 </div>
                             </div>
-                            <div class="history-time">${record.time}</div>
+                            <div class="history-time">${r.time}</div>
                         </div>
                     `;
                 });
@@ -671,108 +640,103 @@
                 totalCountSpan.textContent = `${count} 次`;
             }
 
-            // 显示打卡成功
-            function showPunchSuccess(employee, source, nfcId = '') {
-                // 切换到对勾（短暂显示后恢复NFC图标）
-                nfcSvg.classList.add('hidden');
-                checkSvg.classList.remove('hidden');
+            // 打卡成功动画
+            function showPunchSuccess(employee, source) {
+                // 1. 圆圈放大
+                hollowCircle.classList.remove('circle-pulse');
+                hollowCircle.classList.add('circle-success');
                 
-                // 状态文字
-                statusText.innerHTML = `<span>✅</span> 打卡成功：${employee.name} (${employee.dept})`;
+                // 2. 图标切换为对勾
+                nfcIcon.classList.add('hidden');
+                checkIcon.classList.remove('hidden');
                 
-                // 添加历史记录
-                addHistoryRecord(employee, source, nfcId);
+                // 3. 更新员工卡片信息
+                empAvatar.textContent = employee.avatar;
+                empName.textContent = employee.name;
+                empDept.textContent = employee.dept;
+                empId.textContent = `工号 ${employee.id}`;
+                empTime.textContent = getCurrentTime();
                 
-                // 1.5秒后恢复NFC图标（但保持跳动）
+                // 4. 显示员工卡片（放大出现）
+                employeeCard.classList.add('show');
+                
+                // 5. 更新状态文字
+                statusText.innerHTML = `<span>✅</span> 打卡成功：${employee.name}`;
+                
+                // 6. 添加历史记录
+                addHistoryRecord(employee, source);
+                
+                // 7. 3秒后恢复待机状态
                 setTimeout(() => {
-                    nfcSvg.classList.remove('hidden');
-                    checkSvg.classList.add('hidden');
+                    // 圆圈恢复
+                    hollowCircle.classList.remove('circle-success');
+                    hollowCircle.classList.add('circle-pulse');
+                    
+                    // 图标恢复
+                    nfcIcon.classList.remove('hidden');
+                    checkIcon.classList.add('hidden');
+                    
+                    // 隐藏员工卡片
+                    employeeCard.classList.remove('show');
+                    
+                    // 恢复状态文字
                     statusText.innerHTML = `<span>⚪</span> 等待NFC卡片...`;
-                }, 1500);
+                }, 3000);
             }
 
-            // 初始化NFC（持续扫描）
+            // 初始化NFC
             async function initNfc() {
                 if (!('NDEFReader' in window)) {
-                    statusText.innerHTML = `<span>❌</span> 浏览器不支持NFC（仅Android Chrome）`;
+                    statusText.innerHTML = `<span>❌</span> 浏览器不支持NFC`;
                     return;
                 }
 
                 try {
-                    // 创建NFC读取器
                     nfcReader = new NDEFReader();
                     
-                    // 监听读取事件
                     nfcReader.addEventListener('reading', event => {
-                        // 获取NFC标签ID
-                        let nfcId = event.serialNumber || '未知ID:' + Math.random().toString(16).substring(2, 10);
-                        console.log('检测到NFC:', nfcId);
-                        
-                        // 查找员工
+                        const nfcId = event.serialNumber || '未知ID';
                         const employee = findEmployeeByNfcId(nfcId);
-                        
-                        // 显示成功
-                        showPunchSuccess(employee, 'nfc', nfcId);
+                        showPunchSuccess(employee, 'nfc');
                     });
 
-                    nfcReader.addEventListener('readingerror', error => {
-                        console.error('NFC读取错误:', error);
-                        statusText.innerHTML = `<span>⚠️</span> 读取失败，请重试`;
-                    });
-
-                    // 开始扫描 (持续)
                     await nfcReader.scan();
                     isScanning = true;
-                    statusText.innerHTML = `<span>🟢</span> 持续待机中 · 靠近NFC打卡`;
+                    statusText.innerHTML = `<span>🟢</span> 持续待机中...`;
                     
                 } catch (error) {
-                    console.error('NFC启动失败:', error);
-                    statusText.innerHTML = `<span>❌</span> NFC启动失败: ${error.message}`;
-                    isScanning = false;
+                    statusText.innerHTML = `<span>❌</span> NFC启动失败`;
                 }
             }
 
             // 测试打卡
             function handleTestPunch() {
-                // 随机选择测试用户
-                const testUsers = ['test-user-1', 'test-user-2', 'test-user-3', 'test-user-4', 'test-user-5'];
+                const testUsers = ['test-user-1', 'test-user-2', 'test-user-3'];
                 const randomUser = testUsers[Math.floor(Math.random() * testUsers.length)];
                 const employee = staffDatabase[randomUser];
-                
                 showPunchSuccess(employee, 'test');
             }
 
-            // 页面加载时自动初始化NFC
+            // 事件监听
+            testBtn.addEventListener('click', handleTestPunch);
+            hollowCircle.addEventListener('click', handleTestPunch);
+
+            // 初始化
             window.addEventListener('load', () => {
                 initNfc();
                 
-                // 添加一些示例历史记录（方便展示）
+                // 示例数据
                 setTimeout(() => {
                     if (historyRecords.length === 0) {
-                        // 添加几条示例数据
                         showPunchSuccess(staffDatabase['test-user-1'], 'test');
-                        setTimeout(() => {
-                            showPunchSuccess(staffDatabase['test-user-2'], 'test');
-                        }, 500);
-                        setTimeout(() => {
-                            showPunchSuccess(staffDatabase['test-user-3'], 'test');
-                        }, 1000);
                     }
                 }, 1000);
             });
 
-            // 测试按钮
-            testBtn.addEventListener('click', handleTestPunch);
-
-            // 点击圆圈也可以测试
-            document.querySelector('.nfc-container').addEventListener('click', handleTestPunch);
-
-            // 页面卸载时停止NFC
+            // 清理
             window.addEventListener('beforeunload', async () => {
                 if (isScanning && nfcReader) {
-                    try {
-                        await nfcReader.stop();
-                    } catch (e) {}
+                    try { await nfcReader.stop(); } catch (e) {}
                 }
             });
         })();
