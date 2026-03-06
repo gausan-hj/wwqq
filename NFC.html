@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NFC打卡 · 完整记录</title>
+    <title>NFC打卡 · 发光圆圈包裹</title>
     <style>
         * {
             margin: 0;
@@ -91,7 +91,7 @@
             margin: 20px 0;
         }
 
-        /* 圆圈 */
+        /* 圆圈 - 跳动 */
         .circle-wrapper {
             position: absolute;
             top: 50%;
@@ -219,6 +219,49 @@
         .status-text.hidden {
             opacity: 0;
             pointer-events: none;
+        }
+
+        /* 发光圆圈 - 包裹个人资讯卡片 */
+        .glow-circle {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 340px;
+            height: 340px;
+            border-radius: 50%;
+            background: transparent;
+            border: 4px solid #ff8c00;
+            box-shadow: 0 0 40px rgba(255, 140, 0, 0.5);
+            z-index: 19;
+            opacity: 0;
+            transition: opacity 0.3s;
+            pointer-events: none;
+            animation: glowRotate 3s linear infinite;
+        }
+
+        .glow-circle.show {
+            opacity: 1;
+        }
+
+        .glow-circle::after {
+            content: '';
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            right: 20px;
+            bottom: 20px;
+            border-radius: 50%;
+            border: 2px dashed rgba(255, 140, 0, 0.6);
+        }
+
+        @keyframes glowRotate {
+            0% {
+                transform: translate(-50%, -50%) rotate(0deg);
+            }
+            100% {
+                transform: translate(-50%, -50%) rotate(360deg);
+            }
         }
 
         /* 个人资讯卡片 */
@@ -535,7 +578,7 @@
 
             <!-- NFC卡片容器 -->
             <div class="nfc-card-container">
-                <!-- 圆圈 -->
+                <!-- 圆圈 - 跳动 -->
                 <div class="circle-wrapper" id="circleWrapper">
                     <div class="hollow-circle circle-pulse" id="hollowCircle"></div>
                 </div>
@@ -548,8 +591,8 @@
                     </svg>
                 </div>
 
-                <!-- 状态文字 -->
-                <div class="status-text" id="statusText">⚪ 等待NFC卡片...</div>
+                <!-- 发光圆圈 - 包裹个人资讯 -->
+                <div class="glow-circle" id="glowCircle"></div>
 
                 <!-- 个人资讯卡片 -->
                 <div class="info-card" id="infoCard">
@@ -572,6 +615,9 @@
                         <span class="badge-orange" id="infoStatus">已打卡</span>
                     </div>
                 </div>
+
+                <!-- 状态文字 -->
+                <div class="status-text" id="statusText">⚪ 等待NFC卡片...</div>
 
                 <!-- 测试按钮 -->
                 <button class="test-btn" id="testBtn">🔄 模拟打卡</button>
@@ -605,6 +651,7 @@
             const circleWrapper = document.getElementById('circleWrapper');
             const hollowCircle = document.getElementById('hollowCircle');
             const checkContainer = document.getElementById('checkContainer');
+            const glowCircle = document.getElementById('glowCircle');
             const statusText = document.getElementById('statusText');
             const infoCard = document.getElementById('infoCard');
             const flyTarget = document.getElementById('flyTarget');
@@ -778,8 +825,9 @@
                 infoId.textContent = employee.id;
                 infoTime.textContent = getCurrentTime();
                 
-                // 4. 显示个人资讯卡片
+                // 4. 显示个人资讯卡片和发光圆圈
                 infoCard.classList.add('show');
+                glowCircle.classList.add('show');
                 
                 // 5. 显示飞入目标
                 flyTarget.classList.add('show');
@@ -792,8 +840,9 @@
                     // 添加记录到历史列表
                     addHistoryRecord(employee);
                     
-                    // 隐藏卡片和飞入目标
+                    // 隐藏卡片和发光圆圈
                     infoCard.classList.remove('show');
+                    glowCircle.classList.remove('show');
                     flyTarget.classList.remove('show');
                     
                     // 重置对勾动画
