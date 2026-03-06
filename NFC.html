@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NFC打卡 · 名片显示5秒</title>
+    <title>NFC打卡 · 流畅打勾动画</title>
     <style>
         * {
             margin: 0;
@@ -144,32 +144,39 @@
             border: 2px dashed rgba(255, 255, 255, 0.8);
         }
 
-        /* 对勾容器 */
+        /* 对勾容器 - 改进动画 */
         .check-container {
             position: absolute;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            width: 100px;
-            height: 100px;
+            width: 120px;
+            height: 120px;
             display: flex;
             align-items: center;
             justify-content: center;
             z-index: 15;
             pointer-events: none;
             opacity: 0;
-            transition: opacity 0.3s;
+            transition: opacity 0.2s;
         }
 
         .check-container.show {
             opacity: 1;
         }
 
-        /* CSS动画对勾 */
-        .checkmark {
-            width: 80px;
-            height: 80px;
-            position: relative;
+        /* 对勾SVG动画 - 绘制效果 + 弹性动画 */
+        .checkmark-svg {
+            width: 100px;
+            height: 100px;
+            filter: drop-shadow(0 4px 8px rgba(76, 175, 80, 0.3));
+        }
+
+        .checkmark-circle-bg {
+            stroke: #4CAF50;
+            stroke-width: 3;
+            fill: none;
+            opacity: 0.2;
         }
 
         .checkmark-circle {
@@ -178,20 +185,35 @@
             stroke-dasharray: 166;
             stroke-dashoffset: 166;
             fill: none;
-            animation: stroke 0.6s cubic-bezier(0.65, 0, 0.45, 1) forwards;
+            animation: drawCircle 0.5s cubic-bezier(0.65, 0, 0.45, 1) forwards;
         }
 
-        .checkmark-check {
-            transform-origin: 50% 50%;
+        .checkmark-path {
             stroke: #4CAF50;
-            stroke-width: 4;
+            stroke-width: 6;
+            stroke-linecap: round;
+            stroke-linejoin: round;
             stroke-dasharray: 48;
             stroke-dashoffset: 48;
-            animation: stroke 0.3s cubic-bezier(0.65, 0, 0.45, 1) 0.4s forwards;
+            fill: none;
+            animation: drawCheck 0.4s cubic-bezier(0.65, 0, 0.45, 1) 0.3s forwards,
+                       bounceCheck 0.3s ease 0.7s forwards;
         }
 
-        @keyframes stroke {
+        @keyframes drawCircle {
+            0% { stroke-dashoffset: 166; }
             100% { stroke-dashoffset: 0; }
+        }
+
+        @keyframes drawCheck {
+            0% { stroke-dashoffset: 48; }
+            100% { stroke-dashoffset: 0; }
+        }
+
+        @keyframes bounceCheck {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
         }
 
         /* 状态文字 */
@@ -216,7 +238,7 @@
             pointer-events: none;
         }
 
-        /* 名片 - 在圆圈内部显示 */
+        /* 名片 */
         .business-card {
             position: absolute;
             top: 50%;
@@ -461,18 +483,22 @@
                     <div class="hollow-circle circle-pulse" id="hollowCircle"></div>
                 </div>
 
-                <!-- 对勾容器 (初始隐藏) -->
+                <!-- 对勾容器 - 改进版 -->
                 <div class="check-container" id="checkContainer">
-                    <svg class="checkmark" viewBox="0 0 52 52">
+                    <svg class="checkmark-svg" viewBox="0 0 52 52">
+                        <!-- 半透明背景圆环 -->
+                        <circle class="checkmark-circle-bg" cx="26" cy="26" r="25" fill="none"/>
+                        <!-- 动画圆环 -->
                         <circle class="checkmark-circle" cx="26" cy="26" r="25" fill="none"/>
-                        <path class="checkmark-check" fill="none" d="M14 27l7 7 16-16"/>
+                        <!-- 动画对勾 -->
+                        <path class="checkmark-path" fill="none" d="M14 27l7 7 16-16"/>
                     </svg>
                 </div>
 
                 <!-- 状态文字 -->
                 <div class="status-text" id="statusText">⚪ 等待NFC卡片...</div>
 
-                <!-- 名片 (在圆圈内显示) -->
+                <!-- 名片 -->
                 <div class="business-card" id="businessCard">
                     <div class="card-header">
                         <div class="card-avatar" id="cardAvatar">👨‍💻</div>
@@ -549,6 +575,7 @@
             let isScanning = false;
             let historyRecords = [];
             let timeoutId = null;
+            let checkTimeoutId = null;
 
             // 员工数据库
             const staffDatabase = {
@@ -667,10 +694,19 @@
                 totalCountSpan.textContent = `${count} 次`;
             }
 
-            // 打卡成功动画 - 新流程
+            // 重置动画（移除并重新添加以触发重播）
+            function resetCheckAnimation() {
+                const checkContainer = document.getElementById('checkContainer');
+                const svg = checkContainer.querySelector('svg');
+                const newSvg = svg.cloneNode(true);
+                checkContainer.replaceChild(newSvg, svg);
+            }
+
+            // 打卡成功动画
             function showPunchSuccess(employee, source) {
                 // 清除之前的定时器
                 if (timeoutId) clearTimeout(timeoutId);
+                if (checkTimeoutId) clearTimeout(checkTimeoutId);
 
                 // 1. 圆圈放大
                 circleWrapper.classList.add('zoom-out');
@@ -686,7 +722,7 @@
                 cardId.textContent = employee.id;
                 cardTime.textContent = getCurrentTime();
                 
-                // 4. 显示名片（在圆圈内放大弹出）
+                // 4. 显示名片
                 businessCard.classList.add('show');
                 
                 // 5. 添加历史记录
@@ -697,11 +733,14 @@
                     // 隐藏名片
                     businessCard.classList.remove('show');
                     
-                    // 显示对勾
+                    // 重置对勾动画（确保每次都能重新播放）
+                    resetCheckAnimation();
+                    
+                    // 显示对勾容器
                     checkContainer.classList.add('show');
                     
-                    // 再过1秒恢复待机
-                    setTimeout(() => {
+                    // 对勾显示1.5秒后恢复
+                    checkTimeoutId = setTimeout(() => {
                         // 圆圈恢复
                         circleWrapper.classList.remove('zoom-out');
                         hollowCircle.classList.add('circle-pulse');
@@ -714,9 +753,10 @@
                         statusText.innerHTML = '⚪ 等待NFC卡片...';
                         
                         timeoutId = null;
-                    }, 1000);
+                        checkTimeoutId = null;
+                    }, 1500);
                     
-                }, 5000); // 5秒显示名片
+                }, 5000);
             }
 
             // 初始化NFC
@@ -775,6 +815,7 @@
                     try { await nfcReader.stop(); } catch (e) {}
                 }
                 if (timeoutId) clearTimeout(timeoutId);
+                if (checkTimeoutId) clearTimeout(checkTimeoutId);
             });
         })();
     </script>
