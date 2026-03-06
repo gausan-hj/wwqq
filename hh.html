@@ -3,20 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-    <title>训育处 · 学长团分数板</title>
+    <title>训育处 - 学长团分数板</title>
     <style>
         * {
+            -webkit-tap-highlight-color: rgba(0,0,0,0);
+            box-sizing: border-box;
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
-            -webkit-tap-highlight-color: transparent;
         }
         
         body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', 'Microsoft YaHei', sans-serif;
-            background: #f2f5f9;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Microsoft YaHei', sans-serif;
+            background: #f5f7fa;
             padding: 20px;
-            color: #1a2639;
+            color: #2c3e50;
         }
         
         .container {
@@ -24,104 +24,92 @@
             margin: 0 auto;
         }
         
-        /* 头部 - 简洁干净 */
+        /* 头部 - 白色卡片 */
         .header {
             background: white;
-            border-radius: 28px;
+            border-radius: 20px;
             padding: 24px;
             margin-bottom: 24px;
-            box-shadow: 0 10px 30px -10px rgba(0,0,0,0.05);
-            border: 1px solid rgba(0,0,0,0.02);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+            border: 1px solid #edf2f7;
         }
         
         h1 {
             font-size: 1.8rem;
             font-weight: 600;
-            letter-spacing: -0.02em;
-            color: #0b1e33;
+            color: #1e293b;
             margin-bottom: 4px;
         }
         
         .subtitle {
             display: flex;
             justify-content: space-between;
-            align-items: center;
             color: #64748b;
             font-size: 0.9rem;
-            font-weight: 400;
         }
         
         .search-box {
-            margin-top: 20px;
+            margin-top: 16px;
         }
         
         #search {
             width: 100%;
-            padding: 16px 20px;
-            border: none;
-            background: #f0f3f8;
-            border-radius: 50px;
+            padding: 14px 20px;
+            border: 1px solid #e2e8f0;
+            border-radius: 40px;
             font-size: 1rem;
-            color: #1a2639;
+            background: white;
             transition: all 0.2s;
-        }
-        
-        #search::placeholder {
-            color: #94a3b8;
-            font-weight: 400;
         }
         
         #search:focus {
             outline: none;
-            background: #e8ecf3;
-            box-shadow: 0 0 0 3px rgba(100,116,139,0.1);
+            border-color: #94a3b8;
+            box-shadow: 0 0 0 3px rgba(148,163,184,0.1);
         }
         
-        /* 组排名卡片 - 简约现代 */
+        /* 组排名卡片 - 颜色线条版本 */
         .rank-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 16px;
-            margin-bottom: 32px;
+            margin-bottom: 24px;
         }
         
         .rank-card {
             background: white;
-            border-radius: 24px;
-            padding: 18px 16px;
-            box-shadow: 0 5px 15px -5px rgba(0,0,0,0.05);
-            border: 1px solid rgba(0,0,0,0.02);
+            border-radius: 16px;
+            padding: 16px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+            border: 1px solid #eef2f6;
             cursor: pointer;
             transition: all 0.2s;
             display: flex;
             align-items: center;
             gap: 12px;
+            border-left: 6px solid;
         }
         
         .rank-card:hover {
             transform: translateY(-2px);
-            box-shadow: 0 15px 25px -8px rgba(0,0,0,0.1);
+            box-shadow: 0 8px 16px rgba(0,0,0,0.05);
         }
         
-        .rank-card:active {
-            transform: scale(0.98);
-        }
-        
-        /* 组颜色 - 柔和不刺眼 */
         .rank-card[data-group="星穹组"] {
-            background: linear-gradient(145deg, #fff9e6, white);
+            border-left-color: #fbbf24;
+            background: linear-gradient(to right, #fffaf0, white);
         }
         .rank-card[data-group="夜曜组"] {
-            background: linear-gradient(145deg, #f3eaff, white);
+            border-left-color: #a78bfa;
+            background: linear-gradient(to right, #f5f0ff, white);
         }
         .rank-card[data-group="沧澜组"] {
-            background: linear-gradient(145deg, #e6f2ff, white);
+            border-left-color: #60a5fa;
+            background: linear-gradient(to right, #eff6ff, white);
         }
         
         .rank-icon {
             font-size: 2.2rem;
-            line-height: 1;
-            filter: drop-shadow(0 4px 6px rgba(0,0,0,0.05));
         }
         
         .rank-info {
@@ -132,37 +120,45 @@
             font-weight: 600;
             font-size: 1.1rem;
             margin-bottom: 4px;
-            color: #1e293b;
         }
         
         .rank-score {
             font-weight: 700;
-            font-size: 1.4rem;
+            font-size: 1.3rem;
             color: #0f172a;
-            line-height: 1.2;
         }
         
         .rank-score small {
             font-size: 0.8rem;
             font-weight: 400;
             color: #64748b;
-            margin-left: 4px;
         }
         
-        /* 组卡片 - 干净卡片式 */
+        /* 组卡片 - 颜色线条版本 */
         .groups {
             display: flex;
             flex-direction: column;
-            gap: 24px;
+            gap: 20px;
         }
         
         .group-card {
             background: white;
-            border-radius: 28px;
+            border-radius: 20px;
             padding: 24px;
-            box-shadow: 0 10px 30px -10px rgba(0,0,0,0.05);
-            border: 1px solid rgba(0,0,0,0.02);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.02);
+            border: 1px solid #eef2f6;
             scroll-margin-top: 20px;
+            border-top: 6px solid;
+        }
+        
+        .group-card[data-group="星穹组"] {
+            border-top-color: #fbbf24;
+        }
+        .group-card[data-group="夜曜组"] {
+            border-top-color: #a78bfa;
+        }
+        .group-card[data-group="沧澜组"] {
+            border-top-color: #60a5fa;
         }
         
         .group-header {
@@ -170,23 +166,21 @@
             justify-content: space-between;
             align-items: center;
             margin-bottom: 20px;
-            padding-bottom: 16px;
+            padding-bottom: 12px;
             border-bottom: 2px solid #f1f5f9;
         }
         
         .group-title {
             font-size: 1.4rem;
             font-weight: 600;
-            color: #0f172a;
         }
         
         .group-badge {
-            padding: 8px 18px;
-            border-radius: 40px;
+            padding: 6px 16px;
+            border-radius: 30px;
             font-size: 0.9rem;
             font-weight: 500;
             color: white;
-            box-shadow: 0 4px 10px -4px rgba(0,0,0,0.2);
         }
         
         .group-card[data-group="星穹组"] .group-badge {
@@ -200,7 +194,7 @@
             background: #60a5fa;
         }
         
-        /* 表格 - 清爽简洁 */
+        /* 表格 */
         .member-table {
             width: 100%;
             border-collapse: collapse;
@@ -213,7 +207,7 @@
             font-weight: 600;
             color: #64748b;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
+            border-bottom: 2px solid #f1f5f9;
         }
         
         .member-table td {
@@ -226,14 +220,13 @@
         }
         
         .member-table tr:hover {
-            background: #fafcff;
+            background: #fafbfc;
         }
         
         .rank-number {
             font-weight: 500;
             color: #94a3b8;
             width: 45px;
-            font-size: 0.95rem;
         }
         
         .name-cell {
@@ -243,7 +236,6 @@
         .name-cn {
             font-weight: 600;
             font-size: 1rem;
-            color: #0f172a;
             margin-bottom: 2px;
         }
         
@@ -260,10 +252,9 @@
             font-size: 0.9rem;
             color: #475569;
             font-weight: 500;
-            white-space: nowrap;
         }
         
-        /* 分数标签 - 柔和圆润 */
+        /* 分数标签 */
         .scores-cell {
             max-width: 220px;
         }
@@ -275,7 +266,7 @@
         }
         
         .score-item {
-            padding: 5px 10px;
+            padding: 4px 10px;
             border-radius: 30px;
             font-size: 0.75rem;
             font-weight: 500;
@@ -284,18 +275,15 @@
             gap: 4px;
             background: #f1f5f9;
             color: #334155;
-            border: 1px solid rgba(0,0,0,0.02);
         }
         
         .score-item.has-score {
-            background: #e6f0ff;
-            color: #1e4a6b;
-            border: 1px solid rgba(59,130,246,0.1);
+            background: #e0f2fe;
+            color: #0369a1;
         }
         
         .score-date {
             opacity: 0.7;
-            font-weight: 400;
         }
         
         .score-value {
@@ -316,15 +304,14 @@
             color: #94a3b8;
             font-size: 0.8rem;
             padding: 20px;
+            border-top: 1px solid #e2e8f0;
         }
         
-        /* 移动端优化 */
+        /* 移动端 */
         @media (max-width: 640px) {
             body { padding: 16px; }
             
             .rank-grid { gap: 12px; }
-            .rank-card { padding: 14px 12px; }
-            .rank-icon { font-size: 1.8rem; }
             
             .member-table th {
                 font-size: 0.7rem;
@@ -335,7 +322,6 @@
                 font-size: 0.85rem;
             }
             
-            .score-tags { gap: 4px; }
             .score-item { 
                 padding: 3px 8px; 
                 font-size: 0.7rem; 
@@ -354,9 +340,8 @@
             }
         }
         
-        /* 搜索高亮 */
         .search-match {
-            background: #fef9e7 !important;
+            background: #fff9e6 !important;
         }
     </style>
 </head>
@@ -373,7 +358,7 @@
             </div>
         </div>
 
-        <!-- 组排名卡片 -->
+        <!-- 组排名卡片 - 颜色线条 -->
         <div class="rank-grid">
             <div class="rank-card" data-group="星穹组" onclick="document.getElementById('group-xingqiong').scrollIntoView({behavior: 'smooth'})">
                 <span class="rank-icon">🥇</span>
@@ -398,9 +383,8 @@
             </div>
         </div>
 
-        <!-- 组别内容 -->
         <div class="groups">
-            <!-- 星穹组 -->
+            <!-- 星穹组 - 黄色线条 -->
             <div class="group-card" data-group="星穹组" id="group-xingqiong">
                 <div class="group-header">
                     <span class="group-title">星穹组</span>
@@ -439,7 +423,7 @@
                 </table>
             </div>
 
-            <!-- 夜曜组 -->
+            <!-- 夜曜组 - 紫色线条 -->
             <div class="group-card" data-group="夜曜组" id="group-yeyao">
                 <div class="group-header">
                     <span class="group-title">夜曜组</span>
@@ -478,7 +462,7 @@
                 </table>
             </div>
 
-            <!-- 沧澜组 -->
+            <!-- 沧澜组 - 蓝色线条 -->
             <div class="group-card" data-group="沧澜组" id="group-canglan">
                 <div class="group-header">
                     <span class="group-title">沧澜组</span>
@@ -539,11 +523,10 @@
             
             allRows.forEach(row => {
                 const searchText = row.getAttribute('data-search').toLowerCase();
+                row.style.display = searchText.includes(searchTerm) ? '' : 'none';
                 if (searchText.includes(searchTerm)) {
-                    row.style.display = '';
                     row.classList.add('search-match');
                 } else {
-                    row.style.display = 'none';
                     row.classList.remove('search-match');
                 }
             });
