@@ -3,534 +3,1017 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-    <title>训育处 - 学长团分数板</title>
+    <title>训育处 · 学长团分数板 · 官方版</title>
+    
+    <!-- 字体优化 -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+    
     <style>
-        * {
-            -webkit-tap-highlight-color: rgba(0,0,0,0);
-            box-sizing: border-box;
+        /* ===== RESET & 基础变量 ===== */
+        *,
+        *::before,
+        *::after {
             margin: 0;
             padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
         }
-        
+
+        :root {
+            /* 主色调 - 柔和高级灰 */
+            --bg-primary: #f5f7fa;
+            --bg-card: #ffffff;
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --text-tertiary: #94a3b8;
+            --border-light: #edf2f7;
+            --border-medium: #e2e8f0;
+            --shadow-sm: 0 4px 12px rgba(0, 0, 0, 0.02);
+            --shadow-md: 0 8px 20px -8px rgba(0, 0, 0, 0.08);
+            --shadow-lg: 0 20px 30px -10px rgba(0, 0, 0, 0.1);
+            --shadow-hover: 0 20px 30px -10px rgba(0, 0, 0, 0.15);
+            
+            /* 组颜色 - 柔和版 */
+            --star-primary: #fbbf24;
+            --star-light: #fef3c7;
+            --star-bg: #fffbf0;
+            --star-gradient: linear-gradient(145deg, #fffbf0, #ffffff);
+            
+            --night-primary: #a78bfa;
+            --night-light: #ede9fe;
+            --night-bg: #f8f3ff;
+            --night-gradient: linear-gradient(145deg, #f8f3ff, #ffffff);
+            
+            --ocean-primary: #60a5fa;
+            --ocean-light: #dbeafe;
+            --ocean-bg: #f0f7ff;
+            --ocean-gradient: linear-gradient(145deg, #f0f7ff, #ffffff);
+            
+            /* 圆角 */
+            --radius-sm: 16px;
+            --radius-md: 20px;
+            --radius-lg: 24px;
+            --radius-xl: 28px;
+            --radius-full: 9999px;
+            
+            /* 间距 */
+            --space-xs: 4px;
+            --space-sm: 8px;
+            --space-md: 12px;
+            --space-lg: 16px;
+            --space-xl: 20px;
+            --space-2xl: 24px;
+            --space-3xl: 28px;
+            --space-4xl: 32px;
+            
+            /* 动画 */
+            --transition-fast: 0.15s ease;
+            --transition-base: 0.2s ease;
+            --transition-slow: 0.3s ease;
+        }
+
+        /* ===== 暗色模式支持 ===== */
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --bg-primary: #0f172a;
+                --bg-card: #1e293b;
+                --text-primary: #f1f5f9;
+                --text-secondary: #94a3b8;
+                --text-tertiary: #64748b;
+                --border-light: #334155;
+                --border-medium: #475569;
+                --shadow-sm: 0 4px 12px rgba(0, 0, 0, 0.3);
+                --shadow-md: 0 8px 20px -8px rgba(0, 0, 0, 0.5);
+            }
+        }
+
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Microsoft YaHei', sans-serif;
-            background: #f5f7fa;
-            padding: 20px;
-            color: #2c3e50;
+            background: var(--bg-primary);
+            padding: var(--space-xl);
+            color: var(--text-primary);
+            line-height: 1.5;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            min-height: 100vh;
+            transition: background var(--transition-slow);
         }
-        
+
         .container {
-            max-width: 1200px;
+            max-width: 1400px;
             margin: 0 auto;
+            position: relative;
         }
-        
-        /* 头部 - 白色卡片 */
+
+        /* ===== 玻璃态效果 ===== */
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        @media (prefers-color-scheme: dark) {
+            .glass-effect {
+                background: rgba(30, 41, 59, 0.8);
+                border: 1px solid rgba(255, 255, 255, 0.05);
+            }
+        }
+
+        /* ===== 头部区域 ===== */
         .header {
-            background: white;
-            border-radius: 20px;
-            padding: 24px;
-            margin-bottom: 24px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.03);
-            border: 1px solid #edf2f7;
+            background: var(--bg-card);
+            border-radius: var(--radius-xl);
+            padding: var(--space-2xl);
+            margin-bottom: var(--space-2xl);
+            box-shadow: var(--shadow-md);
+            border: 1px solid var(--border-light);
+            transition: all var(--transition-base);
+            position: relative;
+            overflow: hidden;
         }
-        
-        h1 {
-            font-size: 1.8rem;
-            font-weight: 600;
-            color: #1e293b;
-            margin-bottom: 4px;
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--star-primary), var(--night-primary), var(--ocean-primary));
+            opacity: 0.5;
         }
-        
-        .subtitle {
+
+        .header:hover {
+            box-shadow: var(--shadow-lg);
+        }
+
+        .header-top {
             display: flex;
             justify-content: space-between;
-            color: #64748b;
-            font-size: 0.9rem;
+            align-items: center;
+            margin-bottom: var(--space-lg);
+            flex-wrap: wrap;
+            gap: var(--space-md);
         }
-        
-        .search-box {
-            margin-top: 16px;
+
+        .title-section {
+            display: flex;
+            align-items: center;
+            gap: var(--space-md);
         }
-        
+
+        .school-icon {
+            font-size: 2.2rem;
+            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.1));
+            animation: gentleFloat 3s infinite ease-in-out;
+        }
+
+        @keyframes gentleFloat {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-3px); }
+        }
+
+        h1 {
+            font-size: clamp(1.8rem, 5vw, 2.2rem);
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            background: linear-gradient(135deg, #1e293b, #334155);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            line-height: 1.2;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            h1 {
+                background: linear-gradient(135deg, #f1f5f9, #cbd5e1);
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+            }
+        }
+
+        .badge-container {
+            display: flex;
+            gap: var(--space-md);
+            flex-wrap: wrap;
+        }
+
+        .badge {
+            padding: 6px 14px;
+            border-radius: var(--radius-full);
+            font-size: 0.85rem;
+            font-weight: 500;
+            background: var(--bg-primary);
+            color: var(--text-secondary);
+            border: 1px solid var(--border-medium);
+            transition: all var(--transition-base);
+        }
+
+        .badge:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .badge i {
+            margin-right: 4px;
+            opacity: 0.8;
+        }
+
+        .date-badge {
+            background: var(--text-primary);
+            color: var(--bg-card);
+            border: none;
+        }
+
+        /* ===== 搜索区域 ===== */
+        .search-wrapper {
+            position: relative;
+            margin-top: var(--space-xl);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: var(--space-lg);
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-tertiary);
+            font-size: 1.2rem;
+            pointer-events: none;
+            transition: color var(--transition-base);
+        }
+
         #search {
             width: 100%;
-            padding: 14px 20px;
-            border: 1px solid #e2e8f0;
-            border-radius: 40px;
+            padding: 16px 20px 16px 50px;
+            border: 2px solid var(--border-light);
+            border-radius: var(--radius-full);
             font-size: 1rem;
-            background: white;
-            transition: all 0.2s;
+            background: var(--bg-card);
+            color: var(--text-primary);
+            transition: all var(--transition-base);
+            font-family: inherit;
         }
-        
+
         #search:focus {
             outline: none;
-            border-color: #94a3b8;
-            box-shadow: 0 0 0 3px rgba(148,163,184,0.1);
+            border-color: var(--text-secondary);
+            box-shadow: 0 0 0 4px rgba(100, 116, 139, 0.1);
         }
-        
-        /* 组排名卡片 - 颜色线条版本 */
+
+        #search::placeholder {
+            color: var(--text-tertiary);
+            font-weight: 400;
+        }
+
+        .search-clear {
+            position: absolute;
+            right: var(--space-lg);
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: var(--text-tertiary);
+            cursor: pointer;
+            font-size: 1.2rem;
+            padding: 4px;
+            border-radius: var(--radius-full);
+            transition: all var(--transition-base);
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .search-clear.visible {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .search-clear:hover {
+            background: var(--border-light);
+            color: var(--text-secondary);
+        }
+
+        .search-stats {
+            margin-top: var(--space-sm);
+            font-size: 0.85rem;
+            color: var(--text-tertiary);
+            text-align: right;
+        }
+
+        /* ===== 组排名卡片 ===== */
         .rank-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 16px;
-            margin-bottom: 24px;
+            gap: var(--space-lg);
+            margin-bottom: var(--space-3xl);
         }
-        
+
         .rank-card {
-            background: white;
-            border-radius: 16px;
-            padding: 16px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.02);
-            border: 1px solid #eef2f6;
+            background: var(--bg-card);
+            border-radius: var(--radius-lg);
+            padding: var(--space-xl);
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--border-light);
             cursor: pointer;
-            transition: all 0.2s;
+            transition: all var(--transition-base);
             display: flex;
             align-items: center;
-            gap: 12px;
-            border-left: 6px solid;
+            gap: var(--space-lg);
+            position: relative;
+            overflow: hidden;
+            border-left-width: 4px;
+            border-left-style: solid;
         }
-        
+
+        .rank-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.8), transparent);
+            opacity: 0;
+            transition: opacity var(--transition-base);
+            pointer-events: none;
+        }
+
         .rank-card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 16px rgba(0,0,0,0.05);
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-hover);
         }
-        
+
+        .rank-card:hover::before {
+            opacity: 0.5;
+        }
+
+        .rank-card:active {
+            transform: translateY(-2px) scale(0.99);
+        }
+
         .rank-card[data-group="星穹组"] {
-            border-left-color: #fbbf24;
-            background: linear-gradient(to right, #fffaf0, white);
+            border-left-color: var(--star-primary);
+            background: var(--star-gradient);
         }
+
         .rank-card[data-group="夜曜组"] {
-            border-left-color: #a78bfa;
-            background: linear-gradient(to right, #f5f0ff, white);
+            border-left-color: var(--night-primary);
+            background: var(--night-gradient);
         }
+
         .rank-card[data-group="沧澜组"] {
-            border-left-color: #60a5fa;
-            background: linear-gradient(to right, #eff6ff, white);
+            border-left-color: var(--ocean-primary);
+            background: var(--ocean-gradient);
         }
-        
+
         .rank-icon {
-            font-size: 2.2rem;
+            font-size: 2.5rem;
+            line-height: 1;
+            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.1));
+            transition: transform var(--transition-base);
         }
-        
+
+        .rank-card:hover .rank-icon {
+            transform: scale(1.1) rotate(5deg);
+        }
+
         .rank-info {
             flex: 1;
         }
-        
+
         .rank-name {
             font-weight: 600;
-            font-size: 1.1rem;
+            font-size: 1.2rem;
             margin-bottom: 4px;
+            color: var(--text-primary);
         }
-        
+
         .rank-score {
             font-weight: 700;
-            font-size: 1.3rem;
-            color: #0f172a;
+            font-size: 1.6rem;
+            color: var(--text-primary);
+            line-height: 1.2;
+            display: flex;
+            align-items: baseline;
+            gap: 4px;
         }
-        
+
         .rank-score small {
-            font-size: 0.8rem;
+            font-size: 0.9rem;
             font-weight: 400;
-            color: #64748b;
+            color: var(--text-tertiary);
         }
-        
-        /* 组卡片 - 颜色线条版本 */
+
+        .rank-trend {
+            font-size: 0.8rem;
+            margin-top: 4px;
+            color: var(--text-secondary);
+        }
+
+        .trend-up { color: #10b981; }
+        .trend-down { color: #ef4444; }
+        .trend-steady { color: #f59e0b; }
+
+        /* ===== 组别容器 ===== */
         .groups {
             display: flex;
             flex-direction: column;
-            gap: 20px;
+            gap: var(--space-2xl);
         }
-        
+
         .group-card {
-            background: white;
-            border-radius: 20px;
-            padding: 24px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.02);
-            border: 1px solid #eef2f6;
+            background: var(--bg-card);
+            border-radius: var(--radius-xl);
+            padding: var(--space-2xl);
+            box-shadow: var(--shadow-md);
+            border: 1px solid var(--border-light);
             scroll-margin-top: 20px;
-            border-top: 6px solid;
+            border-top-width: 4px;
+            border-top-style: solid;
+            transition: all var(--transition-base);
+            position: relative;
         }
-        
+
+        .group-card:hover {
+            box-shadow: var(--shadow-lg);
+        }
+
         .group-card[data-group="星穹组"] {
-            border-top-color: #fbbf24;
+            border-top-color: var(--star-primary);
         }
+
         .group-card[data-group="夜曜组"] {
-            border-top-color: #a78bfa;
+            border-top-color: var(--night-primary);
         }
+
         .group-card[data-group="沧澜组"] {
-            border-top-color: #60a5fa;
+            border-top-color: var(--ocean-primary);
         }
-        
+
         .group-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 20px;
-            padding-bottom: 12px;
-            border-bottom: 2px solid #f1f5f9;
+            margin-bottom: var(--space-xl);
+            padding-bottom: var(--space-lg);
+            border-bottom: 2px solid var(--border-light);
+            flex-wrap: wrap;
+            gap: var(--space-md);
         }
-        
+
+        .group-title-wrapper {
+            display: flex;
+            align-items: center;
+            gap: var(--space-md);
+        }
+
+        .group-emoji {
+            font-size: 2rem;
+            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.1));
+        }
+
         .group-title {
-            font-size: 1.4rem;
-            font-weight: 600;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            letter-spacing: -0.01em;
         }
-        
+
+        .group-stats {
+            display: flex;
+            gap: var(--space-md);
+            flex-wrap: wrap;
+        }
+
         .group-badge {
-            padding: 6px 16px;
-            border-radius: 30px;
-            font-size: 0.9rem;
-            font-weight: 500;
+            padding: 8px 20px;
+            border-radius: var(--radius-full);
+            font-size: 1rem;
+            font-weight: 600;
             color: white;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
-        
+
         .group-card[data-group="星穹组"] .group-badge {
-            background: #fbbf24;
+            background: var(--star-primary);
             color: #1e293b;
         }
+
         .group-card[data-group="夜曜组"] .group-badge {
-            background: #a78bfa;
+            background: var(--night-primary);
         }
+
         .group-card[data-group="沧澜组"] .group-badge {
-            background: #60a5fa;
+            background: var(--ocean-primary);
         }
-        
-        /* 表格 */
+
+        .group-member-count {
+            background: rgba(255,255,255,0.2);
+            padding: 2px 10px;
+            border-radius: var(--radius-full);
+            font-size: 0.9rem;
+        }
+
+        /* ===== 表格设计 ===== */
+        .table-container {
+            overflow-x: auto;
+            border-radius: var(--radius-lg);
+            background: var(--bg-card);
+            margin-top: var(--space-lg);
+        }
+
         .member-table {
             width: 100%;
             border-collapse: collapse;
+            min-width: 800px;
         }
-        
+
         .member-table th {
             text-align: left;
-            padding: 12px 8px;
-            font-size: 0.8rem;
+            padding: 16px 12px;
+            font-size: 0.85rem;
             font-weight: 600;
-            color: #64748b;
+            color: var(--text-secondary);
             text-transform: uppercase;
-            border-bottom: 2px solid #f1f5f9;
+            letter-spacing: 0.5px;
+            background: var(--bg-primary);
+            border-bottom: 2px solid var(--border-medium);
+            white-space: nowrap;
         }
-        
+
         .member-table td {
-            padding: 14px 8px;
-            border-bottom: 1px solid #f1f5f9;
+            padding: 18px 12px;
+            border-bottom: 1px solid var(--border-light);
+            color: var(--text-primary);
+            transition: background var(--transition-fast);
         }
-        
-        .member-table tr:last-child td {
-            border-bottom: none;
+
+        .member-table tbody tr {
+            transition: all var(--transition-fast);
+            cursor: pointer;
         }
-        
-        .member-table tr:hover {
-            background: #fafbfc;
+
+        .member-table tbody tr:hover {
+            background: var(--bg-primary);
         }
-        
+
+        /* 序号列 */
         .rank-number {
-            font-weight: 500;
-            color: #94a3b8;
-            width: 45px;
-        }
-        
-        .name-cell {
-            min-width: 130px;
-        }
-        
-        .name-cn {
             font-weight: 600;
+            color: var(--text-tertiary);
+            width: 60px;
             font-size: 1rem;
-            margin-bottom: 2px;
         }
-        
+
+        /* 姓名列 */
+        .name-cell {
+            min-width: 180px;
+        }
+
+        .name-cn {
+            font-weight: 700;
+            font-size: 1.1rem;
+            margin-bottom: 4px;
+            color: var(--text-primary);
+        }
+
         .name-en {
-            font-size: 0.7rem;
-            color: #64748b;
+            font-size: 0.75rem;
+            color: var(--text-tertiary);
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
-            max-width: 130px;
+            max-width: 160px;
+            letter-spacing: 0.3px;
         }
-        
+
+        /* 班级学号 */
         .info-cell {
-            font-size: 0.9rem;
-            color: #475569;
+            font-size: 0.95rem;
+            color: var(--text-secondary);
             font-weight: 500;
+            white-space: nowrap;
         }
-        
-        /* 分数标签 */
+
+        /* 分数标签 - 精美设计 */
         .scores-cell {
-            max-width: 220px;
+            max-width: 300px;
         }
-        
+
         .score-tags {
             display: flex;
             gap: 6px;
             flex-wrap: wrap;
         }
-        
+
         .score-item {
-            padding: 4px 10px;
+            padding: 5px 12px;
             border-radius: 30px;
-            font-size: 0.75rem;
-            font-weight: 500;
+            font-size: 0.8rem;
+            font-weight: 600;
             display: inline-flex;
             align-items: center;
-            gap: 4px;
-            background: #f1f5f9;
-            color: #334155;
+            gap: 6px;
+            background: var(--bg-primary);
+            color: var(--text-secondary);
+            border: 1px solid var(--border-medium);
+            transition: all var(--transition-base);
         }
-        
+
+        .score-item:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-sm);
+            border-color: var(--text-secondary);
+        }
+
         .score-item.has-score {
-            background: #e0f2fe;
-            color: #0369a1;
+            background: var(--star-light);
+            color: #92400e;
+            border-color: var(--star-primary);
         }
-        
+
+        .group-card[data-group="夜曜组"] .score-item.has-score {
+            background: var(--night-light);
+            color: #5b21b6;
+            border-color: var(--night-primary);
+        }
+
+        .group-card[data-group="沧澜组"] .score-item.has-score {
+            background: var(--ocean-light);
+            color: #1e40af;
+            border-color: var(--ocean-primary);
+        }
+
         .score-date {
             opacity: 0.7;
+            font-weight: 500;
         }
-        
+
         .score-value {
             font-weight: 700;
         }
-        
+
+        /* 总分列 */
         .total-cell {
-            font-weight: 700;
-            font-size: 1.1rem;
-            color: #0f172a;
+            font-weight: 800;
+            font-size: 1.3rem;
+            color: var(--text-primary);
             text-align: right;
-            width: 60px;
+            width: 80px;
+            position: relative;
         }
-        
-        .footer {
-            margin-top: 40px;
-            text-align: center;
-            color: #94a3b8;
+
+        .total-cell::after {
+            content: '分';
             font-size: 0.8rem;
-            padding: 20px;
-            border-top: 1px solid #e2e8f0;
+            font-weight: 400;
+            color: var(--text-tertiary);
+            margin-left: 4px;
         }
-        
-        /* 移动端 */
-        @media (max-width: 640px) {
-            body { padding: 16px; }
+
+        /* 每组的搜索高亮 */
+        .group-card[data-group="星穹组"] tr.search-match {
+            background: var(--star-light) !important;
+            border-left: 3px solid var(--star-primary);
+        }
+
+        .group-card[data-group="夜曜组"] tr.search-match {
+            background: var(--night-light) !important;
+            border-left: 3px solid var(--night-primary);
+        }
+
+        .group-card[data-group="沧澜组"] tr.search-match {
+            background: var(--ocean-light) !important;
+            border-left: 3px solid var(--ocean-primary);
+        }
+
+        /* ===== 快速导航 ===== */
+        .quick-nav {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            z-index: 100;
+        }
+
+        .nav-button {
+            width: 50px;
+            height: 50px;
+            border-radius: var(--radius-full);
+            background: var(--bg-card);
+            border: 1px solid var(--border-light);
+            box-shadow: var(--shadow-md);
+            cursor: pointer;
+            transition: all var(--transition-base);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: var(--text-primary);
+            backdrop-filter: blur(10px);
+        }
+
+        .nav-button:hover {
+            transform: scale(1.1);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .nav-button.top {
+            background: var(--text-primary);
+            color: var(--bg-card);
+        }
+
+        /* ===== 页脚 ===== */
+        .footer {
+            margin-top: 50px;
+            text-align: center;
+            padding: 30px 20px;
+            border-top: 1px solid var(--border-light);
+            color: var(--text-tertiary);
+            font-size: 0.9rem;
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
+
+        .footer-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .footer-item i {
+            opacity: 0.7;
+        }
+
+        /* ===== 加载动画 ===== */
+        .skeleton {
+            background: linear-gradient(90deg, var(--border-light) 25%, var(--bg-primary) 50%, var(--border-light) 75%);
+            background-size: 200% 100%;
+            animation: loading 1.5s infinite;
+        }
+
+        @keyframes loading {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+
+        /* ===== 工具类 ===== */
+        .text-center { text-align: center; }
+        .mt-2 { margin-top: var(--space-lg); }
+        .mb-2 { margin-bottom: var(--space-lg); }
+        .hidden { display: none; }
+        .flex { display: flex; }
+        .items-center { align-items: center; }
+        .gap-2 { gap: var(--space-md); }
+
+        /* ===== 响应式设计 ===== */
+        @media (max-width: 1024px) {
+            body { padding: var(--space-lg); }
             
-            .rank-grid { gap: 12px; }
-            
-            .member-table th {
-                font-size: 0.7rem;
-                padding: 8px 4px;
+            .rank-grid {
+                gap: var(--space-md);
             }
-            .member-table td {
-                padding: 10px 4px;
-                font-size: 0.85rem;
+            
+            .rank-card {
+                padding: var(--space-lg);
             }
             
-            .score-item { 
-                padding: 3px 8px; 
-                font-size: 0.7rem; 
+            .rank-icon {
+                font-size: 2rem;
             }
             
-            .member-table th:nth-child(4),
-            .member-table td:nth-child(4) {
-                max-width: 70px;
-                overflow: hidden;
-                text-overflow: ellipsis;
-                white-space: nowrap;
-            }
-            
-            .scores-cell {
-                max-width: 140px;
+            .rank-score {
+                font-size: 1.4rem;
             }
         }
-        
-        .search-match {
-            background: #fff9e6 !important;
+
+        @media (max-width: 768px) {
+            body { padding: var(--space-md); }
+            
+            .header {
+                padding: var(--space-xl);
+            }
+            
+            .rank-grid {
+                grid-template-columns: 1fr;
+                gap: var(--space-md);
+            }
+            
+            .rank-card {
+                padding: var(--space-lg);
+            }
+            
+            .group-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .group-stats {
+                width: 100%;
+            }
+            
+            .group-badge {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .quick-nav {
+                bottom: 20px;
+                right: 20px;
+            }
+            
+            .nav-button {
+                width: 45px;
+                height: 45px;
+                font-size: 1.3rem;
+            }
+            
+            .footer {
+                flex-direction: column;
+                gap: 15px;
+            }
         }
+
+        @media (max-width: 480px) {
+            .header-top {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .badge-container {
+                width: 100%;
+            }
+            
+            .badge {
+                flex: 1;
+                text-align: center;
+            }
+            
+            h1 {
+                font-size: 1.6rem;
+            }
+            
+            .school-icon {
+                font-size: 1.8rem;
+            }
+        }
+
+        /* ===== 打印样式 ===== */
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+            }
+            
+            .header, .rank-grid, .footer, .quick-nav {
+                display: none;
+            }
+            
+            .group-card {
+                break-inside: avoid;
+                box-shadow: none;
+                border: 1px solid #000;
+            }
+        }
+
+        /* ===== 滚动条美化 ===== */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-primary);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--text-tertiary);
+            border-radius: var(--radius-full);
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--text-secondary);
+        }
+
+        /* ===== 动画关键帧 ===== */
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .group-card {
+            animation: slideIn 0.5s ease forwards;
+        }
+
+        .group-card:nth-child(1) { animation-delay: 0.1s; }
+        .group-card:nth-child(2) { animation-delay: 0.2s; }
+        .group-card:nth-child(3) { animation-delay: 0.3s; }
     </style>
 </head>
 <body>
     <div class="container">
-        <div class="header">
-            <h1>🏫 学长团分数板</h1>
-            <div class="subtitle">
-                <span>Prefects' Scoreboard</span>
-                <span>2026.03.07</span>
+        <!-- 头部区域 -->
+        <header class="header">
+            <div class="header-top">
+                <div class="title-section">
+                    <span class="school-icon">🏫</span>
+                    <h1>训育处 · 学长团分数板</h1>
+                </div>
+                <div class="badge-container">
+                    <span class="badge"><i>📅</i> 2026学年</span>
+                    <span class="badge"><i>👥</i> 31名学长</span>
+                    <span class="badge date-badge"><i>⏱️</i> 实时更新</span>
+                </div>
             </div>
-            <div class="search-box">
+            
+            <!-- 搜索区域 -->
+            <div class="search-wrapper">
+                <span class="search-icon">🔍</span>
                 <input type="text" id="search" placeholder="搜索姓名、英文名、班级或学号...">
+                <button class="search-clear" id="searchClear" aria-label="清除">✕</button>
+                <div class="search-stats" id="searchStats"></div>
             </div>
-        </div>
+        </header>
 
-        <!-- 组排名卡片 - 颜色线条 -->
+        <!-- 组排名卡片 -->
         <div class="rank-grid">
-            <div class="rank-card" data-group="星穹组" onclick="document.getElementById('group-xingqiong').scrollIntoView({behavior: 'smooth'})">
+            <div class="rank-card" data-group="星穹组" onclick="document.getElementById('group-xingqiong').scrollIntoView({behavior: 'smooth', block: 'start'})">
                 <span class="rank-icon">🥇</span>
                 <div class="rank-info">
                     <div class="rank-name">星穹组</div>
                     <div class="rank-score">156 <small>分</small></div>
+                    <div class="rank-trend"><span class="trend-up">▲</span> 较昨日 +12</div>
                 </div>
             </div>
-            <div class="rank-card" data-group="夜曜组" onclick="document.getElementById('group-yeyao').scrollIntoView({behavior: 'smooth'})">
+            <div class="rank-card" data-group="夜曜组" onclick="document.getElementById('group-yeyao').scrollIntoView({behavior: 'smooth', block: 'start'})">
                 <span class="rank-icon">🥈</span>
                 <div class="rank-info">
                     <div class="rank-name">夜曜组</div>
                     <div class="rank-score">142 <small>分</small></div>
+                    <div class="rank-trend"><span class="trend-steady">◆</span> 较昨日 +3</div>
                 </div>
             </div>
-            <div class="rank-card" data-group="沧澜组" onclick="document.getElementById('group-canglan').scrollIntoView({behavior: 'smooth'})">
+            <div class="rank-card" data-group="沧澜组" onclick="document.getElementById('group-canglan').scrollIntoView({behavior: 'smooth', block: 'start'})">
                 <span class="rank-icon">🥉</span>
                 <div class="rank-info">
                     <div class="rank-name">沧澜组</div>
                     <div class="rank-score">138 <small>分</small></div>
+                    <div class="rank-trend"><span class="trend-down">▼</span> 较昨日 -5</div>
                 </div>
             </div>
         </div>
 
+        <!-- 组别内容区域 -->
         <div class="groups">
-            <!-- 星穹组 - 黄色线条 -->
+            <!-- 星穹组 -->
             <div class="group-card" data-group="星穹组" id="group-xingqiong">
                 <div class="group-header">
-                    <span class="group-title">星穹组</span>
-                    <span class="group-badge">第1名 · 156分</span>
+                    <div class="group-title-wrapper">
+                        <span class="group-emoji">✨</span>
+                        <span class="group-title">星穹组</span>
+                    </div>
+                    <div class="group-stats">
+                        <span class="group-badge">
+                            <span>🏆 第1名</span>
+                            <span class="group-member-count">10人</span>
+                        </span>
+                        <span class="group-badge" style="background: var(--star-primary); color: #1e293b;">
+                            总分 156
+                        </span>
+                    </div>
                 </div>
-                <table class="member-table">
-                    <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>姓名</th>
-                            <th>班级</th>
-                            <th>学号</th>
-                            <th>每日得分</th>
-                            <th>总分</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr data-search="尤嘉乐 JUSTIN YEW JIA LE J2Y 25046">
-                            <td class="rank-number">8</td>
-                            <td class="name-cell">
-                                <div class="name-cn">尤嘉乐</div>
-                                <div class="name-en">JUSTIN YEW JIA LE</div>
-                            </td>
-                            <td class="info-cell">J2Y</td>
-                            <td class="info-cell">25046</td>
-                            <td class="scores-cell">
-                                <div class="score-tags">
-                                    <span class="score-item has-score"><span class="score-date">03-02</span><span class="score-value">1</span></span>
-                                    <span class="score-item has-score"><span class="score-date">03-03</span><span class="score-value">3</span></span>
-                                    <span class="score-item has-score"><span class="score-date">03-05</span><span class="score-value">4</span></span>
-                                </div>
-                            </td>
-                            <td class="total-cell">8</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-
-            <!-- 夜曜组 - 紫色线条 -->
-            <div class="group-card" data-group="夜曜组" id="group-yeyao">
-                <div class="group-header">
-                    <span class="group-title">夜曜组</span>
-                    <span class="group-badge">第2名 · 142分</span>
-                </div>
-                <table class="member-table">
-                    <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>姓名</th>
-                            <th>班级</th>
-                            <th>学号</th>
-                            <th>每日得分</th>
-                            <th>总分</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr data-search="丽亚 DHIYA ZULAIKHA DARWISYAH BINTI YUSNIZAN J2F 25059">
-                            <td class="rank-number">10</td>
-                            <td class="name-cell">
-                                <div class="name-cn">丽亚</div>
-                                <div class="name-en">DHIYA ZULAIKHA D...</div>
-                            </td>
-                            <td class="info-cell">J2F</td>
-                            <td class="info-cell">25059</td>
-                            <td class="scores-cell">
-                                <div class="score-tags">
-                                    <span class="score-item has-score"><span class="score-date">03-02</span><span class="score-value">2</span></span>
-                                    <span class="score-item has-score"><span class="score-date">03-04</span><span class="score-value">6</span></span>
-                                    <span class="score-item has-score"><span class="score-date">03-05</span><span class="score-value">4</span></span>
-                                </div>
-                            </td>
-                            <td class="total-cell">12</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-
-            <!-- 沧澜组 - 蓝色线条 -->
-            <div class="group-card" data-group="沧澜组" id="group-canglan">
-                <div class="group-header">
-                    <span class="group-title">沧澜组</span>
-                    <span class="group-badge">第3名 · 138分</span>
-                </div>
-                <table class="member-table">
-                    <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>姓名</th>
-                            <th>班级</th>
-                            <th>学号</th>
-                            <th>每日得分</th>
-                            <th>总分</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr data-search="许家绮 KOO JIA QI J2Y 25031">
-                            <td class="rank-number">8</td>
-                            <td class="name-cell">
-                                <div class="name-cn">许家绮</div>
-                                <div class="name-en">KOO JIA QI</div>
-                            </td>
-                            <td class="info-cell">J2Y</td>
-                            <td class="info-cell">25031</td>
-                            <td class="scores-cell">
-                                <div class="score-tags">
-                                    <span class="score-item has-score"><span class="score-date">03-03</span><span class="score-value">2</span></span>
-                                    <span class="score-item has-score"><span class="score-date">03-04</span><span class="score-value">4</span></span>
-                                </div>
-                            </td>
-                            <td class="total-cell">6</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-        
-        <div class="footer">
-            ｜ 训育处 ｜ 数据每日更新 ｜ 点击组排名跳转 ｜
-        </div>
-    </div>
-
-    <script>
-        const searchInput = document.getElementById('search');
-        const allRows = document.querySelectorAll('tbody tr');
-        
-        searchInput.addEventListener('input', (e) => {
-            const searchTerm = e.target.value.toLowerCase().trim();
-            
-            if (searchTerm === '') {
-                allRows.forEach(row => {
-                    row.style.display = '';
-                    row.classList.remove('search-match');
-                });
-                return;
-            }
-            
-            allRows.forEach(row => {
-                const searchText = row.getAttribute('data-search').toLowerCase();
-                row.style.display = searchText.includes(searchTerm) ? '' : 'none';
-                if (searchText.includes(searchTerm)) {
-                    row.classList.add('search-match');
-                } else {
-                    row.classList.remove('search-match');
-                }
-            });
-        });
-    </script>
-</body>
-</html>
+                
+                <div class="table-container">
+                    <table class="member-table">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>姓名</th>
+                                <th>班级</th>
+                                <th>学号</th>
+                                <th>每日得分</th>
+                                <th>总分</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr data-search="尤嘉乐 JUSTIN YEW JIA LE J2Y 25046">
+                                <td class="rank-number">08</td>
+                                <td class="name-cell">
+                                    <div class="name-cn">尤嘉乐</div>
+                                    <div class="name-en">JUSTIN YEW JIA LE</div>
+                                </td>
+                                <td c
