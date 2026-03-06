@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NFC打卡 · 简化版</title>
+    <title>NFC打卡 · 卡片飞入效果</title>
     <style>
         * {
             margin: 0;
@@ -57,6 +57,8 @@
             border: 1px solid rgba(255, 255, 255, 0.6);
             display: flex;
             flex-direction: column;
+            position: relative;
+            overflow: hidden;
         }
 
         /* 标题 */
@@ -91,7 +93,7 @@
             margin: 20px 0;
         }
 
-        /* 圆圈容器 - 完全透明 */
+        /* 圆圈 - 恢复白色变橙色 */
         .circle-wrapper {
             position: absolute;
             top: 50%;
@@ -104,8 +106,48 @@
             justify-content: center;
             transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
             z-index: 10;
-            opacity: 0; /* 完全透明，看不见 */
-            pointer-events: none;
+        }
+
+        /* 空心圆 - 白色变橙色 */
+        .hollow-circle {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            border: 4px solid white;
+            background: transparent;
+            box-shadow: 0 0 0 2px rgba(26, 43, 76, 0.1), 0 20px 40px -10px rgba(0, 0, 0, 0.2);
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        /* 跳动动画 - 白色变橙色 */
+        .circle-pulse {
+            animation: circleScale 2s ease-in-out infinite;
+        }
+
+        @keyframes circleScale {
+            0%, 100% { 
+                transform: scale(1); 
+                border-color: white;
+                box-shadow: 0 0 0 2px rgba(26, 43, 76, 0.1), 0 20px 40px -10px rgba(0, 0, 0, 0.2);
+            }
+            50% { 
+                transform: scale(1.1); 
+                border-color: #ff8c00;
+                box-shadow: 0 0 20px rgba(255, 140, 0, 0.3);
+            }
+        }
+
+        /* 内圈虚线 */
+        .hollow-circle::after {
+            content: '';
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            right: 20px;
+            bottom: 20px;
+            border-radius: 50%;
+            border: 2px dashed rgba(255, 255, 255, 0.8);
         }
 
         /* 对勾容器 */
@@ -129,7 +171,7 @@
             opacity: 1;
         }
 
-        /* 对勾SVG动画 - 只有绘制效果 */
+        /* 对勾SVG动画 */
         .checkmark-svg {
             width: 100px;
             height: 100px;
@@ -157,12 +199,10 @@
         }
 
         @keyframes drawCircle {
-            0% { stroke-dashoffset: 166; }
             100% { stroke-dashoffset: 0; }
         }
 
         @keyframes drawCheck {
-            0% { stroke-dashoffset: 48; }
             100% { stroke-dashoffset: 0; }
         }
 
@@ -188,12 +228,12 @@
             pointer-events: none;
         }
 
-        /* 个人资讯卡片 - 3秒显示 */
+        /* 个人资讯卡片 - 将飞入右侧 */
         .info-card {
             position: absolute;
             top: 50%;
             left: 50%;
-            transform: translate(-50%, -50%) scale(0);
+            transform: translate(-50%, -50%) scale(1);
             width: 320px;
             background: white;
             border-radius: 40px;
@@ -201,15 +241,19 @@
             box-shadow: 0 30px 50px -20px rgba(0, 0, 0, 0.3);
             border: 1px solid rgba(255, 255, 255, 0.8);
             z-index: 20;
-            transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
             opacity: 0;
             pointer-events: none;
         }
 
         .info-card.show {
-            transform: translate(-50%, -50%) scale(1);
             opacity: 1;
             pointer-events: auto;
+        }
+
+        .info-card.fly-out {
+            transform: translate(calc(50vw - 200px), -50%) scale(0.3);
+            opacity: 0;
         }
 
         /* 资讯头部 */
@@ -305,6 +349,7 @@
         .history-header {
             display: flex;
             justify-content: space-between;
+            align-items: center;
             padding: 0 12px 20px 12px;
             border-bottom: 1px solid rgba(26, 43, 76, 0.1);
         }
@@ -352,6 +397,25 @@
             align-items: center;
             gap: 16px;
             animation: slideIn 0.3s ease;
+            transform-origin: right;
+        }
+
+        .history-item.new-item {
+            animation: newItemPop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        @keyframes newItemPop {
+            0% { 
+                transform: scale(0.3) translateX(100px); 
+                opacity: 0;
+            }
+            70% { 
+                transform: scale(1.05); 
+            }
+            100% { 
+                transform: scale(1) translateX(0); 
+                opacity: 1;
+            }
         }
 
         @keyframes slideIn {
@@ -414,6 +478,25 @@
             padding: 6px 16px;
             border-radius: 30px;
         }
+
+        /* 飞入目标提示 */
+        .fly-target {
+            position: absolute;
+            top: 100px;
+            right: 30px;
+            width: 60px;
+            height: 60px;
+            border-radius: 30px;
+            background: rgba(255, 140, 0, 0.2);
+            border: 2px dashed #ff8c00;
+            opacity: 0;
+            transition: opacity 0.3s;
+            pointer-events: none;
+        }
+
+        .fly-target.show {
+            opacity: 1;
+        }
     </style>
 </head>
 <body>
@@ -427,8 +510,10 @@
 
             <!-- NFC卡片容器 -->
             <div class="nfc-card-container">
-                <!-- 圆圈容器 - 透明不可见 -->
-                <div class="circle-wrapper" id="circleWrapper"></div>
+                <!-- 圆圈 - 白色变橙色 -->
+                <div class="circle-wrapper" id="circleWrapper">
+                    <div class="hollow-circle circle-pulse" id="hollowCircle"></div>
+                </div>
 
                 <!-- 对勾容器 -->
                 <div class="check-container" id="checkContainer">
@@ -441,7 +526,7 @@
                 <!-- 状态文字 -->
                 <div class="status-text" id="statusText">⚪ 等待NFC卡片...</div>
 
-                <!-- 个人资讯卡片 -->
+                <!-- 个人资讯卡片 - 将飞入右侧 -->
                 <div class="info-card" id="infoCard">
                     <div class="info-header">
                         <div class="info-avatar" id="infoAvatar">👨‍💻</div>
@@ -470,6 +555,9 @@
 
         <!-- 右侧：历史记录 -->
         <div class="right-panel">
+            <!-- 飞入目标提示 -->
+            <div class="fly-target" id="flyTarget"></div>
+
             <div class="history-header">
                 <h2>📋 今日打卡</h2>
                 <div class="count" id="todayCount">0 人</div>
@@ -497,9 +585,11 @@
         (function() {
             // DOM元素
             const circleWrapper = document.getElementById('circleWrapper');
+            const hollowCircle = document.getElementById('hollowCircle');
             const checkContainer = document.getElementById('checkContainer');
             const statusText = document.getElementById('statusText');
             const infoCard = document.getElementById('infoCard');
+            const flyTarget = document.getElementById('flyTarget');
             const testBtn = document.getElementById('testBtn');
             const historyList = document.getElementById('historyList');
             const todayCount = document.getElementById('todayCount');
@@ -576,7 +666,7 @@
                 return staffDatabase[nfcId.trim()] || staffDatabase['default'];
             }
 
-            // 添加历史记录
+            // 添加历史记录（带飞入动画）
             function addHistoryRecord(employee, source) {
                 const time = getCurrentTime();
                 const record = {
@@ -590,12 +680,21 @@
                 
                 historyRecords.unshift(record);
                 if (historyRecords.length > 15) historyRecords.pop();
-                renderHistory();
+                
+                // 显示飞入目标提示
+                flyTarget.classList.add('show');
+                
+                // 延迟渲染，让飞入动画完成
+                setTimeout(() => {
+                    renderHistory(true); // true表示新记录
+                    flyTarget.classList.remove('show');
+                }, 500);
+                
                 updateStats();
             }
 
             // 渲染历史
-            function renderHistory() {
+            function renderHistory(isNew = false) {
                 if (historyRecords.length === 0) {
                     historyList.innerHTML = `
                         <div class="history-item" style="opacity: 0.6;">
@@ -611,9 +710,10 @@
                 }
 
                 let html = '';
-                historyRecords.forEach(r => {
+                historyRecords.forEach((r, index) => {
+                    const isNewClass = (isNew && index === 0) ? 'new-item' : '';
                     html += `
-                        <div class="history-item">
+                        <div class="history-item ${isNewClass}">
                             <div class="history-avatar">${r.avatar}</div>
                             <div class="history-info">
                                 <div class="history-name">${r.name}</div>
@@ -643,53 +743,66 @@
                 checkContainer.replaceChild(newSvg, svg);
             }
 
-            // 打卡成功动画 - 简化版
+            // 打卡成功动画 - 卡片飞入效果
             function showPunchSuccess(employee, source) {
                 // 清除之前的定时器
                 if (timeoutId) clearTimeout(timeoutId);
                 if (checkTimeoutId) clearTimeout(checkTimeoutId);
 
-                // 1. 隐藏状态文字
+                // 1. 圆圈停止跳动
+                hollowCircle.classList.remove('circle-pulse');
+                
+                // 2. 隐藏状态文字
                 statusText.classList.add('hidden');
                 
-                // 2. 更新个人资讯
+                // 3. 更新个人资讯
                 infoAvatar.textContent = employee.avatar;
                 infoName.textContent = employee.name;
                 infoDept.textContent = employee.dept;
                 infoId.textContent = employee.id;
                 infoTime.textContent = getCurrentTime();
                 
-                // 3. 显示个人资讯卡片（放大动画）
+                // 4. 显示个人资讯卡片
                 infoCard.classList.add('show');
                 
-                // 4. 添加历史记录
-                addHistoryRecord(employee, source);
-                
-                // 5. 3秒后隐藏资讯，显示对勾
+                // 5. 1.5秒后卡片飞入右侧
                 timeoutId = setTimeout(() => {
-                    // 隐藏资讯卡片
-                    infoCard.classList.remove('show');
+                    // 卡片飞入动画
+                    infoCard.classList.add('fly-out');
                     
-                    // 重置对勾动画
-                    resetCheckAnimation();
+                    // 添加历史记录（会触发飞入目标提示）
+                    addHistoryRecord(employee, source);
                     
-                    // 显示对勾
-                    checkContainer.classList.add('show');
-                    
-                    // 1.5秒后恢复待机
-                    checkTimeoutId = setTimeout(() => {
-                        // 隐藏对勾
-                        checkContainer.classList.remove('show');
+                    // 0.5秒后（飞入完成）显示对勾
+                    setTimeout(() => {
+                        // 隐藏资讯卡片
+                        infoCard.classList.remove('show', 'fly-out');
                         
-                        // 显示状态文字
-                        statusText.classList.remove('hidden');
-                        statusText.innerHTML = '⚪ 等待NFC卡片...';
+                        // 重置对勾动画
+                        resetCheckAnimation();
                         
-                        timeoutId = null;
-                        checkTimeoutId = null;
-                    }, 1500);
+                        // 显示对勾
+                        checkContainer.classList.add('show');
+                        
+                        // 1.5秒后恢复待机
+                        checkTimeoutId = setTimeout(() => {
+                            // 隐藏对勾
+                            checkContainer.classList.remove('show');
+                            
+                            // 恢复圆圈跳动
+                            hollowCircle.classList.add('circle-pulse');
+                            
+                            // 显示状态文字
+                            statusText.classList.remove('hidden');
+                            statusText.innerHTML = '⚪ 等待NFC卡片...';
+                            
+                            timeoutId = null;
+                            checkTimeoutId = null;
+                        }, 1500);
+                        
+                    }, 500);
                     
-                }, 3000); // 3秒显示个人资讯
+                }, 1500); // 1.5秒显示个人资讯
             }
 
             // 初始化NFC
@@ -735,8 +848,27 @@
                 // 示例数据
                 setTimeout(() => {
                     if (historyRecords.length === 0) {
-                        addHistoryRecord(staffDatabase['test-user-1'], 'test');
-                        addHistoryRecord(staffDatabase['test-user-2'], 'test');
+                        // 添加示例历史记录
+                        const demo1 = staffDatabase['test-user-1'];
+                        const demo2 = staffDatabase['test-user-2'];
+                        historyRecords.push({
+                            id: Date.now() - 1000,
+                            name: demo1.name,
+                            dept: demo1.dept.split('·')[0].trim(),
+                            avatar: demo1.avatar,
+                            time: '08:30',
+                            source: 'test'
+                        });
+                        historyRecords.push({
+                            id: Date.now() - 2000,
+                            name: demo2.name,
+                            dept: demo2.dept.split('·')[0].trim(),
+                            avatar: demo2.avatar,
+                            time: '08:45',
+                            source: 'test'
+                        });
+                        renderHistory();
+                        updateStats();
                     }
                 }, 1000);
             });
