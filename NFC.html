@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NFC打卡 · 橙蓝白主题 + Excel导出</title>
+    <title>NFC打卡 · 全新排列设计</title>
     <style>
         * {
             margin: 0;
@@ -14,9 +14,9 @@
 
         body {
             min-height: 100vh;
-            background: #f5f7fa;
-            background-image: radial-gradient(circle at 10% 20%, rgba(255, 140, 0, 0.03) 0%, transparent 30%),
-                              radial-gradient(circle at 90% 80%, rgba(25, 55, 110, 0.03) 0%, transparent 40%);
+            background: #f0f3f8;
+            background-image: radial-gradient(circle at 0% 0%, rgba(255, 140, 0, 0.02) 0%, transparent 50%),
+                              radial-gradient(circle at 100% 100%, rgba(10, 26, 58, 0.02) 0%, transparent 50%);
             display: flex;
             justify-content: center;
             align-items: center;
@@ -27,58 +27,101 @@
             max-width: 1400px;
             width: 100%;
             height: 90vh;
-            display: flex;
+            display: grid;
+            grid-template-columns: 1.2fr 0.8fr;
             gap: 24px;
         }
 
-        /* ===== 左侧 - NFC打卡区域 ===== */
+        /* ===== 左侧主打卡区 ===== */
         .left-panel {
-            flex: 1;
             background: white;
-            border-radius: 60px;
-            padding: 30px;
+            border-radius: 48px;
+            padding: 32px;
             box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
             border: 1px solid #eef2f6;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        /* 顶部状态栏 */
+        .status-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 24px;
+            border-bottom: 2px solid #f0f3f8;
+        }
+
+        .logo-area {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-icon {
+            width: 48px;
+            height: 48px;
+            background: #0a1a3a;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.8rem;
+        }
+
+        .logo-text h2 {
+            color: #0a1a3a;
+            font-size: 1.4rem;
+            font-weight: 600;
+            line-height: 1.2;
+        }
+
+        .logo-text p {
+            color: #ff8c00;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        .connection-status {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: #f8fafc;
+            padding: 8px 16px;
+            border-radius: 40px;
+            border: 1px solid #eef2f6;
+        }
+
+        .status-dot {
+            width: 10px;
+            height: 10px;
+            background: #4CAF50;
+            border-radius: 50%;
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(1.2); }
+        }
+
+        .connection-status span {
+            color: #0a1a3a;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        /* 主打卡区域 - 居中 */
+        .main-card-area {
+            flex: 1;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             position: relative;
-        }
-
-        /* 右侧面板 */
-        .right-panel {
-            width: 480px;
-            background: white;
-            border-radius: 60px;
-            padding: 28px 20px;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
-            border: 1px solid #eef2f6;
-            display: flex;
-            flex-direction: column;
-            position: relative;
-        }
-
-        .title-section {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-
-        .title-section h1 {
-            color: #0a1a3a;
-            font-size: 2.2rem;
-            font-weight: 600;
-            letter-spacing: -0.5px;
-        }
-
-        .title-section .sub {
-            color: #ff8c00;
-            background: rgba(255, 140, 0, 0.08);
-            padding: 6px 20px;
-            border-radius: 40px;
-            display: inline-block;
-            border: 1px solid rgba(255, 140, 0, 0.2);
-            font-weight: 500;
+            min-height: 500px;
         }
 
         /* NFC卡片容器 */
@@ -90,10 +133,9 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            margin: 20px 0;
         }
 
-        /* 主圆圈 - 深蓝色 */
+        /* 主圆圈 */
         .circle-wrapper {
             position: absolute;
             top: 50%;
@@ -201,30 +243,7 @@
             100% { stroke-dashoffset: 0; }
         }
 
-        /* 状态文字 */
-        .status-text {
-            position: absolute;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            color: #0a1a3a;
-            font-size: 1.1rem;
-            background: white;
-            padding: 10px 28px;
-            border-radius: 60px;
-            border: 1px solid #eef2f6;
-            white-space: nowrap;
-            z-index: 5;
-            transition: all 0.3s;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.02);
-        }
-
-        .status-text.hidden {
-            opacity: 0;
-            pointer-events: none;
-        }
-
-        /* 发光圆圈 - 包裹个人资讯 */
+        /* 发光圆圈 */
         .glow-circle {
             position: absolute;
             top: 50%;
@@ -351,21 +370,34 @@
             font-weight: 500;
         }
 
+        /* 状态文字 */
+        .status-text {
+            margin-top: 30px;
+            color: #0a1a3a;
+            font-size: 1.1rem;
+            background: #f8fafc;
+            padding: 12px 32px;
+            border-radius: 60px;
+            border: 1px solid #eef2f6;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.02);
+        }
+
+        .status-text.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
         /* 测试按钮 */
         .test-btn {
-            position: absolute;
-            bottom: -60px;
-            left: 50%;
-            transform: translateX(-50%);
+            margin-top: 20px;
             background: white;
             border: 1px solid #0a1a3a;
             color: #0a1a3a;
-            padding: 10px 28px;
+            padding: 12px 32px;
             border-radius: 40px;
             font-size: 1rem;
             cursor: pointer;
             transition: all 0.2s;
-            z-index: 30;
             font-weight: 500;
         }
 
@@ -374,38 +406,99 @@
             color: white;
         }
 
-        /* ===== 右侧历史记录样式 ===== */
-        .history-header {
+        /* ===== 右侧历史记录区 ===== */
+        .right-panel {
+            background: white;
+            border-radius: 48px;
+            padding: 32px 24px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
+            border: 1px solid #eef2f6;
             display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0 12px 20px 12px;
-            border-bottom: 1px solid #eef2f6;
+            flex-direction: column;
         }
 
-        .history-header h2 {
+        /* 右侧头部 */
+        .right-header {
+            margin-bottom: 24px;
+        }
+
+        .right-header h2 {
             color: #0a1a3a;
-            font-size: 1.5rem;
+            font-size: 1.6rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .date-range {
+            color: #64748b;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .date-range span {
+            background: #f8fafc;
+            padding: 4px 12px;
+            border-radius: 20px;
+            color: #ff8c00;
+            font-weight: 500;
+        }
+
+        /* 统计卡片 */
+        .stats-cards {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+
+        .stat-card {
+            background: #f8fafc;
+            border-radius: 24px;
+            padding: 16px;
+            border: 1px solid #eef2f6;
+        }
+
+        .stat-label {
+            color: #64748b;
+            font-size: 0.85rem;
+            margin-bottom: 4px;
+        }
+
+        .stat-value {
+            color: #0a1a3a;
+            font-size: 1.8rem;
             font-weight: 600;
         }
 
-        .header-actions {
+        .stat-sub {
+            color: #ff8c00;
+            font-size: 0.8rem;
+            margin-top: 4px;
+        }
+
+        /* 操作按钮组 */
+        .action-buttons {
             display: flex;
             gap: 10px;
+            margin-bottom: 24px;
         }
 
         .excel-btn {
+            flex: 1;
             background: #ff8c00;
             color: white;
             border: none;
-            padding: 8px 16px;
+            padding: 12px;
             border-radius: 40px;
-            font-size: 0.9rem;
+            font-size: 0.95rem;
             cursor: pointer;
             transition: all 0.2s;
             display: flex;
             align-items: center;
-            gap: 6px;
+            justify-content: center;
+            gap: 8px;
             font-weight: 500;
         }
 
@@ -415,23 +508,33 @@
             box-shadow: 0 8px 15px rgba(255, 140, 0, 0.2);
         }
 
-        .count {
-            background: #f1f5f9;
+        .filter-btn {
+            background: white;
+            border: 1px solid #eef2f6;
             color: #0a1a3a;
-            padding: 4px 12px;
+            padding: 12px 16px;
             border-radius: 40px;
-            font-size: 0.9rem;
-            font-weight: 500;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
         }
 
+        .filter-btn:hover {
+            background: #f8fafc;
+            border-color: #ff8c00;
+        }
+
+        /* 历史记录列表 */
         .history-list {
             flex: 1;
             overflow-y: auto;
-            padding: 16px 8px;
             display: flex;
             flex-direction: column;
-            gap: 12px;
-            min-height: 400px;
+            gap: 10px;
+            padding-right: 4px;
         }
 
         .history-list::-webkit-scrollbar {
@@ -450,41 +553,42 @@
 
         .history-item {
             background: #f8fafc;
-            border-radius: 24px;
+            border-radius: 20px;
             padding: 16px;
             display: flex;
             align-items: center;
             gap: 16px;
             border: 1px solid #eef2f6;
-            animation: slideIn 0.3s ease;
             transition: all 0.2s;
+            animation: slideIn 0.3s ease;
         }
 
         .history-item:hover {
             border-color: #ff8c00;
-            box-shadow: 0 8px 15px rgba(255, 140, 0, 0.1);
+            transform: translateX(4px);
+            box-shadow: 0 4px 12px rgba(255, 140, 0, 0.1);
         }
 
         @keyframes slideIn {
             from {
                 opacity: 0;
-                transform: translateY(-20px);
+                transform: translateX(20px);
             }
             to {
                 opacity: 1;
-                transform: translateY(0);
+                transform: translateX(0);
             }
         }
 
         .history-avatar {
-            width: 52px;
-            height: 52px;
+            width: 48px;
+            height: 48px;
             background: #0a1a3a;
-            border-radius: 18px;
+            border-radius: 16px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.8rem;
+            font-size: 1.6rem;
             color: white;
         }
 
@@ -494,55 +598,48 @@
 
         .history-name {
             color: #0a1a3a;
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             font-weight: 600;
             margin-bottom: 4px;
         }
 
         .history-meta {
             display: flex;
-            gap: 12px;
+            gap: 8px;
             color: #64748b;
-            font-size: 0.85rem;
+            font-size: 0.8rem;
         }
 
         .history-meta span {
             background: white;
-            padding: 2px 10px;
-            border-radius: 20px;
+            padding: 2px 8px;
+            border-radius: 16px;
         }
 
         .history-date {
+            text-align: right;
+        }
+
+        .history-date .date {
             color: #ff8c00;
             font-weight: 600;
             font-size: 0.9rem;
         }
 
-        .stats-footer {
-            margin-top: 20px;
-            padding: 16px 12px 8px;
-            border-top: 1px solid #eef2f6;
-            display: flex;
-            justify-content: space-between;
-            color: #0a1a3a;
-            font-weight: 500;
-        }
-
-        .stats-footer .today-count {
-            background: #f1f5f9;
-            padding: 6px 16px;
-            border-radius: 30px;
-            color: #ff8c00;
+        .history-date .time {
+            color: #64748b;
+            font-size: 0.75rem;
+            margin-top: 2px;
         }
 
         /* 飞入目标 */
         .fly-target {
             position: absolute;
-            top: 80px;
-            right: 30px;
-            width: 40px;
-            height: 40px;
-            border-radius: 20px;
+            top: 100px;
+            right: 50px;
+            width: 50px;
+            height: 50px;
+            border-radius: 25px;
             background: rgba(255, 140, 0, 0.1);
             border: 2px dashed #ff8c00;
             opacity: 0;
@@ -552,7 +649,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.2rem;
+            font-size: 1.5rem;
             color: #ff8c00;
         }
 
@@ -581,10 +678,10 @@
             position: absolute;
             top: 50%;
             left: 50%;
-            width: 2px;
-            height: 2px;
+            width: 3px;
+            height: 3px;
             background: #ff8c00;
-            box-shadow: 0 0 10px #ff8c00;
+            box-shadow: 0 0 15px #ff8c00;
             border-radius: 50%;
             animation: flyLine 0.8s ease-out forwards;
         }
@@ -595,7 +692,7 @@
                 opacity: 1;
             }
             100% {
-                transform: translate(calc(50vw - 200px), -150px) scale(0);
+                transform: translate(calc(50vw + 100px), 100px) scale(0);
                 opacity: 0;
             }
         }
@@ -606,50 +703,62 @@
     <div class="flight-path" id="flightPath"></div>
 
     <div class="dashboard">
-        <!-- 左侧：NFC打卡区域 -->
+        <!-- 左侧：主打卡区 -->
         <div class="left-panel">
-            <div class="title-section">
-                <h1>NFC 考勤系统</h1>
-                <div class="sub">⚡ 靠近卡片自动打卡</div>
+            <!-- 顶部状态栏 -->
+            <div class="status-bar">
+                <div class="logo-area">
+                    <div class="logo-icon">📱</div>
+                    <div class="logo-text">
+                        <h2>NFC考勤</h2>
+                        <p>靠近即打卡</p>
+                    </div>
+                </div>
+                <div class="connection-status">
+                    <div class="status-dot"></div>
+                    <span>持续待机中</span>
+                </div>
             </div>
 
-            <!-- NFC卡片容器 -->
-            <div class="nfc-card-container">
-                <!-- 圆圈 - 深蓝色 -->
-                <div class="circle-wrapper" id="circleWrapper">
-                    <div class="hollow-circle circle-pulse" id="hollowCircle"></div>
-                </div>
-
-                <!-- 对勾容器 - 橙色 -->
-                <div class="check-container" id="checkContainer">
-                    <svg class="checkmark-svg" viewBox="0 0 52 52">
-                        <circle class="checkmark-circle" cx="26" cy="26" r="25" fill="none"/>
-                        <path class="checkmark-path" fill="none" d="M14 27l7 7 16-16"/>
-                    </svg>
-                </div>
-
-                <!-- 发光圆圈 - 橙色包裹 -->
-                <div class="glow-circle" id="glowCircle"></div>
-
-                <!-- 个人资讯卡片 -->
-                <div class="info-card" id="infoCard">
-                    <div class="info-header">
-                        <div class="info-avatar" id="infoAvatar">👨‍💻</div>
-                        <div class="info-title">
-                            <h2 id="infoName">张明远</h2>
-                            <p id="infoDept">研发中心 · 架构组</p>
-                        </div>
+            <!-- 主打卡区域 -->
+            <div class="main-card-area">
+                <div class="nfc-card-container">
+                    <!-- 主圆圈 -->
+                    <div class="circle-wrapper" id="circleWrapper">
+                        <div class="hollow-circle circle-pulse" id="hollowCircle"></div>
                     </div>
-                    <div class="info-details">
-                        <div class="detail-item">
-                            <div class="detail-label">工号</div>
-                            <div class="detail-value" id="infoId">HW-2304</div>
+
+                    <!-- 对勾容器 -->
+                    <div class="check-container" id="checkContainer">
+                        <svg class="checkmark-svg" viewBox="0 0 52 52">
+                            <circle class="checkmark-circle" cx="26" cy="26" r="25" fill="none"/>
+                            <path class="checkmark-path" fill="none" d="M14 27l7 7 16-16"/>
+                        </svg>
+                    </div>
+
+                    <!-- 发光圆圈 -->
+                    <div class="glow-circle" id="glowCircle"></div>
+
+                    <!-- 个人资讯卡片 -->
+                    <div class="info-card" id="infoCard">
+                        <div class="info-header">
+                            <div class="info-avatar" id="infoAvatar">👨‍💻</div>
+                            <div class="info-title">
+                                <h2 id="infoName">张明远</h2>
+                                <p id="infoDept">研发中心 · 架构组</p>
+                            </div>
                         </div>
-                        <div class="detail-item">
-                            <div class="detail-label">打卡时间</div>
-                            <div class="detail-value" id="infoTime">08:32</div>
+                        <div class="info-details">
+                            <div class="detail-item">
+                                <div class="detail-label">工号</div>
+                                <div class="detail-value" id="infoId">HW-2304</div>
+                            </div>
+                            <div class="detail-item">
+                                <div class="detail-label">打卡时间</div>
+                                <div class="detail-value" id="infoTime">08:32</div>
+                            </div>
+                            <span class="badge-orange" id="infoStatus">已打卡</span>
                         </div>
-                        <span class="badge-orange" id="infoStatus">已打卡</span>
                     </div>
                 </div>
 
@@ -661,33 +770,52 @@
             </div>
         </div>
 
-        <!-- 右侧：历史记录 + Excel导出 -->
+        <!-- 右侧：历史记录区 -->
         <div class="right-panel">
             <!-- 飞入目标 -->
             <div class="fly-target" id="flyTarget">📥</div>
 
-            <div class="history-header">
-                <h2>📋 本月打卡记录</h2>
-                <div class="header-actions">
-                    <div class="count" id="todayCount">0 人</div>
-                    <button class="excel-btn" id="excelBtn">
-                        <span>📊</span> 导出Excel
-                    </button>
+            <!-- 右侧头部 -->
+            <div class="right-header">
+                <h2>打卡记录</h2>
+                <div class="date-range">
+                    <span>📅 2024年3月</span>
+                    <span>本月累计 <span id="totalCountSpan">0</span> 次</span>
                 </div>
             </div>
 
-            <div class="history-list" id="historyList">
-                <!-- 动态插入历史记录 -->
+            <!-- 统计卡片 -->
+            <div class="stats-cards">
+                <div class="stat-card">
+                    <div class="stat-label">今日打卡</div>
+                    <div class="stat-value" id="todayCount">0</div>
+                    <div class="stat-sub">已签到</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">连续打卡</div>
+                    <div class="stat-value" id="streakCount">3</div>
+                    <div class="stat-sub">最高 12天</div>
+                </div>
             </div>
 
-            <div class="stats-footer">
-                <span>📅 本月累计</span>
-                <span class="today-count" id="totalCountSpan">0 次</span>
+            <!-- 操作按钮 -->
+            <div class="action-buttons">
+                <button class="excel-btn" id="excelBtn">
+                    <span>📊</span> 导出Excel
+                </button>
+                <button class="filter-btn" id="filterBtn">
+                    <span>📅</span> 本月
+                </button>
+            </div>
+
+            <!-- 历史记录列表 -->
+            <div class="history-list" id="historyList">
+                <!-- 动态插入 -->
             </div>
         </div>
     </div>
 
-    <!-- 引入SheetJS (xlsx) 用于导出Excel -->
+    <!-- 引入SheetJS -->
     <script src="https://cdn.sheetjs.com/xlsx-0.20.1/package/dist/xlsx.full.min.js"></script>
 
     <script>
@@ -703,9 +831,11 @@
             const flightPath = document.getElementById('flightPath');
             const testBtn = document.getElementById('testBtn');
             const excelBtn = document.getElementById('excelBtn');
+            const filterBtn = document.getElementById('filterBtn');
             const historyList = document.getElementById('historyList');
             const todayCount = document.getElementById('todayCount');
             const totalCountSpan = document.getElementById('totalCountSpan');
+            const streakCount = document.getElementById('streakCount');
             
             // 资讯元素
             const infoAvatar = document.getElementById('infoAvatar');
@@ -752,24 +882,6 @@
                     dept: '人事部 · 招聘组',
                     id: 'HW-7788',
                     avatar: '👩‍💼'
-                },
-                {
-                    name: '周检测',
-                    dept: '质量部 · 检测组',
-                    id: 'TEST-006',
-                    avatar: '🔍'
-                },
-                {
-                    name: '吴验证',
-                    dept: '验证部 · 流程组',
-                    id: 'TEST-007',
-                    avatar: '📋'
-                },
-                {
-                    name: '郑确认',
-                    dept: '确认部 · 验收组',
-                    id: 'TEST-008',
-                    avatar: '✅'
                 }
             ];
 
@@ -781,11 +893,11 @@
                 const day = now.getDate().toString().padStart(2, '0');
                 const hours = now.getHours().toString().padStart(2, '0');
                 const minutes = now.getMinutes().toString().padStart(2, '0');
-                const seconds = now.getSeconds().toString().padStart(2, '0');
                 return {
                     date: `${year}-${month}-${day}`,
-                    time: `${hours}:${minutes}:${seconds}`,
-                    display: `${month}-${day} ${hours}:${minutes}`
+                    time: `${hours}:${minutes}`,
+                    displayDate: `${month}/${day}`,
+                    displayTime: `${hours}:${minutes}`
                 };
             }
 
@@ -794,10 +906,7 @@
                 const line = document.createElement('div');
                 line.className = 'flight-line';
                 flightPath.appendChild(line);
-                
-                setTimeout(() => {
-                    line.remove();
-                }, 800);
+                setTimeout(() => line.remove(), 800);
             }
 
             // 重置对勾动画
@@ -807,11 +916,10 @@
                 checkContainer.replaceChild(newSvg, svg);
             }
 
-            // 添加新记录到历史列表
+            // 添加新记录
             function addHistoryRecord(employee) {
                 const dt = getCurrentDateTime();
                 
-                // 创建新记录对象
                 const newRecord = {
                     id: Date.now(),
                     name: employee.name,
@@ -821,28 +929,24 @@
                     avatar: employee.avatar,
                     date: dt.date,
                     time: dt.time,
-                    displayTime: dt.display
+                    displayDate: dt.displayDate,
+                    displayTime: dt.displayTime
                 };
                 
-                // 添加到数组开头
                 historyRecords.unshift(newRecord);
-                
-                // 重新渲染列表
                 renderHistoryList();
-                
-                // 更新计数
                 updateCounts();
             }
 
             // 渲染历史列表
             function renderHistoryList() {
                 if (historyRecords.length === 0) {
-                    historyList.innerHTML = '<div class="history-item" style="opacity: 0.6;"><div class="history-avatar">⏳</div><div class="history-info"><div class="history-name">等待打卡...</div><div class="history-meta"><span>--</span></div></div><div class="history-date">--:--</div></div>';
+                    historyList.innerHTML = '<div class="history-item" style="opacity: 0.6;"><div class="history-avatar">⏳</div><div class="history-info"><div class="history-name">等待打卡...</div><div class="history-meta"><span>--</span></div></div><div class="history-date"><div class="date">--</div><div class="time">--:--</div></div></div>';
                     return;
                 }
 
                 let html = '';
-                historyRecords.forEach(record => {
+                historyRecords.slice(0, 10).forEach(record => {
                     html += `
                         <div class="history-item">
                             <div class="history-avatar">${record.avatar}</div>
@@ -853,7 +957,10 @@
                                     <span>${record.empId}</span>
                                 </div>
                             </div>
-                            <div class="history-date">${record.displayTime}</div>
+                            <div class="history-date">
+                                <div class="date">${record.displayDate}</div>
+                                <div class="time">${record.displayTime}</div>
+                            </div>
                         </div>
                     `;
                 });
@@ -862,24 +969,24 @@
 
             // 更新计数
             function updateCounts() {
-                const count = historyRecords.length;
-                todayCount.textContent = `${count} 人`;
-                totalCountSpan.textContent = `${count} 次`;
+                const today = new Date().toISOString().slice(0,10);
+                const todayCount_num = historyRecords.filter(r => r.date === today).length;
+                todayCount.textContent = todayCount_num;
+                totalCountSpan.textContent = historyRecords.length;
+                
+                // 计算连续打卡（模拟）
+                const streak = Math.min(historyRecords.length, 7);
+                streakCount.textContent = streak;
             }
 
-            // 导出Excel - 包含一个月的数据模拟
+            // 导出Excel
             function exportToExcel() {
-                // 准备Excel数据
                 let excelData = [];
-                
-                // 添加表头
                 excelData.push(['日期', '时间', '姓名', '部门', '工号', '打卡状态']);
                 
                 if (historyRecords.length === 0) {
-                    // 如果没有记录，显示提示
                     excelData.push(['暂无打卡记录', '', '', '', '', '']);
                 } else {
-                    // 添加所有记录
                     historyRecords.forEach(record => {
                         excelData.push([
                             record.date,
@@ -890,117 +997,57 @@
                             '已打卡'
                         ]);
                     });
-                    
-                    // 模拟过去30天的数据（用于演示）
-                    // 实际应用中，这里应该是真实的一个月历史数据
-                    const today = new Date();
-                    for (let i = 1; i <= 30; i++) {
-                        const date = new Date(today);
-                        date.setDate(date.getDate() - i);
-                        const year = date.getFullYear();
-                        const month = (date.getMonth() + 1).toString().padStart(2, '0');
-                        const day = date.getDate().toString().padStart(2, '0');
-                        const dateStr = `${year}-${month}-${day}`;
-                        
-                        // 随机选择员工（模拟历史数据）
-                        if (i % 3 === 0) { // 每3天有一条记录
-                            const emp = staffDatabase[i % staffDatabase.length];
-                            excelData.push([
-                                dateStr,
-                                '09:00:00',
-                                emp.name,
-                                emp.dept,
-                                emp.id,
-                                '已打卡'
-                            ]);
-                        }
-                    }
                 }
                 
-                // 创建工作簿
                 const wb = XLSX.utils.book_new();
                 const ws = XLSX.utils.aoa_to_sheet(excelData);
                 
-                // 设置列宽
                 ws['!cols'] = [
-                    { wch: 12 }, // 日期
-                    { wch: 10 }, // 时间
-                    { wch: 12 }, // 姓名
-                    { wch: 20 }, // 部门
-                    { wch: 12 }, // 工号
-                    { wch: 10 }  // 状态
+                    { wch: 12 }, { wch: 8 }, { wch: 12 }, 
+                    { wch: 20 }, { wch: 12 }, { wch: 8 }
                 ];
                 
                 XLSX.utils.book_append_sheet(wb, ws, '打卡记录');
-                
-                // 导出文件
-                const fileName = `打卡记录_${new Date().toISOString().slice(0,10)}.xlsx`;
-                XLSX.writeFile(wb, fileName);
-                
-                // 提示用户
-                alert(`Excel导出成功！\n文件名称：${fileName}\n包含${excelData.length-1}条记录`);
+                XLSX.writeFile(wb, `打卡记录_${new Date().toISOString().slice(0,10)}.xlsx`);
             }
 
             // 打卡成功动画
             function showPunchSuccess() {
-                // 随机选择一个员工
                 const employee = staffDatabase[Math.floor(Math.random() * staffDatabase.length)];
 
-                // 清除之前的定时器
                 if (timeoutId) clearTimeout(timeoutId);
                 if (checkTimeoutId) clearTimeout(checkTimeoutId);
 
-                // 1. 圆圈停止跳动
                 hollowCircle.classList.remove('circle-pulse');
-                
-                // 2. 隐藏状态文字
                 statusText.classList.add('hidden');
                 
-                // 3. 更新个人资讯
+                const dt = getCurrentDateTime();
                 infoAvatar.textContent = employee.avatar;
                 infoName.textContent = employee.name;
                 infoDept.textContent = employee.dept;
                 infoId.textContent = employee.id;
-                infoTime.textContent = getCurrentDateTime().display.slice(-5);
+                infoTime.textContent = dt.displayTime;
                 
-                // 4. 显示个人资讯卡片和发光圆圈
                 infoCard.classList.add('show');
                 glowCircle.classList.add('show');
-                
-                // 5. 显示飞入目标
                 flyTarget.classList.add('show');
                 
-                // 6. 1.5秒后卡片飞向目标
                 timeoutId = setTimeout(() => {
-                    // 显示飞入路径
                     showFlightPath();
-                    
-                    // 添加记录到历史列表
                     addHistoryRecord(employee);
                     
-                    // 隐藏卡片和发光圆圈
                     infoCard.classList.remove('show');
                     glowCircle.classList.remove('show');
                     flyTarget.classList.remove('show');
                     
-                    // 重置对勾动画
                     resetCheckAnimation();
-                    
-                    // 显示对勾
                     checkContainer.classList.add('show');
                     
-                    // 1.5秒后恢复待机
                     checkTimeoutId = setTimeout(() => {
-                        // 隐藏对勾
                         checkContainer.classList.remove('show');
-                        
-                        // 恢复圆圈跳动
                         hollowCircle.classList.add('circle-pulse');
-                        
-                        // 显示状态文字
                         statusText.classList.remove('hidden');
                         statusText.innerHTML = '⚪ 等待NFC卡片...';
-                        
                         timeoutId = null;
                         checkTimeoutId = null;
                     }, 1500);
@@ -1017,69 +1064,31 @@
 
                 try {
                     nfcReader = new NDEFReader();
-                    
-                    nfcReader.addEventListener('reading', event => {
-                        showPunchSuccess();
-                    });
-
+                    nfcReader.addEventListener('reading', () => showPunchSuccess());
                     await nfcReader.scan();
                     isScanning = true;
                     statusText.innerHTML = '🟢 持续待机中...';
-                    
                 } catch (error) {
                     statusText.innerHTML = '❌ NFC启动失败';
                 }
             }
 
-            // 测试打卡
-            function handleTestPunch() {
-                showPunchSuccess();
-            }
-
             // 事件监听
-            testBtn.addEventListener('click', handleTestPunch);
+            testBtn.addEventListener('click', showPunchSuccess);
             excelBtn.addEventListener('click', exportToExcel);
+            filterBtn.addEventListener('click', () => alert('筛选功能开发中'));
 
             // 初始化
             window.addEventListener('load', () => {
                 initNfc();
                 
-                // 添加一些示例记录
+                // 添加示例数据
                 setTimeout(() => {
                     if (historyRecords.length === 0) {
-                        // 添加今天的记录
                         addHistoryRecord(staffDatabase[0]);
                         setTimeout(() => addHistoryRecord(staffDatabase[1]), 300);
                         setTimeout(() => addHistoryRecord(staffDatabase[2]), 600);
-                        
-                        // 添加一些历史记录（模拟一个月）
-                        setTimeout(() => {
-                            // 修改记录的日期为前几天
-                            const records = historyRecords;
-                            const today = new Date();
-                            
-                            // 修改第二条记录的日期为昨天
-                            if (records.length > 1) {
-                                const yesterday = new Date(today);
-                                yesterday.setDate(yesterday.getDate() - 1);
-                                const yMonth = (yesterday.getMonth() + 1).toString().padStart(2,'0');
-                                const yDay = yesterday.getDate().toString().padStart(2,'0');
-                                records[1].date = `${today.getFullYear()}-${yMonth}-${yDay}`;
-                                records[1].displayTime = `${yMonth}-${yDay} ${records[1].time.slice(0,5)}`;
-                            }
-                            
-                            // 修改第三条记录的日期为前天
-                            if (records.length > 2) {
-                                const twoDaysAgo = new Date(today);
-                                twoDaysAgo.setDate(twoDaysAgo.getDate() - 2);
-                                const tMonth = (twoDaysAgo.getMonth() + 1).toString().padStart(2,'0');
-                                const tDay = twoDaysAgo.getDate().toString().padStart(2,'0');
-                                records[2].date = `${today.getFullYear()}-${tMonth}-${tDay}`;
-                                records[2].displayTime = `${tMonth}-${tDay} ${records[2].time.slice(0,5)}`;
-                            }
-                            
-                            renderHistoryList();
-                        }, 1000);
+                        setTimeout(() => addHistoryRecord(staffDatabase[3]), 900);
                     }
                 }, 1000);
             });
