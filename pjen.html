@@ -3,437 +3,419 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🎄 Christmas: Past & Now · 中英双语互动</title>
-    <!-- Font Awesome 6 (free) -->
+    <title>Christmas · Past & Now (Bilingual)</title>
+    <!-- 只保留基础图标库，简洁风格 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
+        /* 极简风格，干净清晰 */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+            font-family: 'Segoe UI', Roboto, Arial, sans-serif;
         }
 
         body {
-            background: #1f4d2b; /* Christmas green */
-            min-height: 100vh;
+            background: #e9f0e5;
             display: flex;
             justify-content: center;
-            align-items: center;
             padding: 30px 20px;
         }
 
-        /* main card – looks like a presentation folder */
-        .bilingual-card {
-            max-width: 1300px;
+        .container {
+            max-width: 1100px;
             width: 100%;
-            background: #fefaf0; /* warm cream */
-            border-radius: 70px 70px 50px 50px;
-            box-shadow: 0 40px 60px -10px #0f301c, 0 0 0 8px #e0b87b, 0 0 0 16px #a96f2e;
+            background: white;
+            border-radius: 24px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            overflow: hidden;
+            border: 1px solid #ccc;
+        }
+
+        /* 简单标题栏 */
+        .header {
+            background: #2c5e2e;
+            color: white;
+            padding: 20px 30px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            border-bottom: 3px solid #f3b43c;
+        }
+
+        .header h1 {
+            font-size: 2.2rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .group {
+            background: #f3d9a4;
+            color: #2d4a1e;
+            padding: 8px 20px;
+            border-radius: 40px;
+            font-weight: 600;
+            font-size: 1.2rem;
+        }
+
+        /* 教学说明条 */
+        .teach-bar {
+            background: #417c4c;
+            color: white;
+            margin: 25px 30px 15px 30px;
+            padding: 16px 25px;
+            border-radius: 50px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 1.3rem;
+            border: 1px solid #ffdb8e;
+        }
+
+        .teach-bar span {
+            background: #fae5b3;
+            color: #1f491f;
+            padding: 5px 25px;
+            border-radius: 40px;
+            font-weight: 600;
+        }
+
+        /* 主题卡片 */
+        .topics {
+            padding: 10px 30px 30px 30px;
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+        }
+
+        .card {
+            border: 1px solid #c9b38c;
+            border-radius: 28px;
+            background: #fefcf7;
             overflow: hidden;
         }
 
-        /* header with group info */
-        .header-row {
-            background: #b13e3e;
-            padding: 25px 40px;
-            display: flex;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 20px;
-            border-bottom: 8px solid #f5c451;
-        }
-        .header-row i {
-            font-size: 3.8rem;
-            color: #fff4c9;
-        }
-        .header-row h1 {
-            font-size: 3.2rem;
-            font-weight: 800;
-            color: #fff7da;
-            text-shadow: 5px 5px 0 #712b2b;
-            letter-spacing: 1px;
-        }
-        .group-tag {
-            margin-left: auto;
-            background: #f8e1aa;
-            font-size: 1.9rem;
-            font-weight: 700;
-            padding: 12px 35px;
-            border-radius: 60px;
-            color: #4e2d0e;
-            border: 4px solid #bb771c;
-            box-shadow: inset 0 2px 6px #fff1c6;
-        }
-
-        /* intro / what we teach banner */
-        .teach-banner {
-            background: #30853b;
-            margin: 25px 35px 10px 35px;
-            border-radius: 60px;
-            padding: 20px 35px;
-            color: white;
-            display: flex;
-            flex-wrap: wrap;
-            align-items: center;
-            justify-content: space-between;
-            border: 3px solid #ffdb8e;
-        }
-        .teach-banner h2 {
-            font-size: 2.5rem;
+        .card-title {
+            background: #ece1cf;
+            padding: 16px 25px;
+            font-size: 1.8rem;
             font-weight: 600;
+            color: #2b5e1f;
+            border-bottom: 2px solid #cb9e5f;
             display: flex;
             align-items: center;
-            gap: 15px;
-        }
-        .teach-banner span {
-            font-size: 2rem;
-            background: #fce1a4;
-            color: #1f491f;
-            padding: 5px 30px;
-            border-radius: 50px;
-        }
-
-        /* grid of topics – each card = one topic */
-        .topics-grid {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-            padding: 20px 40px 30px 40px;
-        }
-
-        .topic-row {
-            background: #fff9e8;
-            border-radius: 50px;
-            padding: 25px 30px;
-            border: 3px solid #f5cf96;
-            box-shadow: 0 8px 12px #cfa56a;
-        }
-
-        .topic-title {
-            font-size: 2.4rem;
-            font-weight: 700;
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            margin-bottom: 20px;
-            border-left: 18px solid #cf4623;
-            padding-left: 25px;
-        }
-        .topic-title i {
-            font-size: 2.6rem;
-            color: #2f792f;
-        }
-
-        .bilingual-desc {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 15px;
-            margin-bottom: 25px;
-        }
-        .desc-box {
-            flex: 1 1 300px;
-            background: #fcf3e1;
-            border-radius: 40px;
-            padding: 20px 25px;
-            border: 2px solid #efc48c;
-        }
-        .desc-box h3 {
-            font-size: 2rem;
-            color: #974b23;
-            margin-bottom: 15px;
-            border-bottom: 3px dotted #ba7b3a;
-            display: flex;
             gap: 12px;
         }
-        .desc-box p {
-            font-size: 1.35rem;
-            line-height: 1.5;
-            margin: 12px 0;
+
+        .card-title i {
+            color: #b9522c;
+            font-size: 1.9rem;
+        }
+
+        .content-row {
             display: flex;
-            gap: 10px;
+            flex-wrap: wrap;
         }
-        .eng {
-            color: #1e551e;
+
+        .col {
+            flex: 1 1 300px;
+            padding: 22px 25px;
+            border-right: 1px dashed #b9945c;
+        }
+
+        .col:last-child {
+            border-right: none;
+        }
+
+        .col h3 {
+            font-size: 1.7rem;
             font-weight: 500;
+            margin-bottom: 20px;
+            color: #814a25;
+            border-bottom: 2px dotted #b2783a;
+            padding-bottom: 8px;
         }
+
+        .desc-item {
+            display: flex;
+            margin-bottom: 16px;
+            line-height: 1.5;
+        }
+
+        .eng {
+            width: 50%;
+            font-size: 1.1rem;
+            color: #1d571d;
+            padding-right: 10px;
+        }
+
         .chn {
-            color: #8b4513;
-            font-weight: 400;
-            border-left: 4px solid #e7b156;
+            width: 50%;
+            font-size: 1.1rem;
+            color: #7b3f1c;
+            border-left: 3px solid #e5b96e;
             padding-left: 15px;
         }
 
-        /* interactive section inside each topic */
-        .interactive-row {
-            background: #e9dfcc;
-            border-radius: 40px;
-            padding: 15px 30px;
+        /* 互动区域 */
+        .interact {
+            background: #ebe0cd;
+            padding: 16px 25px;
             display: flex;
             flex-wrap: wrap;
             align-items: center;
             justify-content: space-between;
-            border: 3px solid #cf9f5a;
+            border-top: 2px solid #c39d62;
+            font-size: 1.2rem;
         }
-        .question-bubble {
-            background: #fef9e6;
-            border-radius: 50px;
-            padding: 12px 28px;
-            font-size: 1.5rem;
-            font-weight: 600;
-            color: #2e4b1e;
-            box-shadow: inset 0 3px 5px #ffe9b6;
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            flex-wrap: wrap;
-        }
-        .question-bubble i {
-            font-size: 2rem;
-            color: #b1451e;
-        }
-        .microphone {
-            background: #bc3f3f;
-            color: white;
-            border-radius: 50px;
-            padding: 10px 30px;
-            font-size: 1.5rem;
-            font-weight: 600;
+
+        .question {
             display: flex;
             align-items: center;
             gap: 12px;
-            border: 3px solid #fad15e;
+            background: #fff7e6;
+            padding: 8px 25px;
+            border-radius: 40px;
+            border: 1px solid #af873e;
         }
 
-        /* summary unchanging love */
-        .love-note {
-            background: #ffe4ae;
-            margin: 15px 40px 30px 40px;
-            border-radius: 80px;
-            padding: 30px 40px;
-            text-align: center;
-            border: 6px solid #d1973b;
-        }
-        .love-note p {
-            font-size: 2.2rem;
-            font-weight: 700;
-            color: #903e1c;
-        }
-        .love-note small {
-            font-size: 1.6rem;
-            color: #2d5a1e;
+        .ask-chinese {
+            color: #872e2e;
+            font-weight: 500;
         }
 
-        /* footer / download pretend (just for style) */
-        .footer-note {
-            background: #4b3823;
-            color: #fde5bc;
+        /* 总结部分 */
+        .summary-block {
+            background: #f4ead7;
+            margin: 10px 30px 20px 30px;
             padding: 25px;
+            border-radius: 30px;
+            border: 2px solid #c6a062;
             text-align: center;
-            font-size: 1.7rem;
-            border-top: 8px solid #e8b951;
-        }
-        .footer-note i {
-            margin: 0 10px;
         }
 
-        /* simple interactive hover (just for fun) */
-        .question-bubble:hover {
-            background: #fff1d2;
-            transform: scale(1.02);
-            transition: 0.2s;
-            cursor: pointer;
+        .summary-block p {
+            font-size: 1.4rem;
+            margin: 10px 0;
+        }
+
+        .never-change {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #a53f2a;
+        }
+
+        .quote {
+            font-style: italic;
+            background: #fff1cf;
+            padding: 15px;
+            border-radius: 60px;
+        }
+
+        /* 下载按钮 - 简洁大方 */
+        .download-area {
+            padding: 20px 30px 40px 30px;
+            text-align: center;
+        }
+
+        .download-link {
+            display: inline-block;
+            background: #2a7730;
+            color: white;
+            font-size: 2rem;
+            font-weight: 600;
+            padding: 18px 60px;
+            border-radius: 70px;
+            text-decoration: none;
+            border: 2px solid #fac64e;
+            box-shadow: 0 6px 0 #16531c;
+            transition: 0.05s linear;
+        }
+
+        .download-link:active {
+            transform: translateY(5px);
+            box-shadow: 0 2px 0 #16531c;
+        }
+
+        .download-link i {
+            margin-right: 18px;
+        }
+
+        .footer {
+            background: #3f3122;
+            color: #ecdbbd;
+            text-align: center;
+            padding: 18px;
+            font-size: 1.2rem;
+            border-top: 3px solid #e8b951;
         }
     </style>
 </head>
 <body>
-    <div class="bilingual-card">
-        <!-- header -->
-        <div class="header-row">
-            <i class="fas fa-chimney"></i>
-            <h1>CHRISTMAS · PAST & NOW</h1>
-            <div class="group-tag"><i class="fas fa-users"></i> J3B · 6 MEMBERS</div>
+    <div class="container">
+        <!-- 头部：标题 + 组名 -->
+        <div class="header">
+            <h1><i class="fas fa-tree"></i> Christmas · Past & Now</h1>
+            <div class="group"><i class="fas fa-users"></i> J3B · 6 members</div>
         </div>
 
-        <!-- what we teach intro (bilingual) -->
-        <div class="teach-banner">
-            <h2><i class="fas fa-chalkboard-teacher"></i> 📚 What we teach · 我们会教什么</h2>
-            <span>6 topics +互动</span>
+        <!-- 教学概览 (简洁) -->
+        <div class="teach-bar">
+            <span><i class="fas fa-chalkboard"></i> What we teach · 教学内容</span>
+            <span>6 topics + 互动问答</span>
         </div>
 
-        <!-- TOPICS LIST (each topic = past/now + interactive) -->
-        <div class="topics-grid">
-
-            <!-- 1. Celebration style -->
-            <div class="topic-row">
-                <div class="topic-title"><i class="fas fa-glass-cheers"></i> 01 · Celebration Style / 庆祝方式</div>
-                <div class="bilingual-desc">
-                    <div class="desc-box">
-                        <h3>🕯️ PAST 过去</h3>
-                        <p class="eng">🎄 Simple home-based family gatherings, intimate moments.</p>
-                        <p class="chn">简单家庭庆祝，亲密的家庭时光</p>
-                        <p class="eng">👪 Small gatherings with close relatives & neighbors.</p>
-                        <p class="chn">与近亲和邻居的小型聚会</p>
-                        <p class="eng">🕯️ Cozy atmosphere: candles, fireplaces, handmade decorations.</p>
-                        <p class="chn">温馨氛围：蜡烛、壁炉、手工装饰</p>
+        <!-- 六个主题卡片 (过去/现在 + 互动) -->
+        <div class="topics">
+            <!-- 1. 庆祝方式 -->
+            <div class="card">
+                <div class="card-title"><i class="fas fa-glass-cheers"></i> 01 · Celebration style / 庆祝方式</div>
+                <div class="content-row">
+                    <div class="col">
+                        <h3>🕯️ PAST · 过去</h3>
+                        <div class="desc-item"><span class="eng">Simple home gatherings</span><span class="chn">简单的家庭聚会</span></div>
+                        <div class="desc-item"><span class="eng">Close relatives & neighbors</span><span class="chn">近亲与邻居</span></div>
+                        <div class="desc-item"><span class="eng">Candles, fireplace, handmade</span><span class="chn">蜡烛、壁炉、手工装饰</span></div>
                     </div>
-                    <div class="desc-box">
-                        <h3>✨ NOW 现在</h3>
-                        <p class="eng">🎉 Big parties at restaurants, hotels, public venues.</p>
-                        <p class="chn">餐厅/酒店/公共场所的大型派对</p>
-                        <p class="eng">🛍️ Shopping mall decorations, light shows.</p>
-                        <p class="chn">商场装饰、灯光秀</p>
-                        <p class="eng">📸 Instagram-worthy events, photo spots everywhere.</p>
-                        <p class="chn">适合拍照打卡的活动</p>
+                    <div class="col">
+                        <h3>✨ NOW · 现在</h3>
+                        <div class="desc-item"><span class="eng">Big parties at restaurants/malls</span><span class="chn">餐厅/商场大型派对</span></div>
+                        <div class="desc-item"><span class="eng">Light shows, photo spots</span><span class="chn">灯光秀、打卡点</span></div>
+                        <div class="desc-item"><span class="eng">Instagram‑worthy events</span><span class="chn">适合发朋友圈的活动</span></div>
                     </div>
                 </div>
-                <!-- interactive -->
-                <div class="interactive-row">
-                    <div class="question-bubble"><i class="fas fa-comment-dots"></i> ❓ How does YOUR family celebrate? At home or outside?</div>
-                    <div class="microphone"><i class="fas fa-microphone-alt"></i> 你的家庭怎么庆祝？</div>
+                <div class="interact">
+                    <div class="question"><i class="fas fa-comment"></i> How does YOUR family celebrate? · 你家怎么庆祝？</div>
                 </div>
             </div>
 
-            <!-- 2. Food -->
-            <div class="topic-row">
-                <div class="topic-title"><i class="fas fa-utensil-spoon"></i> 02 · Food / 食物</div>
-                <div class="bilingual-desc">
-                    <div class="desc-box">
+            <!-- 2. 食物 -->
+            <div class="card">
+                <div class="card-title"><i class="fas fa-utensils"></i> 02 · Food / 食物</div>
+                <div class="content-row">
+                    <div class="col">
                         <h3>🍲 PAST</h3>
-                        <p class="eng">🍗 Home-cooked meals with family recipes.</p>
-                        <p class="chn">家庭烹饪 · 祖传食谱</p>
-                        <p class="eng">🍮 Traditional: roast turkey, Christmas pudding, gingerbread.</p>
-                        <p class="chn">传统：烤火鸡、圣诞布丁、姜饼</p>
+                        <div class="desc-item"><span class="eng">Home‑cooked, family recipes</span><span class="chn">家常菜、祖传食谱</span></div>
+                        <div class="desc-item"><span class="eng">Turkey, pudding, gingerbread</span><span class="chn">火鸡、布丁、姜饼</span></div>
                     </div>
-                    <div class="desc-box">
+                    <div class="col">
                         <h3>🍔 NOW</h3>
-                        <p class="eng">🍽️ Restaurant dining / fancy Christmas menus.</p>
-                        <p class="chn">餐厅就餐 · 高档圣诞餐</p>
-                        <p class="eng">📱 Fast food & online delivery — order with a click.</p>
-                        <p class="chn">快餐 & 外卖 · 一键下单</p>
+                        <div class="desc-item"><span class="eng">Restaurant dining</span><span class="chn">餐厅就餐</span></div>
+                        <div class="desc-item"><span class="eng">Fast food / online delivery</span><span class="chn">快餐/外卖</span></div>
                     </div>
                 </div>
-                <div class="interactive-row">
-                    <div class="question-bubble"><i class="fas fa-utensils"></i> 🍴 Favourite Christmas food? Cook at home or eat out?</div>
-                    <div class="microphone">你最爱的圣诞食物？在家做还是外出？</div>
+                <div class="interact">
+                    <div class="question"><i class="fas fa-utensils"></i> Favourite Christmas food? Cook or eat out? · 最爱的圣诞食物？在家做还是外出？</div>
                 </div>
             </div>
 
-            <!-- 3. Gifts -->
-            <div class="topic-row">
-                <div class="topic-title"><i class="fas fa-gift"></i> 03 · Gifts / 礼物</div>
-                <div class="bilingual-desc">
-                    <div class="desc-box">
+            <!-- 3. 礼物 -->
+            <div class="card">
+                <div class="card-title"><i class="fas fa-gift"></i> 03 · Gifts / 礼物</div>
+                <div class="content-row">
+                    <div class="col">
                         <h3>🎁 PAST</h3>
-                        <p class="eng">❤️ Handmade, thoughtful presents — love and effort.</p>
-                        <p class="chn">手工制作 · 充满心意</p>
-                        <p class="eng">🎀 Meaningful — it's the thought that counts.</p>
-                        <p class="chn">有意义的礼物 · 心意无价</p>
+                        <div class="desc-item"><span class="eng">Handmade, thoughtful</span><span class="chn">手工制作、用心</span></div>
+                        <div class="desc-item"><span class="eng">Meaningful — it's the thought</span><span class="chn">有意义——心意无价</span></div>
                     </div>
-                    <div class="desc-box">
+                    <div class="col">
                         <h3>💰 NOW</h3>
-                        <p class="eng">💵 Money / gift cards — practical but less personal.</p>
-                        <p class="chn">现金/礼品卡 · 实用但缺少个性</p>
-                        <p class="eng">👟 Expensive branded items, latest gadgets.</p>
-                        <p class="chn">昂贵品牌商品、最新电子产品</p>
+                        <div class="desc-item"><span class="eng">Money/gift cards</span><span class="chn">现金/礼品卡</span></div>
+                        <div class="desc-item"><span class="eng">Expensive branded items</span><span class="chn">昂贵品牌商品</span></div>
                     </div>
                 </div>
-                <div class="interactive-row">
-                    <div class="question-bubble"><i class="fas fa-question-circle"></i> 🎁 Handmade or store‑bought? Which do you prefer?</div>
-                    <div class="microphone">手工还是商店购买？你喜欢哪种？</div>
+                <div class="interact">
+                    <div class="question"><i class="fas fa-question"></i> Handmade or store‑bought? · 手工还是商店购买？</div>
                 </div>
             </div>
 
-            <!-- 4. Religion -->
-            <div class="topic-row">
-                <div class="topic-title"><i class="fas fa-church"></i> 04 · Religion / 宗教</div>
-                <div class="bilingual-desc">
-                    <div class="desc-box">
+            <!-- 4. 宗教 -->
+            <div class="card">
+                <div class="card-title"><i class="fas fa-church"></i> 04 · Religion / 宗教</div>
+                <div class="content-row">
+                    <div class="col">
                         <h3>✝️ PAST</h3>
-                        <p class="eng">⛪ Strong religious focus — celebrating Jesus' birth.</p>
-                        <p class="chn">宗教意义浓厚 · 庆祝耶稣诞生</p>
-                        <p class="eng">📖 Midnight mass, Bible stories, hymns.</p>
-                        <p class="chn">午夜弥撒、圣经故事、赞美诗</p>
+                        <div class="desc-item"><span class="eng">Celebrating Jesus' birth</span><span class="chn">庆祝耶稣诞生</span></div>
+                        <div class="desc-item"><span class="eng">Midnight mass, hymns</span><span class="chn">午夜弥撒、赞美诗</span></div>
                     </div>
-                    <div class="desc-box">
+                    <div class="col">
                         <h3>🛍️ NOW</h3>
-                        <p class="eng">📦 Commercial — Black Friday, Christmas sales.</p>
-                        <p class="chn">商业化——黑色星期五、圣诞促销</p>
-                        <p class="eng">🏬 Less religious meaning for many.</p>
-                        <p class="chn">许多人庆祝但没有宗教意义</p>
+                        <div class="desc-item"><span class="eng">Commercial, Black Friday</span><span class="chn">商业化、黑五促销</span></div>
+                        <div class="desc-item"><span class="eng">Less religious meaning</span><span class="chn">宗教意义弱化</span></div>
                     </div>
                 </div>
-                <div class="interactive-row">
-                    <div class="question-bubble"><i class="fas fa-pray"></i> ❓ Is the religious meaning still important? Why?</div>
-                    <div class="microphone">圣诞节的宗教意义还重要吗？</div>
+                <div class="interact">
+                    <div class="question"><i class="fas fa-pray"></i> Is religious meaning still important? · 宗教意义还重要吗？</div>
                 </div>
             </div>
 
-            <!-- 5. Technology -->
-            <div class="topic-row">
-                <div class="topic-title"><i class="fas fa-mobile-alt"></i> 05 · Technology / 科技</div>
-                <div class="bilingual-desc">
-                    <div class="desc-box">
+            <!-- 5. 科技 -->
+            <div class="card">
+                <div class="card-title"><i class="fas fa-mobile-alt"></i> 05 · Technology / 科技</div>
+                <div class="content-row">
+                    <div class="col">
                         <h3>✉️ PAST</h3>
-                        <p class="eng">📝 Handwritten letters to Santa, storytelling.</p>
-                        <p class="chn">手写信给圣诞老人 · 讲故事</p>
-                        <p class="eng">👥 Face-to-face time without distractions.</p>
-                        <p class="chn">面对面交流，没有干扰</p>
+                        <div class="desc-item"><span class="eng">Handwritten letters</span><span class="chn">手写信件</span></div>
+                        <div class="desc-item"><span class="eng">Storytelling, face to face</span><span class="chn">讲故事、面对面</span></div>
                     </div>
-                    <div class="desc-box">
+                    <div class="col">
                         <h3>📱 NOW</h3>
-                        <p class="eng">🛒 Online shopping, buy gifts anytime.</p>
-                        <p class="chn">网购 · 随时随地买礼物</p>
-                        <p class="eng">📸 Social media (IG, TikTok) & video calls with family.</p>
-                        <p class="chn">社交媒体分享 & 视频通话</p>
+                        <div class="desc-item"><span class="eng">Online shopping</span><span class="chn">网购</span></div>
+                        <div class="desc-item"><span class="eng">Social media, video calls</span><span class="chn">社交媒体、视频通话</span></div>
                     </div>
                 </div>
-                <div class="interactive-row">
-                    <div class="question-bubble"><i class="fas fa-robot"></i> 💬 Does tech make Christmas better or worse?</div>
-                    <div class="microphone">科技让圣诞更好还是更糟？</div>
+                <div class="interact">
+                    <div class="question"><i class="fas fa-robot"></i> Does tech make Christmas better or worse? · 科技让圣诞更好还是更糟？</div>
                 </div>
             </div>
 
-            <!-- 6. Comparison summary -->
-            <div class="topic-row">
-                <div class="topic-title"><i class="fas fa-balance-scale"></i> 06 · Summary / 对比总结</div>
-                <div style="display: flex; flex-wrap: wrap; gap: 15px; margin-bottom: 20px;">
-                    <div style="background: #2f6b2f; border-radius: 40px; padding: 20px; color: white; flex:1;">
-                        <h3 style="color:#ffdd99;">🎄 PAST</h3>
-                        <p>🏠 Simple · intimate · home‑centered</p>
-                        <p>✝️ Religious focus</p>
-                        <p>💝 Handmade gifts · home cooking</p>
+            <!-- 6. 对比总结 -->
+            <div class="card">
+                <div class="card-title"><i class="fas fa-balance-scale"></i> 06 · Summary / 对比总结</div>
+                <div style="display:flex; flex-wrap:wrap; padding:20px 25px; gap:15px;">
+                    <div style="flex:1; background:#e5f0db; border-radius:20px; padding:15px;">
+                        <h3 style="color:#1e5a1e;">🎄 PAST</h3>
+                        <p>Simple · intimate · home · religious · handmade</p>
                     </div>
-                    <div style="background: #b24424; border-radius: 40px; padding: 20px; color: white; flex:1;">
-                        <h3 style="color:#ffdd99;">🎉 NOW</h3>
-                        <p>🏬 Big, public · commercial</p>
-                        <p>💰 Shopping focus</p>
-                        <p>📱 Tech‑driven · expensive gifts</p>
+                    <div style="flex:1; background:#fcdacf; border-radius:20px; padding:15px;">
+                        <h3 style="color:#a13717;">🎉 NOW</h3>
+                        <p>Big · public · commercial · tech · expensive</p>
                     </div>
                 </div>
-                <div style="background: #ffeec9; border-radius: 40px; padding: 18px 25px; text-align: center; font-size: 1.7rem; margin-bottom: 15px;">
-                    🔑 Key changes: Private → Public · Religious → Commercial · Handmade → Store‑bought · Simple → High‑tech
+                <div style="padding:0 25px 15px 25px;">
+                    <p><strong>Key changes:</strong> Private → Public · Religious → Commercial · Handmade → Store‑bought · Simple → High‑tech</p>
                 </div>
-                <!-- interactive for summary -->
-                <div class="interactive-row">
-                    <div class="question-bubble"><i class="fas fa-heart" style="color:red;"></i> Which changes are GOOD? What would you keep from the past?</div>
-                    <div class="microphone">哪些变化是好的？你想保留过去的什么？</div>
+                <div class="interact">
+                    <div class="question"><i class="fas fa-heart" style="color:#c0392b;"></i> Which changes are good? What would you keep? · 哪些变化好？你想保留什么？</div>
                 </div>
             </div>
         </div>
 
-        <!-- the never‑changing truth (bilingual) -->
-        <div class="love-note">
-            <p>❤️ But one thing never changes · 但有一件事从未改变 ❤️</p>
-            <p style="font-size: 2.8rem;">LOVE · FAMILY · GIVING</p>
-            <p><i class="fas fa-quote-left"></i> 最好的圣诞礼物不在树下，而在所爱之人的心中。</p>
-            <small>"The best Christmas gift is not found under the tree, but in the hearts of those we love."</small>
+        <!-- 不变的爱 (中英) -->
+        <div class="summary-block">
+            <p class="never-change">❤️ But one thing never changes · 但有一件事从未改变 ❤️</p>
+            <p style="font-size:2rem; font-weight:600;">LOVE · FAMILY · GIVING</p>
+            <p class="quote">"The best Christmas gift is not found under the tree, but in the hearts of those we love."</p>
+            <p class="quote">最好的圣诞礼物不在树下，而在所爱之人的心中。</p>
         </div>
 
-        <!-- footer -->
-        <div class="footer-note">
-            <i class="fas fa-candy-cane"></i> Group project · J3B · 6 members: Ng Chen Xun, Yap Yu Cen, Lee Wei Hann, Wesley Leong, Lee Ding, Ong Boon Xin  <i class="fas fa-candy-cane"></i>
+        <!-- 下载链接: 直接指向同目录下的 christmas.pptx (简洁按钮) -->
+        <div class="download-area">
+            <a href="christmas.pptx" download class="download-link">
+                <i class="fas fa-download"></i> DOWNLOAD PPTX · 下载PPTX
+            </a>
+            <p style="margin-top:12px; color:#4f4f4f;">click to download · 点击下载 (christmas.pptx)</p>
+        </div>
+
+        <!-- footer 组员名单 (从原PPT来) -->
+        <div class="footer">
+            <i class="fas fa-star"></i> Ng Chen Xun · Yap Yu Cen · Lee Wei Hann · Wesley Leong · Lee Ding · Ong Boon Xin · J3B · Dec 2025 <i class="fas fa-star"></i>
         </div>
     </div>
+
+    <!-- 没有任何多余装饰，干净利落 -->
 </body>
 </html>
