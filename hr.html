@@ -23,11 +23,10 @@
       position: relative;
       overflow-x: hidden;
       color: #fef9e8;
-      /* Mengurangkan beban animasi pada mobile */
       -webkit-tap-highlight-color: transparent;
     }
 
-    /* ===== LATAR RINGAN (OPTIMISED) ===== */
+    /* ===== LATAR DENGAN MASJID PINK ===== */
     .background-elements {
       position: fixed;
       width: 100%;
@@ -38,7 +37,7 @@
       z-index: 0;
     }
 
-    /* Bulan - animasi ringan (transform sahaja) */
+    /* Bulan - animasi ringan */
     .bulan {
       position: absolute;
       top: 5%;
@@ -49,6 +48,7 @@
       border-radius: 50%;
       box-shadow: 0 0 30px #fff9cf;
       animation: bulanApung 5s infinite alternate ease-in-out;
+      z-index: 3;
     }
 
     @keyframes bulanApung {
@@ -56,13 +56,128 @@
       100% { transform: translateY(-8px) scale(1.02); opacity: 1; }
     }
 
-    /* Awan - kurang billangan, pergerakan ringan */
+    /* MASJID PINK (PUTRAJAYA STYLE) - SEBAGAI SILUET */
+    .masjid-pink {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 220px;
+      background: rgba(255, 200, 200, 0.15);
+      backdrop-filter: blur(2px);
+      z-index: 1;
+      pointer-events: none;
+      display: flex;
+      justify-content: center;
+      align-items: flex-end;
+    }
+
+    /* GAMBAR MASJID SECARA GABUNGAN ELEMEN SVG */
+    .siluet-masjid {
+      position: relative;
+      width: 100%;
+      max-width: 550px;
+      height: 200px;
+      margin: 0 auto;
+      filter: drop-shadow(0 0 15px rgba(255, 120, 150, 0.5));
+    }
+
+    /* Kubah utama */
+    .kubah-utama {
+      position: absolute;
+      bottom: 40px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 130px;
+      height: 90px;
+      background: rgba(255, 180, 200, 0.6);
+      border-radius: 80% 80% 0 0;
+      box-shadow: 0 -10px 30px rgba(255, 140, 180, 0.4);
+      border: 2px solid rgba(255, 220, 220, 0.4);
+    }
+
+    .kubah-utama::after {
+      content: "";
+      position: absolute;
+      top: -25px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 40px;
+      height: 30px;
+      background: rgba(255, 200, 200, 0.7);
+      border-radius: 50%;
+      box-shadow: 0 0 20px #ffb6c1;
+    }
+
+    .menara-kiri {
+      position: absolute;
+      bottom: 40px;
+      left: 30%;
+      width: 25px;
+      height: 150px;
+      background: rgba(255, 170, 190, 0.6);
+      border-radius: 20px 20px 0 0;
+      transform: translateX(-50%);
+      box-shadow: -5px 0 20px rgba(255, 150, 170, 0.3);
+    }
+
+    .menara-kanan {
+      position: absolute;
+      bottom: 40px;
+      right: 30%;
+      width: 25px;
+      height: 150px;
+      background: rgba(255, 170, 190, 0.6);
+      border-radius: 20px 20px 0 0;
+      transform: translateX(50%);
+      box-shadow: 5px 0 20px rgba(255, 150, 170, 0.3);
+    }
+
+    .menara-kiri::after, .menara-kanan::after {
+      content: "";
+      position: absolute;
+      top: -20px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 30px;
+      height: 25px;
+      background: rgba(255, 190, 200, 0.7);
+      border-radius: 50%;
+    }
+
+    .pintu-masjid {
+      position: absolute;
+      bottom: 40px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 50px;
+      height: 70px;
+      background: rgba(200, 130, 150, 0.6);
+      border-radius: 30px 30px 0 0;
+      border: 2px solid rgba(255, 220, 200, 0.4);
+    }
+
+    .pintu-masjid::before {
+      content: "";
+      position: absolute;
+      top: 15px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 15px;
+      height: 25px;
+      background: #ffdab9;
+      border-radius: 10px;
+      opacity: 0.5;
+    }
+
+    /* Awan */
     .awan {
       position: absolute;
       background: rgba(255, 250, 240, 0.18);
       backdrop-filter: blur(4px);
       border-radius: 1000px;
       animation: awanGerak 14s infinite alternate ease-in-out;
+      z-index: 2;
     }
 
     .awan1 {
@@ -75,7 +190,7 @@
     .awan2 {
       width: 230px;
       height: 80px;
-      bottom: 10%;
+      bottom: 30%;
       right: -50px;
       animation-duration: 18s;
     }
@@ -85,7 +200,7 @@
       100% { transform: translateX(25px); }
     }
 
-    /* Bintang - minimal, hanya opacity */
+    /* Bintang - minimal */
     .bintang {
       position: absolute;
       background: #fffde7;
@@ -95,6 +210,7 @@
       opacity: 0.5;
       box-shadow: 0 0 8px #fff7cf;
       animation: kelipRingan 3s infinite alternate;
+      z-index: 2;
     }
 
     @keyframes kelipRingan {
@@ -102,7 +218,7 @@
       100% { opacity: 0.9; }
     }
 
-    /* Corak ketupat latar - gambar statik (tak beranimasi) */
+    /* Corak ketupat latar */
     .ketupat-bg {
       position: fixed;
       width: 100%;
@@ -115,9 +231,9 @@
     /* ===== KAD UTAMA ===== */
     .raya-card {
       position: relative;
-      z-index: 15;
+      z-index: 20; /* lebih tinggi dari masjid */
       width: 100%;
-      max-width: 450px; /* selesa untuk phone */
+      max-width: 450px;
       background: rgba(255, 250, 240, 0.1);
       backdrop-filter: blur(12px);
       -webkit-backdrop-filter: blur(12px);
@@ -125,7 +241,6 @@
       box-shadow: 0 20px 40px rgba(0, 20, 10, 0.6), 0 0 0 1.5px rgba(255, 200, 100, 0.4) inset;
       padding: 25px 18px 35px 18px;
       border: 1px solid rgba(255, 230, 150, 0.3);
-      /* animasi ringan - tak pakai naik turun besar utk elak lag */
       animation: cardRingan 6s infinite alternate ease-in-out;
     }
 
@@ -134,7 +249,7 @@
       100% { transform: translateY(-6px); }
     }
 
-    /* ===== LAMPU (lebih kecil, lebih sikit) ===== */
+    /* ===== LAMPU ===== */
     .lampu-container {
       display: flex;
       justify-content: center;
@@ -192,7 +307,7 @@
     }
 
     .salam h1 {
-      font-size: 2.4rem; /* sederhana mobile */
+      font-size: 2.4rem;
       font-weight: 700;
       letter-spacing: 1px;
       background: linear-gradient(135deg, #ffeeaa, #fff2c0);
@@ -216,9 +331,9 @@
       margin: 5px 0;
     }
 
-    /* NAMA CIKGU RIZAN SANGAT BESAR tapi tak over sampai pecah layout */
+    /* NAMA CIKGU RIZAN SANGAT BESAR */
     .guru-nama {
-      font-size: 3.8rem;  /* besar pada phone */
+      font-size: 3.8rem;
       font-weight: 900;
       display: block;
       line-height: 1.2;
@@ -251,7 +366,7 @@
       margin: 12px 0 5px;
     }
 
-    /* ===== KETUPAT MINIMAL (hanya 2, putaran ringan) ===== */
+    /* ===== KETUPAT MINIMAL ===== */
     .ketupat-container {
       display: flex;
       justify-content: center;
@@ -288,7 +403,7 @@
       100% { transform: rotate(405deg); }
     }
 
-    /* ===== FOOTER DOA (ringkas) ===== */
+    /* ===== FOOTER DOA ===== */
     .footer-doa {
       text-align: center;
       margin-top: 20px;
@@ -302,7 +417,6 @@
       backdrop-filter: blur(3px);
     }
 
-    /* Nama khas */
     .khas-untuk {
       text-align: center;
       margin-top: 12px;
@@ -311,7 +425,7 @@
       opacity: 0.9;
     }
 
-    /* ========== MEDIA QUERIES UNTUK KECIL ========== */
+    /* ========== MEDIA QUERIES ========== */
     @media (max-width: 380px) {
       .raya-card { padding: 20px 12px; }
       .salam h1 { font-size: 2rem; }
@@ -324,17 +438,31 @@
     @media (max-width: 320px) {
       .guru-nama { font-size: 2.5rem; }
     }
-
-    /* Mengurangkan jumlah bintang dan elemen berat */
   </style>
 </head>
 <body>
-  <!-- Latar belakang minimalis (optimum) -->
+  <!-- Latar belakang dengan Masjid Pink -->
   <div class="background-elements">
     <div class="bulan"></div>
+    
+    <!-- MASJID PINK (SILUET) -->
+    <div class="masjid-pink">
+      <div class="siluet-masjid">
+        <div class="menara-kiri"></div>
+        <div class="menara-kanan"></div>
+        <div class="kubah-utama"></div>
+        <div class="pintu-masjid"></div>
+        <!-- Hiasan tambahan kecil -->
+        <div style="position:absolute; bottom:40px; left:42%; width:8px; height:40px; background:rgba(255,180,200,0.6); border-radius:10px;"></div>
+        <div style="position:absolute; bottom:40px; right:42%; width:8px; height:40px; background:rgba(255,180,200,0.6); border-radius:10px;"></div>
+      </div>
+    </div>
+    
+    <!-- Awan -->
     <div class="awan awan1"></div>
     <div class="awan awan2"></div>
-    <!-- Bintang hanya 4 biji -->
+    
+    <!-- Bintang -->
     <div class="bintang" style="top: 12%; left: 8%;"></div>
     <div class="bintang" style="top: 22%; left: 88%; width: 5px; height: 5px;"></div>
     <div class="bintang" style="top: 70%; left: 15%;"></div>
@@ -344,7 +472,7 @@
 
   <!-- KAD UTAMA -->
   <div class="raya-card">
-    <!-- Lampu lebih sedikit dari versi desktop (4 biji) -->
+    <!-- Lampu -->
     <div class="lampu-container">
       <div class="lampu"></div>
       <div class="lampu"></div>
@@ -356,35 +484,33 @@
     <div class="salam">
       <h1>✨ SELAMAT HARI RAYA ✨</h1>
       <h2>AIDILFITRI 1446H</h2>
-      <!-- NAMA BESAR -->
+      <!-- NAMA BESAR CIKGU RIZAN -->
       <span class="guru-nama">CIKGU RIZAN</span>
       <p>Maaf zahir & batin</p>
     </div>
 
-    <!-- Ketupat cuma 2 biji -->
+    <!-- Ketupat -->
     <div class="ketupat-container">
       <div class="ketupat"></div>
       <div class="ketupat"></div>
     </div>
 
-    <!-- Doa / pesanan -->
+    <!-- Doa -->
     <div class="footer-doa">
       🌙 Semoga hari raya ini membawa kebahagiaan, keberkatan, dan kesejahteraan.
       <br>🕊️ Mohon maaf zahir dan batin. 🕊️
     </div>
 
-    <!-- Baris khas untuk cikgu -->
+    <!-- Baris khas -->
     <div class="khas-untuk">
       — Khas untuk guru tersayang, Cikgu Rizan —
     </div>
   </div>
 
-  <!-- hanya beberapa bintang tambahan melalui js ringan (tak banyak) -->
+  <!-- Bintang tambahan ringan -->
   <script>
     (function() {
-      // Menambah beberapa bintang lagi tetapi dengan bilangan kecil dan terkawal
       const bg = document.querySelector('.background-elements');
-      // Cuma tambah 3 bintang lagi supaya tak berat
       for (let i = 0; i < 3; i++) {
         const b = document.createElement('div');
         b.className = 'bintang';
