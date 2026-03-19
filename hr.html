@@ -2,9 +2,10 @@
 <html lang="ms">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
   <title>Selamat Hari Raya | Cikgu Rizan</title>
   <style>
+    /* RESET & ASAS - Mobile First */
     * {
       margin: 0;
       padding: 0;
@@ -12,21 +13,23 @@
     }
 
     body {
-      font-family: 'Segoe UI', 'Poppins', 'Arial', sans-serif;
-      background: linear-gradient(145deg, #0b2a1f 0%, #1c4e3d 70%, #2e6b52 100%);
+      font-family: 'Segoe UI', 'Poppins', system-ui, -apple-system, sans-serif;
+      background: linear-gradient(160deg, #0b2a1f 0%, #1c4e3d 80%, #2e6b52 100%);
       min-height: 100vh;
       display: flex;
-      justify-content: center;
       align-items: center;
-      padding: 20px;
+      justify-content: center;
+      padding: 12px;
       position: relative;
       overflow-x: hidden;
       color: #fef9e8;
+      /* Mengurangkan beban animasi pada mobile */
+      -webkit-tap-highlight-color: transparent;
     }
 
-    /* latar belakang animasi awan & bulan */
+    /* ===== LATAR RINGAN (OPTIMISED) ===== */
     .background-elements {
-      position: absolute;
+      position: fixed;
       width: 100%;
       height: 100%;
       top: 0;
@@ -35,157 +38,128 @@
       z-index: 0;
     }
 
+    /* Bulan - animasi ringan (transform sahaja) */
     .bulan {
       position: absolute;
-      top: 8%;
-      right: 8%;
-      width: 120px;
-      height: 120px;
+      top: 5%;
+      right: 5%;
+      width: 90px;
+      height: 90px;
       background: #f9f3c5;
       border-radius: 50%;
-      box-shadow: 0 0 50px #fff9cf, 0 0 100px #fdeaa8;
-      animation: cahayaBulan 4s ease-in-out infinite alternate;
+      box-shadow: 0 0 30px #fff9cf;
+      animation: bulanApung 5s infinite alternate ease-in-out;
     }
 
-    .bulan::before {
-      content: "";
-      position: absolute;
-      top: -15px;
-      left: -15px;
-      width: 140px;
-      height: 140px;
-      border-radius: 50%;
-      background: rgba(255, 255, 200, 0.1);
-      filter: blur(20px);
+    @keyframes bulanApung {
+      0% { transform: translateY(0) scale(1); opacity: 0.9; }
+      100% { transform: translateY(-8px) scale(1.02); opacity: 1; }
     }
 
-    @keyframes cahayaBulan {
-      0% { box-shadow: 0 0 40px #ffefb0, 0 0 80px #fddf9e; transform: scale(1); }
-      100% { box-shadow: 0 0 70px #fff3cc, 0 0 130px #ffecb3; transform: scale(1.03); }
-    }
-
+    /* Awan - kurang billangan, pergerakan ringan */
     .awan {
       position: absolute;
-      background: rgba(245, 245, 240, 0.2);
-      backdrop-filter: blur(6px);
+      background: rgba(255, 250, 240, 0.18);
+      backdrop-filter: blur(4px);
       border-radius: 1000px;
-      box-shadow: 0 8px 24px rgba(0,0,0,0.2);
-      animation: terapungAwan 16s infinite alternate ease-in-out;
+      animation: awanGerak 14s infinite alternate ease-in-out;
     }
 
     .awan1 {
-      width: 280px;
-      height: 95px;
+      width: 200px;
+      height: 65px;
       top: 15%;
-      left: -100px;
-      background: rgba(255,255,250,0.25);
-      filter: blur(2px);
+      left: -60px;
     }
 
     .awan2 {
-      width: 340px;
-      height: 120px;
+      width: 230px;
+      height: 80px;
       bottom: 10%;
-      right: -80px;
-      background: rgba(255, 255, 245, 0.2);
-      filter: blur(3px);
-      animation-duration: 20s;
-      animation-delay: -5s;
+      right: -50px;
+      animation-duration: 18s;
     }
 
-    .awan3 {
-      width: 200px;
-      height: 70px;
-      top: 45%;
-      left: 5%;
-      background: rgba(240, 240, 235, 0.18);
-      filter: blur(4px);
-      animation-duration: 14s;
-      animation-delay: -2s;
+    @keyframes awanGerak {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(25px); }
     }
 
-    @keyframes terapungAwan {
-      0% { transform: translateX(0) translateY(0); }
-      100% { transform: translateX(60px) translateY(15px); }
-    }
-
-    /* bintang berkelip */
+    /* Bintang - minimal, hanya opacity */
     .bintang {
       position: absolute;
       background: #fffde7;
       border-radius: 50%;
-      width: 3px;
-      height: 3px;
+      width: 4px;
+      height: 4px;
       opacity: 0.5;
-      box-shadow: 0 0 10px #fff7cf, 0 0 20px #ffecaa;
-      animation: kelip 3s infinite alternate;
+      box-shadow: 0 0 8px #fff7cf;
+      animation: kelipRingan 3s infinite alternate;
     }
 
-    @keyframes kelip {
-      0% { opacity: 0.2; transform: scale(0.8); }
-      100% { opacity: 1; transform: scale(1.4); }
+    @keyframes kelipRingan {
+      0% { opacity: 0.2; }
+      100% { opacity: 0.9; }
     }
 
-    /* karpet geometrik / ketupat */
+    /* Corak ketupat latar - gambar statik (tak beranimasi) */
     .ketupat-bg {
-      position: absolute;
+      position: fixed;
       width: 100%;
       height: 100%;
-      background-image: radial-gradient(circle at 30% 40%, rgba(255,215,0,0.1) 0%, transparent 25%),
-                        repeating-linear-gradient(45deg, rgba(210,180,140,0.05) 0px, rgba(210,180,140,0.05) 20px, transparent 20px, transparent 40px);
+      background-image: repeating-linear-gradient(45deg, rgba(210,180,140,0.04) 0px, rgba(210,180,140,0.04) 25px, transparent 25px, transparent 50px);
       pointer-events: none;
       z-index: 0;
     }
 
-    /* main container */
+    /* ===== KAD UTAMA ===== */
     .raya-card {
       position: relative;
-      z-index: 10;
-      max-width: 1000px;
+      z-index: 15;
       width: 100%;
-      background: rgba(255, 255, 245, 0.1);
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-      border-radius: 60px 60px 40px 40px;
-      box-shadow: 0 30px 60px rgba(0, 20, 10, 0.5), 0 0 0 2px rgba(255, 215, 0, 0.3) inset;
-      padding: 40px 25px 60px 25px;
-      border: 1px solid rgba(255, 239, 150, 0.5);
-      transition: 0.5s;
-      animation: naikTurun 7s infinite alternate ease-in-out;
+      max-width: 450px; /* selesa untuk phone */
+      background: rgba(255, 250, 240, 0.1);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-radius: 40px 40px 30px 30px;
+      box-shadow: 0 20px 40px rgba(0, 20, 10, 0.6), 0 0 0 1.5px rgba(255, 200, 100, 0.4) inset;
+      padding: 25px 18px 35px 18px;
+      border: 1px solid rgba(255, 230, 150, 0.3);
+      /* animasi ringan - tak pakai naik turun besar utk elak lag */
+      animation: cardRingan 6s infinite alternate ease-in-out;
     }
 
-    @keyframes naikTurun {
-      0% { transform: translateY(0); box-shadow: 0 30px 50px rgba(0,0,0,0.3); }
-      100% { transform: translateY(-12px); box-shadow: 0 45px 70px rgba(0, 30, 10, 0.6); }
+    @keyframes cardRingan {
+      0% { transform: translateY(0); }
+      100% { transform: translateY(-6px); }
     }
 
-    /* hiasan pelita / lampu */
+    /* ===== LAMPU (lebih kecil, lebih sikit) ===== */
     .lampu-container {
       display: flex;
       justify-content: center;
-      gap: 20px 40px;
-      flex-wrap: wrap;
+      gap: 12px;
       margin-bottom: 20px;
+      flex-wrap: wrap;
     }
 
     .lampu {
-      width: 50px;
-      height: 70px;
+      width: 38px;
+      height: 52px;
       background: #eeba5e;
-      border-radius: 50% 50% 30% 30%;
+      border-radius: 50% 50% 25% 25%;
       position: relative;
-      box-shadow: 0 0 30px #ffb347;
-      animation: kelipLampu 2.2s infinite alternate;
-      transform-origin: top;
+      box-shadow: 0 0 20px #ffb347;
+      animation: kelipLampuRingan 2s infinite alternate;
     }
 
     .lampu::before {
       content: "";
       position: absolute;
-      top: -18px;
-      left: 15px;
-      width: 20px;
-      height: 20px;
+      top: -12px;
+      left: 11px;
+      width: 16px;
+      height: 16px;
       background: #997b4b;
       border-radius: 4px 4px 0 0;
     }
@@ -193,117 +167,106 @@
     .lampu::after {
       content: "";
       position: absolute;
-      bottom: -10px;
-      left: 5px;
-      width: 40px;
-      height: 15px;
+      bottom: -6px;
+      left: 6px;
+      width: 26px;
+      height: 10px;
       background: #b88a4b;
-      border-radius: 10px 10px 0 0;
+      border-radius: 8px 8px 0 0;
       filter: blur(2px);
     }
 
-    .lampu:nth-child(2) { background: #f7c56c; animation-delay: 0.4s; }
-    .lampu:nth-child(3) { background: #ffd966; animation-delay: 0.8s; }
-    .lampu:nth-child(4) { background: #e3aa5a; animation-delay: 0.2s; }
-    .lampu:nth-child(5) { background: #f5b342; animation-delay: 1.1s; }
+    .lampu:nth-child(2) { background: #f7c56c; animation-delay: 0.3s; }
+    .lampu:nth-child(3) { background: #ffd966; animation-delay: 0.6s; }
+    .lampu:nth-child(4) { background: #e3aa5a; animation-delay: 0.1s; }
 
-    @keyframes kelipLampu {
-      0% { box-shadow: 0 0 15px #fdaa33; opacity: 0.9; transform: scaleY(1); }
-      100% { box-shadow: 0 0 50px #ffcc66, 0 0 90px #ffbb33; opacity: 1; transform: scaleY(1.04); }
+    @keyframes kelipLampuRingan {
+      0% { box-shadow: 0 0 8px #fdaa33; opacity: 0.8; }
+      100% { box-shadow: 0 0 30px #ffcc66; opacity: 1; }
     }
 
-    /* teks utama - dengan nama cikgu rizan BESAR */
+    /* ===== TEKS ===== */
     .salam {
       text-align: center;
-      margin: 30px 0 20px;
+      margin: 10px 0 15px;
     }
 
     .salam h1 {
-      font-size: 3.8rem;
-      font-weight: 800;
-      letter-spacing: 3px;
-      text-shadow: 0 4px 20px #f5b042, 0 8px 30px #1e4d33;
-      background: linear-gradient(135deg, #ffeeaa, #fff5d0);
+      font-size: 2.4rem; /* sederhana mobile */
+      font-weight: 700;
+      letter-spacing: 1px;
+      background: linear-gradient(135deg, #ffeeaa, #fff2c0);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
-      margin-bottom: 15px;
-      animation: teksBerkilat 3s infinite alternate;
-      line-height: 1.3;
+      margin-bottom: 5px;
+      animation: kilatTeks 3s infinite alternate;
     }
 
-    /* NAMA CIKGU RIZAN SANGAT BESAR */
-    .guru-nama {
-      font-size: 5.5rem;        /* lebih besar dari h1 */
-      font-weight: 900;
-      display: block;
-      line-height: 1.2;
-      margin: 10px 0 5px;
-      text-transform: uppercase;
-      letter-spacing: 6px;
-      background: linear-gradient(145deg, #ffd966, #fff0b5, #f9cb6b);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      text-shadow: 0 0 30px #f1c232, 0 0 70px #ffb347, 0 10px 20px rgba(0,0,0,0.3);
-      animation: kilatNama 2.8s infinite alternate ease-in-out;
-    }
-
-    @keyframes kilatNama {
-      0% { text-shadow: 0 0 25px #f3b544, 0 0 50px #dba551, 0 10px 20px black; transform: scale(1); }
-      100% { text-shadow: 0 0 60px #ffd966, 0 0 110px #fddf9e, 0 15px 30px black; transform: scale(1.02); }
+    @keyframes kilatTeks {
+      0% { text-shadow: 0 0 10px #f5b042; }
+      100% { text-shadow: 0 0 25px #ffd966, 0 0 40px #f1c232; }
     }
 
     .salam h2 {
-      font-size: 2.5rem;
+      font-size: 1.7rem;
       font-weight: 500;
       color: #f2e3b3;
-      text-shadow: 0 2px 10px #2b5a42;
-      margin: 5px 0 10px;
-      animation: fadeInOut 5s infinite;
+      text-shadow: 0 2px 6px #1f4a33;
+      margin: 5px 0;
+    }
+
+    /* NAMA CIKGU RIZAN SANGAT BESAR tapi tak over sampai pecah layout */
+    .guru-nama {
+      font-size: 3.8rem;  /* besar pada phone */
+      font-weight: 900;
+      display: block;
+      line-height: 1.2;
+      margin: 5px 0 0px;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      background: linear-gradient(145deg, #ffda7a, #fff2b5, #f9cb6b);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      text-shadow: 0 0 25px #f1c232, 0 0 50px #ffb347, 0 5px 15px rgba(0,0,0,0.4);
+      animation: kilatNamaRingan 2.5s infinite alternate;
+    }
+
+    @keyframes kilatNamaRingan {
+      0% { text-shadow: 0 0 20px #f3b544, 0 0 40px #dba551; }
+      100% { text-shadow: 0 0 45px #ffd966, 0 0 80px #fddf9e; }
     }
 
     .salam p {
-      font-size: 2rem;
+      font-size: 1.5rem;
       color: #f7eac4;
       background: rgba(0, 0, 0, 0.2);
       display: inline-block;
-      padding: 12px 40px;
-      border-radius: 60px;
+      padding: 8px 25px;
+      border-radius: 50px;
       backdrop-filter: blur(4px);
       border: 1px solid #e3b56a;
-      box-shadow: 0 0 30px #dba551;
-      margin-top: 15px;
+      box-shadow: 0 0 20px #dba551;
+      margin: 12px 0 5px;
     }
 
-    @keyframes teksBerkilat {
-      0% { text-shadow: 0 0 20px #f3b544, 0 0 40px #b57c2a; }
-      100% { text-shadow: 0 0 40px #ffd966, 0 0 80px #f1c232, 0 0 120px #ca9e3b; }
-    }
-
-    @keyframes fadeInOut {
-      0% { opacity: 0.7; transform: scale(1); }
-      50% { opacity: 1; transform: scale(1.03); text-shadow: 0 0 15px #ffeeaa; }
-      100% { opacity: 0.7; transform: scale(1); }
-    }
-
-    /* hiasan tambahan ketupat 3d */
+    /* ===== KETUPAT MINIMAL (hanya 2, putaran ringan) ===== */
     .ketupat-container {
       display: flex;
       justify-content: center;
-      gap: 30px;
-      margin: 35px 0 15px;
-      flex-wrap: wrap;
+      gap: 20px;
+      margin: 15px 0 10px;
     }
 
     .ketupat {
-      width: 80px;
-      height: 80px;
+      width: 60px;
+      height: 60px;
       background: #f0d78c;
       transform: rotate(45deg);
-      border-radius: 15px 5px 15px 5px;
-      box-shadow: 0 10px 20px rgba(0,0,0,0.3), 0 0 0 4px #e3b56a inset;
-      animation: putarKetupat 6s infinite linear;
+      border-radius: 12px 4px 12px 4px;
+      box-shadow: 0 5px 12px rgba(0,0,0,0.4), 0 0 0 3px #e3b56a inset;
+      animation: putarRingan 8s infinite linear;
       position: relative;
     }
 
@@ -313,127 +276,125 @@
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%) rotate(-45deg);
-      font-size: 2rem;
+      font-size: 1.5rem;
       color: #b3702a;
-      opacity: 0.4;
+      opacity: 0.3;
     }
 
-    .ketupat:nth-child(2) { animation-direction: reverse; animation-duration: 7s; background: #e8cb7e; }
-    .ketupat:nth-child(3) { animation-duration: 8s; background: #f5dc9c; }
+    .ketupat:nth-child(2) { animation-direction: reverse; animation-duration: 9s; background: #e8cb7e; }
 
-    @keyframes putarKetupat {
-      0% { transform: rotate(45deg) scale(1); }
-      50% { transform: rotate(225deg) scale(1.05); }
-      100% { transform: rotate(405deg) scale(1); }
+    @keyframes putarRingan {
+      0% { transform: rotate(45deg); }
+      100% { transform: rotate(405deg); }
     }
 
-    /* footer doa */
+    /* ===== FOOTER DOA (ringkas) ===== */
     .footer-doa {
       text-align: center;
-      margin-top: 40px;
-      font-size: 1.6rem;
+      margin-top: 20px;
+      font-size: 1.2rem;
       font-weight: 300;
-      background: rgba(255,215,0,0.1);
-      padding: 18px 10px;
-      border-radius: 100px;
+      background: rgba(255, 215, 0, 0.1);
+      padding: 14px 8px;
+      border-radius: 60px;
       border: 1px dashed #ebc27a;
       color: #fff5d6;
-      backdrop-filter: blur(5px);
-      animation: perlahanLap 8s infinite;
+      backdrop-filter: blur(3px);
     }
 
-    @keyframes perlahanLap {
-      0% { border-color: #ebc27a; background: rgba(255,215,0,0.1); }
-      50% { border-color: #ffd966; background: rgba(255,225,140,0.2); box-shadow: 0 0 30px #ebc27a; }
-      100% { border-color: #ebc27a; background: rgba(255,215,0,0.1); }
+    /* Nama khas */
+    .khas-untuk {
+      text-align: center;
+      margin-top: 12px;
+      font-size: 1rem;
+      color: #ffe3a5;
+      opacity: 0.9;
     }
 
-    /* responsive */
-    @media (max-width: 700px) {
-      .salam h1 { font-size: 2.5rem; }
-      .guru-nama { font-size: 3.8rem; }
-      .salam h2 { font-size: 1.8rem; }
-      .salam p { font-size: 1.5rem; }
-      .lampu-container { gap: 15px; }
+    /* ========== MEDIA QUERIES UNTUK KECIL ========== */
+    @media (max-width: 380px) {
+      .raya-card { padding: 20px 12px; }
+      .salam h1 { font-size: 2rem; }
+      .guru-nama { font-size: 3rem; }
+      .salam h2 { font-size: 1.4rem; }
+      .salam p { font-size: 1.2rem; padding: 6px 15px; }
+      .lampu { width: 30px; height: 42px; }
     }
 
-    @media (max-width: 450px) {
-      .guru-nama { font-size: 3rem; letter-spacing: 2px; }
+    @media (max-width: 320px) {
+      .guru-nama { font-size: 2.5rem; }
     }
+
+    /* Mengurangkan jumlah bintang dan elemen berat */
   </style>
 </head>
 <body>
-  <!-- elemen latar belakang bergerak -->
+  <!-- Latar belakang minimalis (optimum) -->
   <div class="background-elements">
     <div class="bulan"></div>
     <div class="awan awan1"></div>
     <div class="awan awan2"></div>
-    <div class="awan awan3"></div>
-    <!-- beberapa bintang rawak -->
-    <div class="bintang" style="top: 15%; left: 10%;"></div>
-    <div class="bintang" style="top: 25%; left: 85%; width: 5px; height: 5px;"></div>
-    <div class="bintang" style="top: 70%; left: 20%;"></div>
-    <div class="bintang" style="top: 50%; left: 95%;"></div>
-    <div class="bintang" style="top: 85%; left: 70%;"></div>
-    <div class="bintang" style="top: 35%; left: 45%; width: 6px; height: 6px;"></div>
+    <!-- Bintang hanya 4 biji -->
+    <div class="bintang" style="top: 12%; left: 8%;"></div>
+    <div class="bintang" style="top: 22%; left: 88%; width: 5px; height: 5px;"></div>
+    <div class="bintang" style="top: 70%; left: 15%;"></div>
+    <div class="bintang" style="top: 85%; left: 75%;"></div>
   </div>
   <div class="ketupat-bg"></div>
 
-  <!-- kad utama -->
+  <!-- KAD UTAMA -->
   <div class="raya-card">
-    <!-- lampu bergoyang -->
+    <!-- Lampu lebih sedikit dari versi desktop (4 biji) -->
     <div class="lampu-container">
       <div class="lampu"></div>
       <div class="lampu"></div>
       <div class="lampu"></div>
       <div class="lampu"></div>
-      <div class="lampu"></div>
     </div>
 
-    <!-- teks ucapan dengan nama cikgu rizan paling besar -->
+    <!-- Teks dengan CIKGU RIZAN besar -->
     <div class="salam">
       <h1>✨ SELAMAT HARI RAYA ✨</h1>
       <h2>AIDILFITRI 1446H</h2>
-      <!-- NAMA CIKGU RIZAN SANGAT BESAR, memenuhi permintaan -->
+      <!-- NAMA BESAR -->
       <span class="guru-nama">CIKGU RIZAN</span>
       <p>Maaf zahir & batin</p>
     </div>
 
-    <!-- hiasan ketupat berputar -->
+    <!-- Ketupat cuma 2 biji -->
     <div class="ketupat-container">
       <div class="ketupat"></div>
       <div class="ketupat"></div>
-      <div class="ketupat"></div>
     </div>
 
-    <!-- ayat maaf dan doa (melayu) -->
+    <!-- Doa / pesanan -->
     <div class="footer-doa">
-      🌙 Semoga hari raya ini membawa kebahagiaan, keberkatan, dan kesejahteraan. <br>
-      🕊️ Mohon maaf atas segala kesalahan, zahir dan batin. 🕊️
+      🌙 Semoga hari raya ini membawa kebahagiaan, keberkatan, dan kesejahteraan.
+      <br>🕊️ Mohon maaf zahir dan batin. 🕊️
     </div>
 
-    <!-- sedikit tambahan nama lagi supaya lebih peribadi (tapi tetap sederhana) -->
-    <div style="text-align: center; margin-top: 20px; font-size: 1.2rem; color: #ffe3a5; opacity: 0.9;">
+    <!-- Baris khas untuk cikgu -->
+    <div class="khas-untuk">
       — Khas untuk guru tersayang, Cikgu Rizan —
     </div>
   </div>
 
-  <!-- lebih banyak bintang berkelip (dijana secara kecil) -->
+  <!-- hanya beberapa bintang tambahan melalui js ringan (tak banyak) -->
   <script>
     (function() {
-      // tambah beberapa bintang rawak secara dynamic untuk meriah
+      // Menambah beberapa bintang lagi tetapi dengan bilangan kecil dan terkawal
       const bg = document.querySelector('.background-elements');
-      for (let i = 0; i < 12; i++) {
-        const bintang = document.createElement('div');
-        bintang.className = 'bintang';
-        const size = Math.random() * 5 + 2;
-        bintang.style.width = size + 'px';
-        bintang.style.height = size + 'px';
-        bintang.style.top = Math.random() * 100 + '%';
-        bintang.style.left = Math.random() * 100 + '%';
-        bintang.style.animationDelay = (Math.random() * 5) + 's';
-        bintang.style.animationDuration = (Math.random() * 3 + 2) + 's';
-        bg.appendChild(bintang);
+      // Cuma tambah 3 bintang lagi supaya tak berat
+      for (let i = 0; i < 3; i++) {
+        const b = document.createElement('div');
+        b.className = 'bintang';
+        b.style.top = Math.random() * 90 + '%';
+        b.style.left = Math.random() * 90 + '%';
+        b.style.width = (Math.random() * 4 + 2) + 'px';
+        b.style.height = b.style.width;
+        b.style.animationDelay = (Math.random() * 4) + 's';
+        b.style.animationDuration = (Math.random() * 3 + 2) + 's';
+        bg.appendChild(b);
       }
     })();
   </script>
