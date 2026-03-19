@@ -19,15 +19,15 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: flex-end; /* push content to bottom so masjid stays visible */
-      padding: 12px 12px 0 12px;
+      justify-content: center; /* kembali ke tengah */
+      padding: 12px;
       position: relative;
       overflow-x: hidden;
       color: #fef9e8;
       -webkit-tap-highlight-color: transparent;
     }
 
-    /* ===== LATAR DENGAN MASJID PINK - KINI DI HADAPAN ===== */
+    /* ===== LATAR BELAKANG ===== */
     .background-elements {
       position: fixed;
       width: 100%;
@@ -35,10 +35,10 @@
       top: 0;
       left: 0;
       pointer-events: none;
-      z-index: 5; /* lebih rendah dari card tapi lebih tinggi dari sebelumnya */
+      z-index: 1; /* paling bawah */
     }
 
-    /* Bulan - tetap di atas */
+    /* Bulan */
     .bulan {
       position: absolute;
       top: 5%;
@@ -49,7 +49,7 @@
       border-radius: 50%;
       box-shadow: 0 0 30px #fff9cf;
       animation: bulanApung 5s infinite alternate ease-in-out;
-      z-index: 8;
+      z-index: 2;
     }
 
     @keyframes bulanApung {
@@ -57,140 +57,14 @@
       100% { transform: translateY(-8px) scale(1.02); opacity: 1; }
     }
 
-    /* MASJID PINK - SEKARANG DIHADAPKAN DAN LEBIH TERANG */
-    .masjid-pink {
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      width: 100%;
-      height: 260px; /* lebih tinggi biar nampak */
-      background: rgba(255, 180, 200, 0.25);
-      backdrop-filter: blur(3px);
-      z-index: 6; /* antara bulan dan card (card 20) */
-      pointer-events: none;
-      display: flex;
-      justify-content: center;
-      align-items: flex-end;
-      border-top: 2px solid rgba(255, 220, 220, 0.3);
-      box-shadow: 0 -10px 30px rgba(255, 140, 180, 0.3);
-    }
-
-    /* GAMBAR MASJID LEBIH TEBAL */
-    .siluet-masjid {
-      position: relative;
-      width: 100%;
-      max-width: 600px;
-      height: 240px;
-      margin: 0 auto;
-      filter: drop-shadow(0 0 20px #ffb0c0);
-    }
-
-    /* Kubah utama - lebih besar */
-    .kubah-utama {
-      position: absolute;
-      bottom: 50px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 160px;
-      height: 110px;
-      background: rgba(255, 140, 170, 0.8);
-      border-radius: 80% 80% 0 0;
-      box-shadow: 0 -10px 40px #ffa0b0;
-      border: 3px solid rgba(255, 230, 230, 0.6);
-    }
-
-    .kubah-utama::after {
-      content: "";
-      position: absolute;
-      top: -30px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 50px;
-      height: 35px;
-      background: rgba(255, 180, 200, 0.9);
-      border-radius: 50%;
-      box-shadow: 0 0 30px #ffc0cb;
-    }
-
-    .menara-kiri {
-      position: absolute;
-      bottom: 50px;
-      left: 28%;
-      width: 30px;
-      height: 180px;
-      background: rgba(255, 130, 170, 0.8);
-      border-radius: 25px 25px 0 0;
-      transform: translateX(-50%);
-      box-shadow: -5px 0 30px #ff90b0;
-    }
-
-    .menara-kanan {
-      position: absolute;
-      bottom: 50px;
-      right: 28%;
-      width: 30px;
-      height: 180px;
-      background: rgba(255, 130, 170, 0.8);
-      border-radius: 25px 25px 0 0;
-      transform: translateX(50%);
-      box-shadow: 5px 0 30px #ff90b0;
-    }
-
-    .menara-kiri::after, .menara-kanan::after {
-      content: "";
-      position: absolute;
-      top: -25px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 40px;
-      height: 30px;
-      background: rgba(255, 170, 190, 0.9);
-      border-radius: 50%;
-    }
-
-    .pintu-masjid {
-      position: absolute;
-      bottom: 50px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 60px;
-      height: 80px;
-      background: rgba(180, 100, 130, 0.8);
-      border-radius: 35px 35px 0 0;
-      border: 3px solid rgba(255, 210, 210, 0.7);
-    }
-
-    .pintu-masjid::before {
-      content: "";
-      position: absolute;
-      top: 20px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 20px;
-      height: 30px;
-      background: #ffefd5;
-      border-radius: 12px;
-      opacity: 0.7;
-    }
-
-    /* Hiasan tambahan */
-    .bintang-kecil {
-      position: absolute;
-      width: 8px;
-      height: 8px;
-      background: #fff0d0;
-      border-radius: 50%;
-      box-shadow: 0 0 20px #ffb0c0;
-    }
-
-    /* Awan - diletakkan supaya tidak menutup masjid sangat */
+    /* Awan */
     .awan {
       position: absolute;
       background: rgba(255, 250, 240, 0.2);
       backdrop-filter: blur(5px);
       border-radius: 1000px;
       animation: awanGerak 14s infinite alternate ease-in-out;
-      z-index: 7;
+      z-index: 2;
     }
 
     .awan1 {
@@ -203,7 +77,7 @@
     .awan2 {
       width: 230px;
       height: 80px;
-      bottom: 30%;
+      bottom: 20%;
       right: -50px;
       animation-duration: 18s;
     }
@@ -223,7 +97,7 @@
       opacity: 0.6;
       box-shadow: 0 0 10px #fff7cf;
       animation: kelipRingan 3s infinite alternate;
-      z-index: 7;
+      z-index: 2;
     }
 
     @keyframes kelipRingan {
@@ -231,7 +105,7 @@
       100% { opacity: 1; }
     }
 
-    /* Corak ketupat latar - sangat tipis */
+    /* Corak ketupat latar */
     .ketupat-bg {
       position: fixed;
       width: 100%;
@@ -241,21 +115,147 @@
       z-index: 1;
     }
 
-    /* ===== KAD UTAMA - SEKARANG LEBIH TRANSPARAN supaya masjid nampak ===== */
+    /* ===== MASJID PINK - SEKARANG DI ATAS CARD ===== */
+    .masjid-pink-container {
+      position: relative;
+      z-index: 30; /* lebih tinggi dari card */
+      width: 100%;
+      max-width: 500px;
+      margin-bottom: -40px; /* tarik card naik sikit supaya rapat */
+      pointer-events: none;
+      display: flex;
+      justify-content: center;
+    }
+
+    .masjid-pink {
+      width: 100%;
+      height: 180px;
+      background: transparent;
+      display: flex;
+      justify-content: center;
+      align-items: flex-end;
+      filter: drop-shadow(0 0 25px #ffa0c0);
+    }
+
+    .siluet-masjid {
+      position: relative;
+      width: 100%;
+      max-width: 500px;
+      height: 170px;
+    }
+
+    /* Kubah utama */
+    .kubah-utama {
+      position: absolute;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 140px;
+      height: 90px;
+      background: rgba(255, 130, 170, 0.9);
+      border-radius: 80% 80% 0 0;
+      box-shadow: 0 -10px 40px #ff80a0;
+      border: 3px solid rgba(255, 230, 230, 0.7);
+    }
+
+    .kubah-utama::after {
+      content: "";
+      position: absolute;
+      top: -25px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 45px;
+      height: 30px;
+      background: rgba(255, 160, 190, 0.9);
+      border-radius: 50%;
+      box-shadow: 0 0 25px #ffb0c0;
+    }
+
+    .menara-kiri {
+      position: absolute;
+      bottom: 20px;
+      left: 30%;
+      width: 25px;
+      height: 140px;
+      background: rgba(255, 120, 160, 0.9);
+      border-radius: 20px 20px 0 0;
+      transform: translateX(-50%);
+      box-shadow: -5px 0 25px #ff70a0;
+    }
+
+    .menara-kanan {
+      position: absolute;
+      bottom: 20px;
+      right: 30%;
+      width: 25px;
+      height: 140px;
+      background: rgba(255, 120, 160, 0.9);
+      border-radius: 20px 20px 0 0;
+      transform: translateX(50%);
+      box-shadow: 5px 0 25px #ff70a0;
+    }
+
+    .menara-kiri::after, .menara-kanan::after {
+      content: "";
+      position: absolute;
+      top: -20px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 35px;
+      height: 25px;
+      background: rgba(255, 150, 180, 0.9);
+      border-radius: 50%;
+    }
+
+    .pintu-masjid {
+      position: absolute;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 50px;
+      height: 60px;
+      background: rgba(160, 90, 120, 0.9);
+      border-radius: 30px 30px 0 0;
+      border: 3px solid rgba(255, 200, 200, 0.7);
+    }
+
+    .pintu-masjid::before {
+      content: "";
+      position: absolute;
+      top: 15px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 18px;
+      height: 25px;
+      background: #fff0d0;
+      border-radius: 10px;
+      opacity: 0.6;
+    }
+
+    /* Hiasan tambahan */
+    .bintang-kecil {
+      position: absolute;
+      width: 8px;
+      height: 8px;
+      background: #fff0d0;
+      border-radius: 50%;
+      box-shadow: 0 0 15px #ffb0c0;
+    }
+
+    /* ===== KAD UTAMA - SEKARANG DI BAWAH MASJID ===== */
     .raya-card {
       position: relative;
-      z-index: 20;
+      z-index: 20; /* lebih rendah dari masjid container */
       width: 100%;
       max-width: 450px;
-      background: rgba(20, 40, 30, 0.4); /* lebih transparen */
-      backdrop-filter: blur(8px);
-      -webkit-backdrop-filter: blur(8px);
+      background: rgba(20, 40, 30, 0.5);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
       border-radius: 40px 40px 30px 30px;
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5), 0 0 0 1.5px rgba(255, 200, 150, 0.5) inset;
-      padding: 25px 18px 30px 18px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6), 0 0 0 1.5px rgba(255, 200, 150, 0.5) inset;
+      padding: 30px 18px 30px 18px;
       border: 1px solid rgba(255, 220, 150, 0.4);
       animation: cardRingan 6s infinite alternate ease-in-out;
-      margin-bottom: 20px; /* jarak dari bawah */
     }
 
     @keyframes cardRingan {
@@ -466,42 +466,23 @@
 
     /* ========== MEDIA QUERIES ========== */
     @media (max-width: 380px) {
-      .raya-card { padding: 20px 12px; }
+      .raya-card { padding: 25px 12px; }
       .salam h1 { font-size: 2rem; }
       .guru-nama { font-size: 3rem; }
       .salam h2 { font-size: 1.4rem; }
       .salam p { font-size: 1.2rem; padding: 6px 15px; }
       .lampu { width: 30px; height: 42px; }
       .pesanan-khas { font-size: 1rem; }
+      .masjid-pink { height: 150px; }
     }
   </style>
 </head>
 <body>
-  <!-- Latar belakang dengan Masjid Pink (kini di hadapan, lebih jelas) -->
+  <!-- Latar belakang (bulan, awan, bintang) -->
   <div class="background-elements">
     <div class="bulan"></div>
-    
-    <!-- MASJID PINK - KINI LEBIH TEBAL & DIHADAPAN -->
-    <div class="masjid-pink">
-      <div class="siluet-masjid">
-        <div class="menara-kiri"></div>
-        <div class="menara-kanan"></div>
-        <div class="kubah-utama"></div>
-        <div class="pintu-masjid"></div>
-        <!-- Hiasan tambahan kecil -->
-        <div style="position:absolute; bottom:50px; left:41%; width:10px; height:50px; background:rgba(255,150,180,0.9); border-radius:10px;"></div>
-        <div style="position:absolute; bottom:50px; right:41%; width:10px; height:50px; background:rgba(255,150,180,0.9); border-radius:10px;"></div>
-        <!-- Bintang kecil di atas masjid -->
-        <div class="bintang-kecil" style="top: 20px; left: 40%;"></div>
-        <div class="bintang-kecil" style="top: 40px; left: 60%;"></div>
-      </div>
-    </div>
-    
-    <!-- Awan (supaya masjid tetap nampak) -->
     <div class="awan awan1"></div>
     <div class="awan awan2"></div>
-    
-    <!-- Bintang -->
     <div class="bintang" style="top: 12%; left: 8%;"></div>
     <div class="bintang" style="top: 22%; left: 88%; width: 5px; height: 5px;"></div>
     <div class="bintang" style="top: 70%; left: 15%;"></div>
@@ -510,7 +491,25 @@
   
   <div class="ketupat-bg"></div>
 
-  <!-- KAD UTAMA - kini lebih transparen, masjid nampak di belakang -->
+  <!-- MASJID PINK - DI ATAS CARD (tiada apa yang menutup) -->
+  <div class="masjid-pink-container">
+    <div class="masjid-pink">
+      <div class="siluet-masjid">
+        <div class="menara-kiri"></div>
+        <div class="menara-kanan"></div>
+        <div class="kubah-utama"></div>
+        <div class="pintu-masjid"></div>
+        <!-- Hiasan tambahan kecil -->
+        <div style="position:absolute; bottom:20px; left:41%; width:8px; height:45px; background:rgba(255,130,170,0.9); border-radius:10px;"></div>
+        <div style="position:absolute; bottom:20px; right:41%; width:8px; height:45px; background:rgba(255,130,170,0.9); border-radius:10px;"></div>
+        <!-- Bintang kecil di atas masjid -->
+        <div class="bintang-kecil" style="top: 0px; left: 45%;"></div>
+        <div class="bintang-kecil" style="top: 15px; left: 55%;"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- KAD UTAMA - kini di bawah masjid, masjid jelas kelihatan -->
   <div class="raya-card">
     <!-- Lampu -->
     <div class="lampu-container">
@@ -532,7 +531,7 @@
     <!-- PESANAN ISTIMEWA: "Tidak perlu share dalam group, ini hanya sedikit心意" -->
     <div class="pesanan-khas">
       <span>🤍 Pesanan Khas 🤍</span>
-      Cikgu, ini hanya sedikit daripada saya.<br>
+      Cikgu, ini hanya sedikit心意 daripada saya.<br>
       Tidak perlu dikongsikan dalam group mana pun.<br>
       Cukup untuk Cikgu seorang. 🌹
     </div>
